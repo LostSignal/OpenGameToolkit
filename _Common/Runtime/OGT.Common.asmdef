@@ -1,0 +1,27 @@
+{
+    "name": "OGT.Common",
+    "rootNamespace": "",
+    "references": [
+        "GUID:9d12953d290ed43218520fde6f01f004"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "Unity",
+            "expression": "0.0.0",
+            "define": "UNITY"
+        },
+        {
+            "name": "com.revenantx.litenetlib",
+            "expression": "0.0.0",
+            "define": "USING_LITE_NET_LIB"
+        }
+    ],
+    "noEngineReferences": false
+}

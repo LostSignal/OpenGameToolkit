@@ -1,0 +1,18 @@
+{
+    "name": "OGT.Misc.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:7a20c285ba49af244b1d4f7a7e6b3413"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

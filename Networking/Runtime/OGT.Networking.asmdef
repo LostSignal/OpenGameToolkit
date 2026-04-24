@@ -1,0 +1,18 @@
+{
+    "name": "OGT.Networking",
+    "rootNamespace": "",
+    "references": [
+        "GUID:07eef6138bd086b4a8b900f81c87383a",
+        "GUID:a1f6d4cae8ca5e44283a8a0b9e4681cd",
+        "GUID:09b1bcbdd442e4b449dbaa31ab1ff3fe"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

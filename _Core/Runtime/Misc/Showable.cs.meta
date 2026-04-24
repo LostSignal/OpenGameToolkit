@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 8b22b615d740be44b9d2105dd0dbea25
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - simpleAnimation: {instanceID: 0}
+  - show: {fileID: 7400000, guid: 022512aac2e73b8418b82b8f69e7c165, type: 2}
+  - hide: {fileID: 7400000, guid: db5dceffa189f2d44b52a647cafaba78, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

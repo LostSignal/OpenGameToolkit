@@ -1,0 +1,33 @@
+{
+    "name": "OGT.Unity.Optimizer.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:07eef6138bd086b4a8b900f81c87383a",
+        "GUID:a1f6d4cae8ca5e44283a8a0b9e4681cd",
+        "GUID:13d8775bd08327b428b17300a7bf920a",
+        "GUID:79e4da52ef2437c48a13a0d9e269b469",
+        "GUID:478a2357cc57436488a56e564b08d223",
+        "GUID:538d87cc2c2911443abbf4df570f6d14",
+        "GUID:a09b502a3463f794a83cf80a67a246d2",
+        "GUID:77ccaf49895b0d64e87cd4b4faf83c49"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Lost Common.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.whinarn.unitymeshsimplifier",
+            "expression": "0.0.0",
+            "define": "USING_UNITY_MESH_SIMPLIFIER"
+        }
+    ],
+    "noEngineReferences": false
+}

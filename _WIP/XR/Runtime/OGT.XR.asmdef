@@ -1,0 +1,52 @@
+{
+    "name": "OGT.XR",
+    "rootNamespace": "",
+    "references": [
+        "GUID:07eef6138bd086b4a8b900f81c87383a",
+        "GUID:ab8962b6277185546a87daeb4b19e1dd",
+        "GUID:a1f6d4cae8ca5e44283a8a0b9e4681cd",
+        "GUID:f8ae758060c5a99408f1ce67fc83303c",
+        "GUID:f93a19062ef99834fb470b52dc96501f",
+        "GUID:471a31e4ca2236d498867fa04c687528",
+        "GUID:14861e8c54633d54b8b16c93f2608614",
+        "GUID:0a2e5498c4092c14b9040f5d5a1bd300",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:09b1bcbdd442e4b449dbaa31ab1ff3fe",
+        "GUID:7f7d1af65c2641843945d409d28f2e20",
+        "GUID:dc960734dc080426fa6612f1c5fe95f3",
+        "GUID:e40ba710768534012815d3193fa296cb",
+        "GUID:fe685ec1767f73d42b749ea8045bfe43",
+        "GUID:8e6a24801a2051a46b1cff796dfdf441"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.xr.interaction.toolkit",
+            "expression": "0.0.0",
+            "define": "USING_UNITY_XR_INTERACTION_TOOLKIT"
+        },
+        {
+            "name": "com.unity.xr.management",
+            "expression": "0.0.0",
+            "define": "USING_UNITY_XR_MANAGEMENT"
+        },
+        {
+            "name": "com.unity.animation.rigging",
+            "expression": "0.0.0",
+            "define": "USING_UNITY_ANIMATION_RIGGING"
+        },
+        {
+            "name": "com.unity.animation.rigging",
+            "expression": "0.0.0",
+            "define": "USING_UNITY_ANIMATION_RIGGING"
+        }
+    ],
+    "noEngineReferences": false
+}

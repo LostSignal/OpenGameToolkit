@@ -1,0 +1,120 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81f9e79d47c930c428991074f0dc9c11, type: 3}
+  m_Name: XR Rig Properties
+  m_EditorClassIdentifier: OGT.Common::Properties
+  type: 0
+  properties:
+  - rid: 8267887890160418932
+  - rid: 8267887890160418933
+  - rid: 8267887935804670069
+  - rid: 8267887935804670070
+  - rid: 8267887890160418934
+  - rid: 8267887935804670071
+  - rid: 8267887935804670072
+  - rid: 8267887890160418935
+  - rid: 8267887890160418936
+  - rid: 8267887890160418937
+  - rid: 8267887935804670073
+  references:
+    version: 2
+    RefIds:
+    - rid: 8267887890160418932
+      type: {class: Properties/FloatProperty, ns: OGT.Properties, asm: OGT.Common}
+      data:
+        id: 1
+        name: XR.General.EstimatedHeight
+        defaultValue: 1.3
+        currentValue: 0
+        min: 1
+        max: 3
+    - rid: 8267887890160418933
+      type: {class: Properties/FloatProperty, ns: OGT.Properties, asm: OGT.Common}
+      data:
+        id: 2
+        name: XR.General.EyeHeight
+        defaultValue: 1.3
+        currentValue: 0
+        min: 1
+        max: 3
+    - rid: 8267887890160418934
+      type: {class: Properties/BoolProperty, ns: OGT.Properties, asm: OGT.Common}
+      data:
+        id: 3
+        name: XR.Movement.EnableStrafe
+        defaultValue: 1
+        currentValue: 0
+    - rid: 8267887890160418935
+      type: {class: Properties/BoolProperty, ns: OGT.Properties, asm: OGT.Common}
+      data:
+        id: 4
+        name: XR.Turning.AllowTurnAround
+        defaultValue: 0
+        currentValue: 0
+    - rid: 8267887890160418936
+      type: {class: Properties/FloatProperty, ns: OGT.Properties, asm: OGT.Common}
+      data:
+        id: 5
+        name: XR.Turning.ContinuousTurnSpeed
+        defaultValue: 180
+        currentValue: 0
+        min: 10
+        max: 360
+    - rid: 8267887890160418937
+      type: {class: Properties/IntProperty, ns: OGT.Properties, asm: OGT.Common}
+      data:
+        id: 6
+        name: XR.Turning.SnapTurnDegrees
+        defaultValue: 30
+        currentValue: 0
+        min: 15
+        max: 45
+    - rid: 8267887935804670069
+      type: {class: Properties/EnumProperty, ns: OGT.Properties, asm: OGT.Common}
+      data:
+        id: 8
+        name: XR.General.MovementMode
+        defaultIndex: 0
+        currentIndex: 0
+        enumType: {fileID: 11400000, guid: 79a0b115291a891409d06ee20c2a5bdd, type: 2}
+    - rid: 8267887935804670070
+      type: {class: Properties/EnumProperty, ns: OGT.Properties, asm: OGT.Common}
+      data:
+        id: 9
+        name: XR.General.SitStand
+        defaultIndex: 0
+        currentIndex: 0
+        enumType: {fileID: 11400000, guid: 4ee9b88b78651354184639c240e26cb3, type: 2}
+    - rid: 8267887935804670071
+      type: {class: Properties/EnumProperty, ns: OGT.Properties, asm: OGT.Common}
+      data:
+        id: 10
+        name: XR.Movement.MovementHand
+        defaultIndex: 0
+        currentIndex: 0
+        enumType: {fileID: 11400000, guid: cdd2ad28e49156b4ba8d263bf03a250b, type: 2}
+    - rid: 8267887935804670072
+      type: {class: Properties/EnumProperty, ns: OGT.Properties, asm: OGT.Common}
+      data:
+        id: 11
+        name: XR.Movement.MovementSource
+        defaultIndex: 0
+        currentIndex: 0
+        enumType: {fileID: 11400000, guid: fd97642eb42bc1a4181fb61cbd2e775b, type: 2}
+    - rid: 8267887935804670073
+      type: {class: Properties/EnumProperty, ns: OGT.Properties, asm: OGT.Common}
+      data:
+        id: 12
+        name: XR.Turning.TurnMode
+        defaultIndex: 0
+        currentIndex: 0
+        enumType: {fileID: 11400000, guid: 1baa13ed1bcd3df4f985fc5dd0f8a1ac, type: 2}

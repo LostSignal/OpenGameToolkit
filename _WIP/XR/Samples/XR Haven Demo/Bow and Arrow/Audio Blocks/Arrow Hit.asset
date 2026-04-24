@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4928135bef12d72418be474593539ad1, type: 3}
+  m_Name: Arrow Hit
+  m_EditorClassIdentifier: ''
+  audioChannel: {fileID: 11400000, guid: 1eb86a6df8498cb4294ca9c61b78613c, type: 2}
+  audioClips:
+  - {fileID: 8300000, guid: c197e11523abdd94287bd5652cb36ce9, type: 3}
+  minPitch: 1.5
+  maxPitch: 2
+  minVolume: 0.8
+  maxVolume: 0.8
+  playType: 0

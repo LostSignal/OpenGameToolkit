@@ -1,0 +1,19 @@
+{
+    "name": "OGT.Unity.ThirdParty.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a1f6d4cae8ca5e44283a8a0b9e4681cd",
+        "GUID:4552b3a80101a06448add2a064e74c7d"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

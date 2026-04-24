@@ -1,0 +1,1 @@
+- Inside of OGT.Unity the only reference to Editor Grid is the OGTButton and OGTToggle

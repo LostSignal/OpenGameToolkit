@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 806f35a870af3404bb32acb68c980a94, type: 3}
+  m_Name: Default Socket Settings
+  m_EditorClassIdentifier: 
+  settings:
+    keepSelectedTargetValid: 1
+    recycleDelayTime: 1
+    interactableHoverScale: 1
+    showInteractableHoverMeshes: 1
+    interactableHoverMeshMaterial: {fileID: 2100000, guid: 3aff9bdc650b1214d98360e5398f32c2, type: 2}
+    interactableCantHoverMeshMaterial: {fileID: 2100000, guid: a5f8ddbc1ec51bc4d86f6cf8fdb1e562, type: 2}

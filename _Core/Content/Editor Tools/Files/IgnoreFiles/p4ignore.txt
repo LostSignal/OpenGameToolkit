@@ -1,0 +1,140 @@
+
+# ===================================== #
+# Project Specific Unity Files          #
+# ===================================== #
+
+ExportedObj
+Library
+Logs
+Temp
+.gradle
+
+# =================================== #
+# Package Lock File Windows and Mac   #
+# =================================== #
+
+# Windows
+Packages\packages-lock.json
+
+# Mac
+Packages/packages-lock.json
+
+# ================================= #
+# Adressables for Windows and Mac   #
+# ================================= #
+
+# Windows
+Assets\StreamingAssets\aa\*
+Assets\StreamingAssets\aa.meta
+Assets\StreamingAssets\com.unity.addressables\*
+Assets\StreamingAssets\com.unity.addressables.meta
+AssetBundles\*
+
+# Mac
+Assets/StreamingAssets/aa/*
+Assets/StreamingAssets/aa.meta
+Assets/StreamingAssets/com.unity.addressables/*
+Assets/StreamingAssets/com.unity.addressables.meta
+AssetBundles/*
+
+# ================================= #
+# BuildConfig for Windows and Mac   #
+# ================================= #
+
+# Windows
+Assets\Resources\buildconfig.json
+Assets\Resources\buildconfig.json.meta
+
+# Mac
+Assets/Resources/buildconfig.json
+Assets/Resources/buildconfig.json.meta
+
+# ================================= #
+# Release for Windows and Mac       #
+# ================================= #
+
+# Windows
+Assets\Resources\release.json
+Assets\Resources\release.json.meta
+
+# Mac
+Assets/Resources/release.json
+Assets/Resources/release.json.meta
+
+# ==================================== #
+# Visual Scripting for Windows and Mac #
+# ==================================== #
+
+# Windows
+Assets\Unity.VisualScripting.Generated\VisualScripting.Flow\*
+Assets\Unity.VisualScripting.Generated\VisualScripting.Flow.meta
+
+# Mac
+Assets/Unity.VisualScripting.Generated/VisualScripting.Flow/*
+Assets/Unity.VisualScripting.Generated/VisualScripting.Flow.meta
+
+# ================================= #
+# Asset Bundles for Windows and Mac #
+# ================================= #
+
+# Windows
+Assets\StreamingAssets\AssetBundles\*
+Assets\StreamingAssets\AssetBundles.meta
+
+# Mac
+Assets/StreamingAssets/AssetBundles/*
+Assets/StreamingAssets/AssetBundles.meta
+
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+
+.vs
+obj
+bin
+!Assets/Plugins/UnityPurchasing/Bin
+!Assets\Plugins\UnityPurchasing\Bin
+
+/*.booproj
+/*.csproj
+/*.pidb
+/*.sln
+/*.sln.DotSettings
+/*.suo
+/*.svd
+/*.tmproj
+/*.unityproj
+/*.user
+/*.userprefs
+
+StyleCop.Cache
+
+
+# ======================= #
+# Warnings As Errors File #
+# ======================= #
+
+# Windows
+Assets\mcs.rsp
+Assets\mcs.rsp.meta
+
+# Mac
+Assets/mcs.rsp
+Assets/mcs.rsp.meta
+
+
+# ============ #
+# OS generated #
+# ============ #
+
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# API files
+*.api
+*.api.meta

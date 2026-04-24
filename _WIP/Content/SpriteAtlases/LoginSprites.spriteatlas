@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: LoginSprites
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 4
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 2
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 1
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_IgnorePlatformSupport: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 17cce419ad71f5e4b910e47cae8247b2, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+    packedSpriteRenderDataKeys:
+    - fc59cca0c5cfa9d4ab91e45852e7bcb5: 21300000
+    - 026eaee0fb53f924d93dc0220ae0e86d: 21300000
+    - cf76d1f0e70b3fc4499f52c5e40705aa: 21300000
+    - 843f73967045f3a4ea3faf0793e78af5: 21300000
+    - 761234b6cb876e744b7e23eee566dfac: 21300000
+    - fcef6ae8f668fdd4fadde5705ae5d51e: 21300000
+    - abba70aa93e8c944b9cfca0d86d2b334: 21300000
+    - 7be15a1c40498524c91f9f0f4061825d: 21300000
+    - d5c36b4d2961c8d408213eed741e33ef: 21300000
+    - dcffb38de1456254299d6e885e335265: 21300000
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: fc59cca0c5cfa9d4ab91e45852e7bcb5, type: 3}
+  - {fileID: 21300000, guid: 026eaee0fb53f924d93dc0220ae0e86d, type: 3}
+  - {fileID: 21300000, guid: cf76d1f0e70b3fc4499f52c5e40705aa, type: 3}
+  - {fileID: 21300000, guid: 843f73967045f3a4ea3faf0793e78af5, type: 3}
+  - {fileID: 21300000, guid: 761234b6cb876e744b7e23eee566dfac, type: 3}
+  - {fileID: 21300000, guid: fcef6ae8f668fdd4fadde5705ae5d51e, type: 3}
+  - {fileID: 21300000, guid: abba70aa93e8c944b9cfca0d86d2b334, type: 3}
+  - {fileID: 21300000, guid: 7be15a1c40498524c91f9f0f4061825d, type: 3}
+  - {fileID: 21300000, guid: d5c36b4d2961c8d408213eed741e33ef, type: 3}
+  - {fileID: 21300000, guid: dcffb38de1456254299d6e885e335265, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - lock
+  - white
+  - shift on
+  - mail
+  - cross
+  - White-Box
+  - shift always on
+  - check
+  - shift off
+  - add user
+  m_RenderDataMap: {}
+  m_Tag: LoginSprites
+  m_IsVariant: 0

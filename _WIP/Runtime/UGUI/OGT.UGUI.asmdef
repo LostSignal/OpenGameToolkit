@@ -1,0 +1,28 @@
+{
+    "name": "OGT.UGUI",
+    "rootNamespace": "",
+    "references": [
+        "GUID:07eef6138bd086b4a8b900f81c87383a",
+        "GUID:a1f6d4cae8ca5e44283a8a0b9e4681cd",
+        "GUID:0a2e5498c4092c14b9040f5d5a1bd300",
+        "GUID:09b1bcbdd442e4b449dbaa31ab1ff3fe",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:471a31e4ca2236d498867fa04c687528"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "Unity",
+            "expression": "0.0.0",
+            "define": "UNITY"
+        }
+    ],
+    "noEngineReferences": false
+}

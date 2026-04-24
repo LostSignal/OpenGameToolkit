@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 84276bd6a5430f049860034b9a8073f9
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - pancakeInputActions: {fileID: -944628639613478452, guid: 473b665a1e6c29945a6c2d917fc7c707,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

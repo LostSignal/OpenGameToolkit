@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-139439753006180091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f285f2761d7c37744a86c6eda5d13f6c, type: 3}
+  m_Name: Snap
+  m_EditorClassIdentifier: OGT.Common::OGT.Properties.EnumValue
+  displayName: Snap
+  value: 0
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5564a8c8b3a445d47bef38a9aef63340, type: 3}
+  m_Name: XR Turn Mode
+  m_EditorClassIdentifier: OGT.Common::OGT.Properties.Enum
+  enumValues:
+  - {fileID: -139439753006180091}
+  - {fileID: 8414086876777908181}
+--- !u!114 &8414086876777908181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f285f2761d7c37744a86c6eda5d13f6c, type: 3}
+  m_Name: Continuous
+  m_EditorClassIdentifier: OGT.Common::OGT.Properties.EnumValue
+  displayName: Continuous
+  value: 1

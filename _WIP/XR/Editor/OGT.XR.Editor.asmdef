@@ -1,0 +1,41 @@
+{
+    "name": "OGT.XR.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:b4a1ee0c58dd8944e9365381803ed052",
+        "GUID:a1f6d4cae8ca5e44283a8a0b9e4681cd",
+        "GUID:13d8775bd08327b428b17300a7bf920a"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.xr.interaction.toolkit",
+            "expression": "0.0.0",
+            "define": "USING_UNITY_XR_INTERACTION_TOOLKIT"
+        },
+        {
+            "name": "com.unity.xr.management",
+            "expression": "0.0.0",
+            "define": "USING_UNITY_XR_MANAGEMENT"
+        },
+        {
+            "name": "com.unity.animation.rigging",
+            "expression": "0.0.0",
+            "define": "USING_UNITY_ANIMATION_RIGGING"
+        },
+        {
+            "name": "com.unity.animation.rigging",
+            "expression": "0.0.0",
+            "define": "USING_UNITY_ANIMATION_RIGGING"
+        }
+    ],
+    "noEngineReferences": false
+}

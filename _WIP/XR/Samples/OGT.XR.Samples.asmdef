@@ -1,0 +1,30 @@
+{
+    "name": "OGT.XR.Samples",
+    "rootNamespace": "",
+    "references": [
+        "GUID:07eef6138bd086b4a8b900f81c87383a",
+        "GUID:a1f6d4cae8ca5e44283a8a0b9e4681cd",
+        "GUID:0a2e5498c4092c14b9040f5d5a1bd300",
+        "GUID:b4a1ee0c58dd8944e9365381803ed052",
+        "GUID:f93a19062ef99834fb470b52dc96501f",
+        "GUID:14861e8c54633d54b8b16c93f2608614",
+        "GUID:f8ae758060c5a99408f1ce67fc83303c",
+        "GUID:fe685ec1767f73d42b749ea8045bfe43",
+        "GUID:8e6a24801a2051a46b1cff796dfdf441"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.xr.interaction.toolkit",
+            "expression": "0.0.0",
+            "define": "USING_UNITY_XR_INTERACTION_TOOLKIT"
+        }
+    ],
+    "noEngineReferences": false
+}

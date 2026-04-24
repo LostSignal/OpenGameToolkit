@@ -1,0 +1,217 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8070114988264279279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f8e273314ebf3a4f9c3869b7f270bc9, type: 3}
+  m_Name: Movement - Enable Strafe
+  m_EditorClassIdentifier: 
+  serializationId: 1
+  uniqueId: 1635749466
+  defaultValue: 1
+--- !u!114 &-7402950740573969428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92edd060375819f469b719050500d25d, type: 3}
+  m_Name: General - Sit / Stand
+  m_EditorClassIdentifier: 
+  serializationId: 11
+  uniqueId: 1001599164
+  defaultValue: 1
+  enumValues:
+  - name: Sitting
+  - name: Standing
+--- !u!114 &-6864606483391211050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 805a1b837956883458f5f6dfafa9eb64, type: 3}
+  m_Name: Turning - Snap Turn Degrees
+  m_EditorClassIdentifier: 
+  serializationId: 6
+  uniqueId: 1073244071
+  defaultValue: 30
+  minValue: 15
+  maxValue: 45
+--- !u!114 &-6207452375174053000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 805a1b837956883458f5f6dfafa9eb64, type: 3}
+  m_Name: Turning - Continuous Turn Speed
+  m_EditorClassIdentifier: 
+  serializationId: 5
+  uniqueId: 1970490478
+  defaultValue: 180
+  minValue: 10
+  maxValue: 360
+--- !u!114 &-3227162821482652308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 805a1b837956883458f5f6dfafa9eb64, type: 3}
+  m_Name: General - Eye Height
+  m_EditorClassIdentifier: 
+  serializationId: 8
+  uniqueId: 12693636
+  defaultValue: 1.3
+  minValue: 1
+  maxValue: 3
+--- !u!114 &-2841705166025696726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f8e273314ebf3a4f9c3869b7f270bc9, type: 3}
+  m_Name: Turning - Allow Turn Around
+  m_EditorClassIdentifier: 
+  serializationId: 4
+  uniqueId: 1386111074
+  defaultValue: 0
+--- !u!114 &-1422833002349543504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92edd060375819f469b719050500d25d, type: 3}
+  m_Name: Turning - Turn Mode
+  m_EditorClassIdentifier: 
+  serializationId: 7
+  uniqueId: 1456176389
+  defaultValue: 1
+  enumValues:
+  - name: Continuous
+  - name: Snap
+--- !u!114 &-997527234537954797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92edd060375819f469b719050500d25d, type: 3}
+  m_Name: Movement - Movement Source
+  m_EditorClassIdentifier: 
+  serializationId: 3
+  uniqueId: 251060411
+  defaultValue: 0
+  enumValues:
+  - name: Head
+  - name: Left Hand
+  - name: Right Hand
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 154641d7f7226c548822e3d6cf39fb23, type: 3}
+  m_Name: XR Controller Settings
+  m_EditorClassIdentifier: 
+  variables:
+  - {fileID: -8070114988264279279}
+  - {fileID: 4310021362046942805}
+  - {fileID: -997527234537954797}
+  - {fileID: -2841705166025696726}
+  - {fileID: -6207452375174053000}
+  - {fileID: -6864606483391211050}
+  - {fileID: -1422833002349543504}
+  - {fileID: -3227162821482652308}
+  - {fileID: 7548089743027566424}
+  - {fileID: 5631301948527609628}
+  - {fileID: -7402950740573969428}
+  lastSerializeId: 11
+--- !u!114 &4310021362046942805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92edd060375819f469b719050500d25d, type: 3}
+  m_Name: Movement - Movement Hand
+  m_EditorClassIdentifier: 
+  serializationId: 2
+  uniqueId: 1404656607
+  defaultValue: 0
+  enumValues:
+  - name: Left
+  - name: Right
+--- !u!114 &5631301948527609628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92edd060375819f469b719050500d25d, type: 3}
+  m_Name: General - Movement Mode
+  m_EditorClassIdentifier: 
+  serializationId: 10
+  uniqueId: 1420380603
+  defaultValue: 0
+  enumValues:
+  - name: Continuous and Teleport
+  - name: Continuous Only
+  - name: Teleport Only
+--- !u!114 &7548089743027566424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 805a1b837956883458f5f6dfafa9eb64, type: 3}
+  m_Name: General - Estimated Height
+  m_EditorClassIdentifier: 
+  serializationId: 9
+  uniqueId: 1207291647
+  defaultValue: 1.3
+  minValue: 1
+  maxValue: 3

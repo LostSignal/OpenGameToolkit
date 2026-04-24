@@ -1,0 +1,23 @@
+{
+    "name": "OGT.Unity.UI.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:07eef6138bd086b4a8b900f81c87383a",
+        "GUID:a1f6d4cae8ca5e44283a8a0b9e4681cd",
+        "GUID:13d8775bd08327b428b17300a7bf920a",
+        "GUID:471a31e4ca2236d498867fa04c687528",
+        "GUID:7cc55e470f872f64db8bfbe42e200e59",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

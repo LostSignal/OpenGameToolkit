@@ -1,0 +1,20 @@
+{
+    "name": "OGT.Actions.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a1098b34245085649b5fe3fbf2b3f1e5",
+        "GUID:c3a01dc954638854cbf85ac5481bbb1a",
+        "GUID:13d8775bd08327b428b17300a7bf920a"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,75 @@
+# OS
+.DS_Store*
+Thumbs.db
+Desktop.ini
+
+# Unity
+bin
+obj
+Build
+Builds
+BuildReports
+BuildReports.meta
+Library
+Logs
+MemoryCaptures
+Temp
+UserSettings
+packages-lock.json
+**/Assets/AssetStoreTools
+!**/Assets/Plugins/UnityPurchasing/Bin
+
+# Visual Studio
+{UNITY_PROJECT_DIRECTORY}/*.csproj
+{UNITY_PROJECT_DIRECTORY}/*.sln
+.vsconfig
+.vs
+.vs/*
+*.pdb
+*.pdb.meta
+*.mdb
+*.mdb.meta
+*.suo
+
+# Addressables
+**/Assets/AddressableAssetsData/*/*.bin*
+**/Assets/AddressableAssetsData/link.xml
+**/Assets/AddressableAssetsData/link.xml.meta
+**/Assets/StreamingAssets/aa
+**/Assets/StreamingAssets/aa.meta
+
+# Visual Scripting
+**/Assets/Unity.VisualScripting.Generated/VisualScripting.Flow/*
+**/Assets/Unity.VisualScripting.Generated/VisualScripting.Flow
+**/Assets/Unity.VisualScripting.Generated/VisualScripting.Flow.meta
+
+# Bakery
+bakery_times.log
+.uvgblog.txt
+.denoiserlog.txt
+.ftracelog.txt
+
+# Open Game Toolkit
+RuntimeSettings.txt
+RuntimeSettings.txt.meta
+.packagemappings
+
+# Other
+.gradle
+.consulo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.svd
+*.opendb
+*.VC.db
+*.pidb.meta
+*.apk
+sysinfo.txt
+ExportedObj
+launchSettings.json
+
+# API files
+*.api
+*.api.meta

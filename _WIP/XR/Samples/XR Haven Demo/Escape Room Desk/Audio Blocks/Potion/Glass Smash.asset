@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4928135bef12d72418be474593539ad1, type: 3}
+  m_Name: Glass Smash
+  m_EditorClassIdentifier: 
+  closeCaptioning:
+    localizedStringId: CC_GLASS_BREAKING
+  audioChannel: {fileID: 0}
+  audioClips:
+  - {fileID: 8300000, guid: 905d2b3db896b014092a2265e7eaa347, type: 3}
+  - {fileID: 8300000, guid: bc96081d53f3aa24bae8460909a31cfd, type: 3}
+  - {fileID: 8300000, guid: e1978c07119ce5d4494a83e9be51936b, type: 3}
+  minPitch: 0.8
+  maxPitch: 1.2
+  minVolume: 1
+  maxVolume: 1
+  cooldownTime: 0
+  playType: 0
