@@ -38,7 +38,7 @@ namespace OGT.PlayFab
             get
             {
                 Debug.LogError("PlayFabManager.Instance no longer supported!");
-                return GameObject.FindFirstObjectByType<Bootloader>().FindManager<PlayFabManager>();
+                return GameObject.FindAnyObjectByType<Bootloader>().FindManager<PlayFabManager>();
             }
         }
 

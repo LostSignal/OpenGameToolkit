@@ -1,3 +1,5 @@
+﻿#pragma warning disable
+
 
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.UI;

@@ -1,3 +1,5 @@
+﻿#pragma warning disable
+
 //-----------------------------------------------------------------------
 // <copyright file="XRInteractionHelper.cs" company="Lost Signal LLC">
 //     Copyright (c) Lost Signal LLC. All rights reserved.
@@ -83,7 +85,7 @@ namespace OGT.Haven
                 return;
             }
 
-            xrInteractionManagerInstance = GameObject.FindFirstObjectByType<XRInteractionManager>();
+            xrInteractionManagerInstance = GameObject.FindAnyObjectByType<XRInteractionManager>();
 
             if (xrInteractionManagerInstance == null)
             {

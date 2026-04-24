@@ -1,3 +1,5 @@
+﻿#pragma warning disable
+
 //-----------------------------------------------------------------------
 // <copyright file="HavenRig.cs" company="Lost Signal LLC">
 //     Copyright (c) Lost Signal LLC. All rights reserved.
@@ -65,7 +67,7 @@ namespace OGT.Haven
         [SerializeField] private XRUtilManager xrUtilManager;
 #pragma warning restore 0649
 
-        private Dictionary<long, XRController> controllerCache = new();
+        private Dictionary<ulong, XRController> controllerCache = new();
 
         private bool isClimbingWithLeftHand;
         private bool isClimbingWithRightHand;
@@ -139,7 +141,7 @@ namespace OGT.Haven
 
         public void SendHapticImpluse(UnityEngine.XR.Interaction.Toolkit.Interactors.XRBaseInteractor interactor, float amplitude, float duration)
         {
-            long entityId = interactor.GetEntityId();
+            ulong entityId = interactor.GetEntityId().ToULong();
 
             if (this.controllerCache.TryGetValue(entityId, out XRController controller) == false)
             {

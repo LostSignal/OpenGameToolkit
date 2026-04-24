@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +16,7 @@ public class RespawnableObject : MonoBehaviour
     Quaternion m_StartingRotation;
 
     Rigidbody m_Rigidbody;
-    
+
     void Start()
     {
         m_Rigidbody = GetComponent<Rigidbody>();

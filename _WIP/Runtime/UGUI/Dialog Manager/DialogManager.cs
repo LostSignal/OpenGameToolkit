@@ -30,7 +30,7 @@ namespace OGT
             get
             {
                 Debug.LogError("DialogManager.Instance No Longer Supported!");
-                return GameObject.FindFirstObjectByType<Bootloader>().FindManager<DialogManager>();
+                return GameObject.FindAnyObjectByType<Bootloader>().FindManager<DialogManager>();
             }
         }
 

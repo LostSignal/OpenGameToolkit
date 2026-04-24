@@ -1,3 +1,5 @@
+﻿#pragma warning disable
+
 //-----------------------------------------------------------------------
 // <copyright file="Potion.cs" company="Lost Signal LLC">
 //     Copyright (c) Lost Signal LLC. All rights reserved.
@@ -155,7 +157,7 @@ namespace Lost.Haven
                 //// if (Physics.Raycast(this.particleSystemLiquid.transform.position, Vector3.down, out RaycastHit hit, 50.0f, ~0, QueryTriggerInteraction.Collide))
                 //// {
                 ////     PotionReceiver receiver = hit.collider.GetComponent<PotionReceiver>();
-                //// 
+                ////
                 ////     if (receiver != null)
                 ////     {
                 ////         receiver.ReceivePotion(potionType);

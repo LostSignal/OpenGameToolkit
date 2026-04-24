@@ -30,7 +30,7 @@ namespace OGT
 
     public abstract class Editor : UnityEditor.Editor
     {
-        private static readonly Dictionary<long, SerializedObject> SerializedObjectCache = new();
+        private static readonly Dictionary<ulong, SerializedObject> SerializedObjectCache = new();
         private static readonly OGTLogger Logger = OGTLogger.OGTEditor;
         private static readonly string DownString = '\u2193'.ToString();
         private static readonly string UpString = '\u2191'.ToString();
@@ -175,10 +175,10 @@ namespace OGT
 
         protected void DrawMember(UnityEngine.Object objectValue, string propertyName, params GUILayoutOption[] options)
         {
-            if (SerializedObjectCache.TryGetValue(objectValue.GetEntityId(), out SerializedObject serializedObject) == false)
+            if (SerializedObjectCache.TryGetValue(EntityId.ToULong(objectValue.GetEntityId()), out SerializedObject serializedObject) == false)
             {
                 serializedObject = new SerializedObject(objectValue);
-                SerializedObjectCache.Add(objectValue.GetEntityId(), serializedObject);
+                SerializedObjectCache.Add(EntityId.ToULong(objectValue.GetEntityId()), serializedObject);
             }
 
             var property = serializedObject.FindProperty(propertyName);

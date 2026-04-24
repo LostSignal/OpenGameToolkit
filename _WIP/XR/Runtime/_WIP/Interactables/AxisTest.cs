@@ -1,3 +1,5 @@
+﻿#pragma warning disable
+
 //-----------------------------------------------------------------------
 // <copyright file="AxisTest.cs" company="Lost Signal LLC">
 //     Copyright (c) Lost Signal LLC. All rights reserved.
@@ -10,7 +12,7 @@ namespace OGT.XR
     using UnityEngine;
     using UnityEngine.XR.Interaction.Toolkit;
 
-    //// 
+    ////
     //// NOTE [bgish]: Got some inspiration from here https://www.youtube.com/watch?v=xMPQa2MWmHk
     //// NOTE [bgish]: Need to detect if objectTransform has a Rigidbody and use that instead of the transform
     //// NOTE [bgish]: Need to transfer velocity to object after letting go of it

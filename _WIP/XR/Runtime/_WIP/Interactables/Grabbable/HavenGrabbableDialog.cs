@@ -1,3 +1,5 @@
+﻿#pragma warning disable
+
 //-----------------------------------------------------------------------
 // <copyright file="HavenGrabbableDialog.cs" company="Lost Signal LLC">
 //     Copyright (c) Lost Signal LLC. All rights reserved.
@@ -9,7 +11,7 @@
 namespace OGT.Haven
 {
     using UnityEngine;
-    
+
 
     [AddComponentMenu("Haven XR/Interactables/HXR Grabbable Dialog")]
     public class HavenGrabbableDialog : HavenGrabbable

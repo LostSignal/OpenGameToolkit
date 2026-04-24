@@ -1,3 +1,5 @@
+﻿#pragma warning disable
+
 using Lost;
 using System.Collections.Generic;
 using Unity.FPS.Game;

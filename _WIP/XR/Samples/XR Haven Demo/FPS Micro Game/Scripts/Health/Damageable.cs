@@ -1,3 +1,5 @@
+﻿#pragma warning disable
+
 //-----------------------------------------------------------------------
 // <copyright file="Damageable.cs" company="Lost Signal LLC">
 //     Copyright (c) Lost Signal LLC. All rights reserved.
@@ -15,7 +17,7 @@ namespace Lost
 
     public class Damageable : MonoBehaviour, IValidate
     {
-        private static readonly Dictionary<long, Damageable> DamangeableColliders = new();
+        private static readonly Dictionary<ulong, Damageable> DamangeableColliders = new();
 
         static Damageable()
         {
@@ -46,7 +48,7 @@ namespace Lost
 
         public static bool TryGetDamageable(Collider collider, out Damageable damageable)
         {
-            return DamangeableColliders.TryGetValue(collider.GetEntityId(), out damageable);
+            return DamangeableColliders.TryGetValue(collider.GetEntityId().ToULong(), out damageable);
         }
 
         public void InflictDamage(float damage, bool isExplosionDamage, GameObject damageSource)
@@ -91,7 +93,7 @@ namespace Lost
         {
             for (int i = 0; i < this.colliders.Count; i++)
             {
-                DamangeableColliders.Add(this.colliders[i].GetEntityId(), this);
+                DamangeableColliders.Add(this.colliders[i].GetEntityId().ToULong(), this);
             }
         }
 
@@ -99,7 +101,7 @@ namespace Lost
         {
             for (int i = 0; i < this.colliders.Count; i++)
             {
-                DamangeableColliders.Remove(this.colliders[i].GetEntityId());
+                DamangeableColliders.Remove(this.colliders[i].GetEntityId().ToULong());
             }
         }
     }

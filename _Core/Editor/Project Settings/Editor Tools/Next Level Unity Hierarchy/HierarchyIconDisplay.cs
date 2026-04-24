@@ -25,13 +25,13 @@ namespace OGT
             if (ProjectSettingsEditorTools.Instance.UseWarpedImaginationNextLevelHierarchy)
             {
                 // TODO [bgish]: In Unity 6.4 this changes to hierarchyWindowItemByEntityIdOnGUI
-                EditorApplication.hierarchyWindowItemOnGUI += OnHierarchyWindowItemOnGUI;
+                EditorApplication.hierarchyWindowItemByEntityIdOnGUI += OnHierarchyWindowItemOnGUI;
                 EditorApplication.update += OnEditorUpdate;
             }
             else
             {
                 // TODO [bgish]: In Unity 6.4 this changes to hierarchyWindowItemByEntityIdOnGUI
-                EditorApplication.hierarchyWindowItemOnGUI -= OnHierarchyWindowItemOnGUI;
+                EditorApplication.hierarchyWindowItemByEntityIdOnGUI -= OnHierarchyWindowItemOnGUI;
                 EditorApplication.update -= OnEditorUpdate;
             }
         }
@@ -51,7 +51,7 @@ namespace OGT
             DoesHierarchyHaveFocus = EditorWindow.focusedWindow != null && EditorWindow.focusedWindow == HierarchyEditorWindow;
         }
 
-        private static void OnHierarchyWindowItemOnGUI(int entityId, Rect selectionRect)
+        private static void OnHierarchyWindowItemOnGUI(EntityId entityId, Rect selectionRect)
         {
             var obj = EditorUtility.EntityIdToObject(entityId) as GameObject;
 

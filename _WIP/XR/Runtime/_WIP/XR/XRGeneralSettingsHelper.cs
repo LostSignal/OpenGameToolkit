@@ -1,3 +1,5 @@
+﻿#pragma warning disable
+
 //-----------------------------------------------------------------------
 // <copyright file="XRGeneralSettingsHelper.cs" company="Lost Signal LLC">
 //     Copyright (c) Lost Signal LLC. All rights reserved.
@@ -27,11 +29,11 @@ namespace OGT.XR
             //// {
             ////     string searchText = "t:XRGeneralSettings";
             ////     string[] assets = UnityEditor.AssetDatabase.FindAssets(searchText);
-            //// 
+            ////
             ////     if (assets.Length > 0)
             ////     {
             ////         string path = UnityEditor.AssetDatabase.GUIDToAssetPath(assets[0]);
-            //// 
+            ////
             ////         foreach (var asset in UnityEditor.AssetDatabase.LoadAllAssetsAtPath(path))
             ////         {
             ////             if (asset is XRGeneralSettings settings)
@@ -40,7 +42,7 @@ namespace OGT.XR
             ////                 {
             ////                     settings.InitManagerOnStart = false;
             ////                 }
-            //// 
+            ////
             ////                 UnityEditor.EditorUtility.SetDirty(settings);
             ////             }
             ////         }

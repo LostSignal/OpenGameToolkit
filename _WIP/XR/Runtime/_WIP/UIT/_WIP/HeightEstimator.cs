@@ -1,3 +1,5 @@
+﻿#pragma warning disable
+
 //-----------------------------------------------------------------------
 // <copyright file="HeightEstimator.cs" company="DefaultCompany">
 //     Copyright (c) DefaultCompany. All rights reserved.

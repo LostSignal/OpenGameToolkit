@@ -39,13 +39,13 @@ namespace OGT
             UnityEditor.EditorPrefs.DeleteKey(EditorPrefKey);
 
             var objectToDisable = GameObject.FindObjectsByType<DisableOnPlayAndBuild>(FindObjectsInactive.Include);
-            var disabledEntityIds = new List<long>();
+            var disabledEntityIds = new List<ulong>();
 
             foreach (var obj in objectToDisable)
             {
                 if (obj.gameObject.activeSelf)
                 {
-                    disabledEntityIds.Add(obj.gameObject.GetEntityId());
+                    disabledEntityIds.Add(EntityId.ToULong(obj.gameObject.GetEntityId()));
                     obj.gameObject.SetActive(false);
                 }
             }
@@ -61,13 +61,13 @@ namespace OGT
         {
             var objectToEnable = GameObject.FindObjectsByType<DisableOnPlayAndBuild>(FindObjectsInactive.Include);
             var disabledEntityIdsString = UnityEditor.EditorPrefs.GetString(EditorPrefKey, null);
-            var disabledEntityIds = new HashSet<long>();
+            var disabledEntityIds = new HashSet<ulong>();
 
             if (disabledEntityIdsString != null)
             {
                 foreach (var idStr in disabledEntityIdsString.Split(','))
                 {
-                    if (long.TryParse(idStr, out long entityId))
+                    if (ulong.TryParse(idStr, out ulong entityId))
                     {
                         disabledEntityIds.Add(entityId);
                     }
@@ -76,7 +76,7 @@ namespace OGT
 
             foreach (var obj in objectToEnable)
             {
-                if (disabledEntityIds.Contains(obj.gameObject.GetEntityId()))
+                if (disabledEntityIds.Contains(EntityId.ToULong(obj.gameObject.GetEntityId())))
                 {
                     obj.gameObject.SetActive(true);
                 }

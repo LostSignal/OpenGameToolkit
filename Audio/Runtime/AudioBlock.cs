@@ -202,7 +202,7 @@ namespace OGT
         //               we'll continue on using this.
         private AudioManager GetAudioManager()
         {
-            audioManagerInstance ??= GameObject.FindFirstObjectByType<Bootloader>()?.FindManager<AudioManager>();
+            audioManagerInstance ??= GameObject.FindAnyObjectByType<Bootloader>()?.FindManager<AudioManager>();
             return audioManagerInstance;
         }
 

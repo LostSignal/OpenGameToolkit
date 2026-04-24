@@ -13,7 +13,7 @@ namespace SNP
 
     public class BackendManager : GameBehavior
     {
-        public event Action OnLogin;
+        //public event Action OnLogin;
 
         public bool IsLoggedIn { get; private set; }
         public string PlayerId { get; private set; }

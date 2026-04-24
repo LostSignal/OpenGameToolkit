@@ -51,6 +51,12 @@ namespace OGT
             ConvertAllCSharpFiles(false);
         }
 
+        [MenuItem("Tools/OGT/Utility/Force Recompile All Code", priority = MenuItemPriorities.Utility + 3)]
+        public static void ForceRecompile()
+        {
+            UnityEditor.Compilation.CompilationPipeline.RequestScriptCompilation(UnityEditor.Compilation.RequestScriptCompilationOptions.CleanBuildCache);
+        }
+
         [MenuItem("Tools/OGT/Generate Menu Items", priority = MenuItemPriorities.GenerateMenuItems)]
         public static void GenerateMenuItemsFile() => GenerateMenuItems.Generate();
 

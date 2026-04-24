@@ -69,7 +69,7 @@ namespace OGT.Networking
             get
             {
                 Logger.LogError("NetworkingManager.PrintDebugOutput is obsolete, use Logging Categories instead.");
-                return GameObject.FindFirstObjectByType<Bootloader>().FindManager<NetworkingManager>().settings.PrintDebugOutput;
+                return GameObject.FindAnyObjectByType<Bootloader>().FindManager<NetworkingManager>().settings.PrintDebugOutput;
             }
         }
 

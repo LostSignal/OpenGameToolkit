@@ -1,3 +1,5 @@
+﻿#pragma warning disable
+
 using Unity.FPS.Game;
 using UnityEngine;
 
@@ -78,7 +80,7 @@ namespace Unity.FPS.AI
 
         void UpdateAiStateTransitions()
         {
-            // Handle transitions 
+            // Handle transitions
             switch (AiState)
             {
                 case AIState.Follow:
@@ -103,7 +105,7 @@ namespace Unity.FPS.AI
 
         void UpdateCurrentAiState()
         {
-            // Handle logic 
+            // Handle logic
             switch (AiState)
             {
                 case AIState.Patrol:

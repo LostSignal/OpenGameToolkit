@@ -1,3 +1,5 @@
+﻿#pragma warning disable
+
 using System.Collections.Generic;
 using Unity.FPS.Game;
 using UnityEngine;

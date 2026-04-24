@@ -16,7 +16,7 @@ namespace OGT
     [CustomEditor(typeof(Dialog))]
     public class DialogEditor : UnityEditor.Editor
     {
-        private static readonly HashSet<long> ShowDialogComponents = new();
+        private static readonly HashSet<ulong> ShowDialogComponents = new();
 
         private SerializedObject dialogObject;
 
@@ -71,17 +71,17 @@ namespace OGT
             }
 
             // Drawing the Show/Hide components button
-            bool componentsVisible = ShowDialogComponents.Contains(this.target.GetEntityId());
+            bool componentsVisible = ShowDialogComponents.Contains(this.target.GetEntityId().ToULong());
 
             if (GUILayout.Button(componentsVisible ? "Hide Editor Components" : "Show Editor Components"))
             {
                 if (componentsVisible)
                 {
-                    ShowDialogComponents.Remove(this.target.GetEntityId());
+                    ShowDialogComponents.Remove(this.target.GetEntityId().ToULong());
                 }
                 else
                 {
-                    ShowDialogComponents.Add(this.target.GetEntityId());
+                    ShowDialogComponents.Add(this.target.GetEntityId().ToULong());
                 }
 
                 this.SetComponentsVisibility(!componentsVisible);
@@ -135,7 +135,7 @@ namespace OGT
             this.onHide = this.dialogObject.FindProperty("onHide");
             this.onBackButtonPressed = this.dialogObject.FindProperty("onBackButtonPressed");
 
-            this.SetComponentsVisibility(ShowDialogComponents.Contains(this.target.GetEntityId()));
+            this.SetComponentsVisibility(ShowDialogComponents.Contains(this.target.GetEntityId().ToULong()));
         }
 
         private void DrawAnimator(Dialog dialog)

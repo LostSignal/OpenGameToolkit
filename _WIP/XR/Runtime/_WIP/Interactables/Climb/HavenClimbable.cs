@@ -1,3 +1,5 @@
+﻿#pragma warning disable
+
 //-----------------------------------------------------------------------
 // <copyright file="HavenClimbable.cs" company="Lost Signal LLC">
 //     Copyright (c) Lost Signal LLC. All rights reserved.
@@ -13,7 +15,7 @@ namespace OGT.Haven
     [AddComponentMenu("Haven XR/Interactables/HXR Climbable")]
     public class HavenClimbable : UnityEngine.XR.Interaction.Toolkit.Interactables.XRBaseInteractable, IAwake, IValidate
     {
-        private static readonly Dictionary<long, HavenHand> Hands = new();
+        private static readonly Dictionary<ulong, HavenHand> Hands = new();
 
 #pragma warning disable 0649
         [SerializeField] private HavenClimbableSettingsObject havenClimbableSettings;
@@ -80,13 +82,13 @@ namespace OGT.Haven
                 return null;
             }
 
-            if (Hands.TryGetValue(interactor.GetEntityId(), out HavenHand havenHand) == false)
+            if (Hands.TryGetValue(interactor.GetEntityId().ToULong(), out HavenHand havenHand) == false)
             {
                 havenHand = interactor.transform.parent.GetComponent<HavenHand>();
 
                 if (havenHand != null)
                 {
-                    Hands.Add(interactor.GetEntityId(), havenHand);
+                    Hands.Add(interactor.GetEntityId().ToULong(), havenHand);
                 }
             }
 

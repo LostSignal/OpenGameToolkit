@@ -1,3 +1,5 @@
+﻿#pragma warning disable
+
 using Lost;
 using System.Collections.Generic;
 using Unity.FPS.Game;
@@ -96,15 +98,15 @@ namespace Unity.FPS.Gameplay
 
             //// // Handle case of player shooting (make projectiles not go through walls, and remember center-of-screen trajectory)
             //// PlayerWeaponsManager playerWeaponsManager = m_ProjectileBase.Owner.GetComponent<PlayerWeaponsManager>();
-            //// 
+            ////
             //// if (playerWeaponsManager)
             //// {
             ////     m_HasTrajectoryOverride = true;
-            //// 
+            ////
             ////     Vector3 cameraToMuzzle = (m_ProjectileBase.InitialPosition - playerWeaponsManager.WeaponCamera.transform.position);
-            //// 
+            ////
             ////     m_TrajectoryCorrectionVector = Vector3.ProjectOnPlane(-cameraToMuzzle, playerWeaponsManager.WeaponCamera.transform.forward);
-            //// 
+            ////
             ////     if (TrajectoryCorrectionDistance == 0)
             ////     {
             ////         transform.position += m_TrajectoryCorrectionVector;
@@ -114,7 +116,7 @@ namespace Unity.FPS.Gameplay
             ////     {
             ////         m_HasTrajectoryOverride = false;
             ////     }
-            //// 
+            ////
             ////     if (Physics.Raycast(playerWeaponsManager.WeaponCamera.transform.position, cameraToMuzzle.normalized,
             ////         out RaycastHit hit, cameraToMuzzle.magnitude, HittableLayers, k_TriggerInteraction))
             ////     {
@@ -135,7 +137,7 @@ namespace Unity.FPS.Gameplay
                 transform.position += m_ProjectileBase.InheritedMuzzleVelocity * Time.deltaTime;
             }
 
-            // Drift towards trajectory override (this is so that projectiles can be centered 
+            // Drift towards trajectory override (this is so that projectiles can be centered
             // with the camera center even though the actual weapon is offset)
             if (m_HasTrajectoryOverride && m_ConsumedTrajectoryCorrectionVector.sqrMagnitude <
                 m_TrajectoryCorrectionVector.sqrMagnitude)

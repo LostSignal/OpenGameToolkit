@@ -1,3 +1,5 @@
+﻿#pragma warning disable
+
 //-----------------------------------------------------------------------
 // <copyright file="XRDialog.cs" company="Lost Signal LLC">
 //     Copyright (c) Lost Signal LLC. All rights reserved.
@@ -9,7 +11,7 @@ namespace OGT.XR
     using UnityEngine;
 
 #if USING_UNITY_XR_INTERACTION_TOOLKIT
-    
+
     using UnityEngine.XR.Interaction.Toolkit.UI;
 #endif
 

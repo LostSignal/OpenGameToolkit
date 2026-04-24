@@ -1,3 +1,5 @@
+﻿#pragma warning disable
+
 //-----------------------------------------------------------------------
 // <copyright file="IgnoreHitDetection.cs" company="Lost Signal LLC">
 //     Copyright (c) Lost Signal LLC. All rights reserved.
@@ -14,7 +16,7 @@ namespace Lost
 
     public class IgnoreHitDetection : MonoBehaviour, IValidate
     {
-        private static readonly Dictionary<long, IgnoreHitDetection> IgnoreHitDetectionColliders = new();
+        private static readonly Dictionary<ulong, IgnoreHitDetection> IgnoreHitDetectionColliders = new();
 
 #pragma warning disable 0649
         [Tooltip("The Colliders that ignore hit detection")]
@@ -23,7 +25,7 @@ namespace Lost
 
         public static bool TryGetIgnoreHitDetection(Collider collider, out IgnoreHitDetection ignoreHitDetection)
         {
-            return IgnoreHitDetectionColliders.TryGetValue(collider.GetEntityId(), out ignoreHitDetection);
+            return IgnoreHitDetectionColliders.TryGetValue(collider.GetEntityId().ToULong(), out ignoreHitDetection);
         }
 
         public void Validate(ValidationReport report, bool isSceneObject)
@@ -35,7 +37,7 @@ namespace Lost
         {
             for (int i = 0; i < this.colliders.Count; i++)
             {
-                IgnoreHitDetectionColliders.Add(this.colliders[i].GetEntityId(), this);
+                IgnoreHitDetectionColliders.Add(this.colliders[i].GetEntityId().ToULong(), this);
             }
         }
 
@@ -43,7 +45,7 @@ namespace Lost
         {
             for (int i = 0; i < this.colliders.Count; i++)
             {
-                IgnoreHitDetectionColliders.Remove(this.colliders[i].GetEntityId());
+                IgnoreHitDetectionColliders.Remove(this.colliders[i].GetEntityId().ToULong());
             }
         }
     }

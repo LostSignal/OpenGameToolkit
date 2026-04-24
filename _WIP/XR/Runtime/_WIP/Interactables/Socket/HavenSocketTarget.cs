@@ -1,3 +1,5 @@
+﻿#pragma warning disable
+
 //-----------------------------------------------------------------------
 // <copyright file="HavenSocketTarget.cs" company="Lost Signal LLC">
 //     Copyright (c) Lost Signal LLC. All rights reserved.
@@ -16,7 +18,7 @@ namespace OGT.Haven
     [RequireComponent(typeof(UnityEngine.XR.Interaction.Toolkit.Interactables.XRBaseInteractable))]
     public class HavenSocketTarget : MonoBehaviour, IAwake, IValidate
     {
-        private static readonly Dictionary<long, string> SocketTargetMap = new();
+        private static readonly Dictionary<ulong, string> SocketTargetMap = new();
 
 #pragma warning disable 0649
         [SerializeField] private Rigidbody interactableRigidbody;
@@ -27,7 +29,7 @@ namespace OGT.Haven
 
         public static string GetSocketTargetName(UnityEngine.XR.Interaction.Toolkit.Interactables.XRBaseInteractable interactable)
         {
-            if (SocketTargetMap.TryGetValue(interactable.GetEntityId(), out string socketTargetName))
+            if (SocketTargetMap.TryGetValue(interactable.GetEntityId().ToULong(), out string socketTargetName))
             {
                 return socketTargetName;
             }
@@ -75,7 +77,7 @@ namespace OGT.Haven
         {
             if (this.interactable && string.IsNullOrWhiteSpace(this.socketTargetName) == false)
             {
-                SocketTargetMap.Add(this.interactable.GetEntityId(), this.socketTargetName);
+                SocketTargetMap.Add(this.interactable.GetEntityId().ToULong(), this.socketTargetName);
             }
         }
 
@@ -83,7 +85,7 @@ namespace OGT.Haven
         {
             if (this.interactable && string.IsNullOrWhiteSpace(this.socketTargetName) == false)
             {
-                SocketTargetMap.Remove(this.interactable.GetEntityId());
+                SocketTargetMap.Remove(this.interactable.GetEntityId().ToULong());
             }
         }
 

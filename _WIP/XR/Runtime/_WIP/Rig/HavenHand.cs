@@ -1,3 +1,5 @@
+﻿#pragma warning disable
+
 //-----------------------------------------------------------------------
 // <copyright file="CharacterController.cs" company="Lost Signal LLC">
 //     Copyright (c) Lost Signal LLC. All rights reserved.
@@ -35,7 +37,7 @@ namespace OGT.Haven
         [SerializeField] private UnityEngine.XR.Interaction.Toolkit.Interactors.XRBaseInteractor[] interactors;
 #pragma warning restore 0649
 
-        private HashSet<long> interactorInstanceIds;
+        private HashSet<ulong> interactorInstanceIds;
         private float previousTrigger;
         private float previousGrip;
         private Mode currentMode;
@@ -117,18 +119,18 @@ namespace OGT.Haven
             //// TODO [bgish]: Precache these at startup
             if (this.interactorInstanceIds == null)
             {
-                this.interactorInstanceIds = new HashSet<long>();
+                this.interactorInstanceIds = new HashSet<ulong>();
 
                 if (this.interactors?.Length > 0)
                 {
                     for (int i = 0; i < this.interactors.Length; i++)
                     {
-                        this.interactorInstanceIds.Add(this.interactors[i].GetEntityId());
+                        this.interactorInstanceIds.Add(this.interactors[i].GetEntityId().ToULong());
                     }
                 }
             }
 
-            return this.interactorInstanceIds.Contains(interactor.GetEntityId());
+            return this.interactorInstanceIds.Contains(interactor.GetEntityId().ToULong());
         }
 
         private void Awake()

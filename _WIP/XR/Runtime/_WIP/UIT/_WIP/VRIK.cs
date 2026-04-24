@@ -1,3 +1,5 @@
+﻿#pragma warning disable
+
 //-----------------------------------------------------------------------
 // <copyright file="VRIK.cs" company="Lost Signal LLC">
 //     Copyright (c) Lost Signal LLC. All rights reserved.
@@ -259,7 +261,7 @@ namespace OGT
         {
             ActivationManager.Register(this);
             this.enabled = false;
-        } 
+        }
 
         private HeadOffsets headOffsets = new HeadOffsets();
         private bool isDoneCalibrating = false;
@@ -275,14 +277,14 @@ namespace OGT
             {
                 this.headOffsets.Add(dot, isLookingUp, Camera.main.transform.position);
                 this.isDoneCalibrating = true;
-                
+
                 //// this.head.TrackingPositionOffset = new Vector3(0.0f, 0.0f, -this.centerEye.localPosition.z);
                 //// this.leftHand.TrackingPositionOffset = new Vector3(0.0f, 0.0f, -this.centerEye.localPosition.z);
                 //// this.rightHand.TrackingPositionOffset = new Vector3(0.0f, 0.0f, -this.centerEye.localPosition.z);
-            
+
                 return;
             }
-            
+
             if (this.isDoneCalibrating)
             {
                 this.isDoneCalibrating = false;

@@ -1,3 +1,5 @@
+﻿#pragma warning disable
+
 using Lost;
 using System.Linq;
 using Unity.FPS.Game;

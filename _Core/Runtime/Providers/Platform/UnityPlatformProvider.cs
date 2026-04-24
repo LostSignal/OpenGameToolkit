@@ -531,9 +531,7 @@ namespace OGT
                 case RuntimePlatform.tvOS:
                 case RuntimePlatform.Switch:
                 case RuntimePlatform.EmbeddedLinuxArm64:
-                case RuntimePlatform.EmbeddedLinuxArm32:
                 case RuntimePlatform.EmbeddedLinuxX64:
-                case RuntimePlatform.EmbeddedLinuxX86:
                 case RuntimePlatform.LinuxServer:
                 case RuntimePlatform.WindowsServer:
                 case RuntimePlatform.OSXServer:
