@@ -46,7 +46,7 @@ namespace OGT
             var triggerTransform = trigger.TriggerTransform;
 
             this.triggers.Add(
-                trigger.GetEntityId(),
+                (long)EntityId.ToULong(trigger.GetEntityId()),
                 new TriggerItem
                 {
                     Area = trigger.Area,
@@ -62,7 +62,7 @@ namespace OGT
 
         public void RemoveTrigger(Trigger trigger)
         {
-            this.triggers.Remove(trigger.GetEntityId());
+            this.triggers.Remove((long)EntityId.ToULong(trigger.GetEntityId()));
         }
     }
 }

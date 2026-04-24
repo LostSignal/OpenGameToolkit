@@ -38,7 +38,7 @@ namespace OGT
             Transform playerProximityTransform = playerProximity.ProximityTransform;
 
             this.playerProximityList.Add(
-                playerProximity.GetEntityId(),
+                (long)EntityId.ToULong(playerProximity.GetEntityId()),
                 new PlayerProximityItem
                 {
                     WorldToLocal = playerProximityTransform.worldToLocalMatrix,
@@ -53,7 +53,7 @@ namespace OGT
 
         public void Unregister(PlayerProximity playerProximity)
         {
-            this.playerProximityList.Remove(playerProximity.GetEntityId());
+            this.playerProximityList.Remove((long)EntityId.ToULong(playerProximity.GetEntityId()));
         }
 
         public void OnUpdate(float deltaTime)

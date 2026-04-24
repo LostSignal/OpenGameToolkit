@@ -113,7 +113,6 @@ namespace Lost
             {
                 return;
             }
-#endif
 
             this.recordedLightmaps = LightmapSettings.lightmaps.Select(x => new RecordedLightmapData
             {
@@ -122,7 +121,7 @@ namespace Lost
                 lightmapShadowMask = x.shadowMask,
             }).ToArray();
 
-            var allRenderers = GameObject.FindObjectsByType<Renderer>(FindObjectsInactive.Include, FindObjectsSortMode.InstanceID);
+            var allRenderers = GameObject.FindObjectsByType<Renderer>(FindObjectsInactive.Include).OrderBy(x => EntityId.ToULong(x.GetEntityId())).ToArray();
 
             this.rendererInfos = new RendererLMInfo[allRenderers.Length];
 
@@ -133,14 +132,13 @@ namespace Lost
                 var scaleOffset = renderer.lightmapScaleOffset;
                 this.rendererInfos[i] = new RendererLMInfo
                 {
-                    rendererEntityId = renderer.GetEntityId(),
+                    rendererEntityId = EntityId.ToULong(renderer.GetEntityId()),
                     rendererName = renderer.gameObject.name,
                     lightmapIndex = lightmapIndex,
                     scaleOffset = scaleOffset,
                 };
             }
 
-#if UNITY_EDITOR
             UnityEditor.EditorUtility.SetDirty(this);
 #endif
         }
@@ -199,7 +197,7 @@ namespace Lost
         private class RendererLMInfo
         {
             public string rendererName;
-            public long rendererEntityId;
+            public ulong rendererEntityId;
             public int lightmapIndex;
             public Vector4 scaleOffset;
         }

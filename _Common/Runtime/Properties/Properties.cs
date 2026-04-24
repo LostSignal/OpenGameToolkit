@@ -602,7 +602,7 @@ namespace OGT.Properties
         private class PropertyPropertyDrawer : UnityEditor.PropertyDrawer
         {
             private static readonly Dictionary<string, string> typeNameCache = new();
-            private static readonly Dictionary<long, string[]> enumNamesCache = new();
+            private static readonly Dictionary<ulong, string[]> enumNamesCache = new();
 
             public override void OnGUI(Rect position, UnityEditor.SerializedProperty property, GUIContent label)
             {
@@ -742,10 +742,10 @@ namespace OGT.Properties
                     return Array.Empty<string>();
                 }
 
-                if (enumNamesCache.TryGetValue(enumType.GetEntityId(), out var enumNames) == false)
+                if (enumNamesCache.TryGetValue(EntityId.ToULong(enumType.GetEntityId()), out var enumNames) == false)
                 {
                     enumNames = enumType.EnumValues.Select(x => x.Name).ToArray();
-                    enumNamesCache.Add(enumType.GetEntityId(), enumNames);
+                    enumNamesCache.Add(EntityId.ToULong(enumType.GetEntityId()), enumNames);
                 }
 
                 return enumNames;

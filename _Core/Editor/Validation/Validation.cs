@@ -20,7 +20,7 @@ namespace OGT.Validation
         [MenuItem("Tools/OGT/Validation/Validate Open Scenes", priority = MenuItemPriorities.Validation + 0)]
         public static void ValidateOpenScenes()
         {
-            var gameObjects = GameObject.FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None).ToList<UnityEngine.Object>();
+            var gameObjects = GameObject.FindObjectsByType<GameObject>(FindObjectsInactive.Include).ToList<UnityEngine.Object>();
 
             ValidateObjects(gameObjects, true);
         }

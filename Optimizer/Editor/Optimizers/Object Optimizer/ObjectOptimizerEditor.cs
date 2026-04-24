@@ -127,7 +127,7 @@ namespace OGT
 
         private void UpdateMeshRendererCount()
         {
-            this.meshRendererCountText = $"Mesh Render Count: {GameObject.FindObjectsByType<MeshRenderer>(FindObjectsSortMode.None).Where(x => x.enabled).Count()}";
+            this.meshRendererCountText = $"Mesh Render Count: {GameObject.FindObjectsByType<MeshRenderer>().Where(x => x.enabled).Count()}";
         }
     }
 }

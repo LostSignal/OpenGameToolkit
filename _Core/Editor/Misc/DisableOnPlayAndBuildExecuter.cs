@@ -18,7 +18,7 @@ namespace OGT
         {
             var componentsToDestroy = new List<DisableOnPlayAndBuild>();
 
-            foreach (var disableOnPlay in GameObject.FindObjectsByType<DisableOnPlayAndBuild>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            foreach (var disableOnPlay in GameObject.FindObjectsByType<DisableOnPlayAndBuild>(FindObjectsInactive.Include))
             {
                 disableOnPlay.gameObject.SetActive(false);
                 componentsToDestroy.Add(disableOnPlay);
@@ -38,7 +38,7 @@ namespace OGT
         {
             UnityEditor.EditorPrefs.DeleteKey(EditorPrefKey);
 
-            var objectToDisable = GameObject.FindObjectsByType<DisableOnPlayAndBuild>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var objectToDisable = GameObject.FindObjectsByType<DisableOnPlayAndBuild>(FindObjectsInactive.Include);
             var disabledEntityIds = new List<long>();
 
             foreach (var obj in objectToDisable)
@@ -59,7 +59,7 @@ namespace OGT
         [EditorEvents.OnExitPlayMode]
         private static void OnExitPlayMode()
         {
-            var objectToEnable = GameObject.FindObjectsByType<DisableOnPlayAndBuild>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var objectToEnable = GameObject.FindObjectsByType<DisableOnPlayAndBuild>(FindObjectsInactive.Include);
             var disabledEntityIdsString = UnityEditor.EditorPrefs.GetString(EditorPrefKey, null);
             var disabledEntityIds = new HashSet<long>();
 

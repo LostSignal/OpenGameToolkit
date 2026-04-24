@@ -13,7 +13,7 @@ namespace OGT
         [EditorEvents.OnProcessSceneBuild]
         private static void OnValidateScene()
         {
-            foreach (var moveToRoot in UnityEngine.Object.FindObjectsByType<MoveTransformToRoot>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            foreach (var moveToRoot in UnityEngine.Object.FindObjectsByType<MoveTransformToRoot>(FindObjectsInactive.Include))
             {
                 moveToRoot.MoveToRoot();
             }

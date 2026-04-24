@@ -26,19 +26,19 @@ namespace OGT
 
             Logger.Log($"OptimizationCleanUp.CleanUp({scene.name}) Started...");
 
-            foreach (var objectOptimizer in GameObject.FindObjectsByType<ObjectOptimizer>(FindObjectsSortMode.None).Where(x => x.gameObject.scene == scene))
+            foreach (var objectOptimizer in GameObject.FindObjectsByType<ObjectOptimizer>().Where(x => x.gameObject.scene == scene))
             {
                 Logger.Log($"OptimizationCleanUp Cleaning Up ObjectOptimizer {objectOptimizer.name}...");
                 objectOptimizer.CleanUp();
             }
 
-            foreach (var sceneOptimizer in GameObject.FindObjectsByType<SceneOptimizer>(FindObjectsSortMode.None).Where(x => x.gameObject.scene == scene))
+            foreach (var sceneOptimizer in GameObject.FindObjectsByType<SceneOptimizer>().Where(x => x.gameObject.scene == scene))
             {
                 Logger.Log($"OptimizationCleanUp Cleaning Up SceneOptimizer {sceneOptimizer.name}...");
                 sceneOptimizer.CleanUp();
             }
 
-            foreach (var volumeOptimizer in GameObject.FindObjectsByType<VolumeOptimizer>(FindObjectsSortMode.None).Where(x => x.gameObject.scene == scene))
+            foreach (var volumeOptimizer in GameObject.FindObjectsByType<VolumeOptimizer>().Where(x => x.gameObject.scene == scene))
             {
                 Logger.Log($"OptimizationCleanUp Cleaning Up VolumeOptimizer {volumeOptimizer.name}...");
                 volumeOptimizer.CleanUp();
