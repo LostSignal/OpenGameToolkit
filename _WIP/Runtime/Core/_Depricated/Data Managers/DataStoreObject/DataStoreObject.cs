@@ -15,9 +15,9 @@ namespace OGT
 
     public abstract class DataStoreObject : ScriptableObject
     {
-        private static readonly List<DataStoreObject> DataStoreObjects = new ();
+        private static readonly List<DataStoreObject> DataStoreObjects = new();
 
-        private readonly DataStore dataStore = new ();
+        private readonly DataStore dataStore = new();
 
 #pragma warning disable 0649
         [SerializeField][ReadOnly] private int id;

@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 using System;
 using System.Collections.Generic;
@@ -217,7 +217,7 @@ namespace Unity.FPS.Game
             m_PhysicalAmmoPool.Enqueue(nextShell);
         }
 
-        void PlaySFX(AudioClip sfx) { } // => AudioUtility.CreateSFX(sfx, transform.position, AudioUtility.AudioGroups.WeaponShoot, 0.0f);
+        void PlaySFX(AudioClip sfx) {}  // => AudioUtility.CreateSFX(sfx, transform.position, AudioUtility.AudioGroups.WeaponShoot, 0.0f);
 
         void Reload()
         {

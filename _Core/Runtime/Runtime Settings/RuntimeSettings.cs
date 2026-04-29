@@ -85,7 +85,6 @@ namespace OGT
             System.IO.File.WriteAllText(GetRuntimeSettingsEditorFilePath(), JsonUtil.Serialize(Settings, true));
         }
 
-
 #if UNITY_EDITOR
         [UnityEditor.MenuItem("Test/Show Runtime Settings File Path")]
 #endif

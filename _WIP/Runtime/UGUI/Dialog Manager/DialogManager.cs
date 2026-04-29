@@ -66,17 +66,17 @@ namespace OGT
             //// {
             ////     return (T)dialogLogic;
             //// }
-            //// 
+            ////
             //// if (DialogManager.Instance.onDemandDialogs == null)
             //// {
             ////     return null;
             //// }
-            //// 
+            ////
             //// for (int i = 0; i < DialogManager.Instance.onDemandDialogs.Length; i++)
             //// {
             ////     var prefab = DialogManager.Instance.onDemandDialogs[i];
             ////     var dailogLogicComponent = prefab.GetComponent<T>();
-            //// 
+            ////
             ////     if (dailogLogicComponent)
             ////     {
             ////         var newDialog = GameObject.Instantiate(prefab);
@@ -86,7 +86,7 @@ namespace OGT
             ////         return newDialog.GetComponent<T>();
             ////     }
             //// }
-            //// 
+            ////
             //// return null;
 
             throw new System.NotImplementedException();

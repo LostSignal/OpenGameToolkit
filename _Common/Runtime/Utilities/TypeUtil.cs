@@ -77,22 +77,22 @@ namespace OGT
             string name = assembly.FullName.Substring(0, assembly.FullName.IndexOf(","));
 
             return name == "System" ||
-                   name == "mscorlib" ||
-                   name == "UnityEngine" ||
-                   name == "UnityEditor" ||
-                   name == "Shouldly" ||
-                   name == "nunit.framework" ||
-                   name == "Newtonsoft.Json" ||
-                   name == "PlayerBuildProgramLibrary.Data" ||
-                   name == "Purchasing.Common" ||
-                   name == "PPv2URPConverters" ||
-                   name == "netstandard" ||
-                   name.StartsWith("Bee.") ||
-                   name.StartsWith("Mono.") ||
-                   name.StartsWith("Unity.") ||
-                   name.StartsWith("System.") ||
-                   name.StartsWith("UnityEditor.") ||
-                   name.StartsWith("UnityEngine.");
+                name == "mscorlib" ||
+                name == "UnityEngine" ||
+                name == "UnityEditor" ||
+                name == "Shouldly" ||
+                name == "nunit.framework" ||
+                name == "Newtonsoft.Json" ||
+                name == "PlayerBuildProgramLibrary.Data" ||
+                name == "Purchasing.Common" ||
+                name == "PPv2URPConverters" ||
+                name == "netstandard" ||
+                name.StartsWith("Bee.") ||
+                name.StartsWith("Mono.") ||
+                name.StartsWith("Unity.") ||
+                name.StartsWith("System.") ||
+                name.StartsWith("UnityEditor.") ||
+                name.StartsWith("UnityEngine.");
         }
     }
 }

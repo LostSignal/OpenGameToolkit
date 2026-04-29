@@ -17,7 +17,7 @@ namespace OGT
         [Test]
         public void DuplicateAdd()
         {
-            BitArray bitArray = new (0);
+            BitArray bitArray = new(0);
             bitArray.SetBit(0);
             bitArray.SetBit(0);
             bitArray.SetBit(0);
@@ -34,10 +34,10 @@ namespace OGT
         {
             int max = 1000;
 
-            BitArray bitArray1 = new (0);
+            BitArray bitArray1 = new(0);
             bitArray1.SetCapacity(max);
 
-            BitArray bitArray2 = new (0);
+            BitArray bitArray2 = new(0);
 
             LogAssert.Expect(LogType.Error, BitArray.GrowError);
             bitArray2.SetBit(max);
@@ -52,11 +52,11 @@ namespace OGT
             int max = 1001;
 
             LogAssert.Expect(LogType.Error, "BitArray.SetCapacity Failed, maxBitIndex 1001 exceeds MaxBitIndex 1000!");
-            BitArray bitArray1 = new (0);
+            BitArray bitArray1 = new(0);
             bitArray1.SetCapacity(max);
             LogAssert.NoUnexpectedReceived();
 
-            BitArray bitArray2 = new (0);
+            BitArray bitArray2 = new(0);
 
             LogAssert.Expect(LogType.Error, "BitArray.SetBit Failed, bitIndex 1001 exceeds MaxBitIndex 1000!");
             bitArray2.SetBit(max);
@@ -68,7 +68,7 @@ namespace OGT
         [Test]
         public void TestSettingAndGrowing()
         {
-            BitArray bitArray = new ();
+            BitArray bitArray = new();
             bitArray.SetCapacity(7);
 
             Assert.False(bitArray.IsBitSet(0));
@@ -136,7 +136,7 @@ namespace OGT
         [Test]
         public void TestGrowingError()
         {
-            BitArray bitArray = new ();
+            BitArray bitArray = new();
             bitArray.SetCapacity(0);
 
             LogAssert.Expect(LogType.Error, BitArray.GrowError);
@@ -150,7 +150,7 @@ namespace OGT
         [Test]
         public void AddingNegative()
         {
-            BitArray bitArray = new ();
+            BitArray bitArray = new();
             Assert.Throws<ArgumentException>(() => { bitArray.SetBit(-1); });
         }
     }

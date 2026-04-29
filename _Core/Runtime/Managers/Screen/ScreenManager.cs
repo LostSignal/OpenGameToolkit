@@ -1,4 +1,3 @@
-
 namespace OGT
 {
     using System;
@@ -123,7 +122,6 @@ namespace OGT
                     Screen.SetResolution(newWidth, newHeight, true);
                 }
             }
-
         }
 
         private void ForceCorrectOrientation()

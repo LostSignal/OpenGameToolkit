@@ -11,7 +11,7 @@ namespace OGT.PlayFab
     using UnityEngine;
 
     public class TitleData<T> : ScriptableObject
-        where T : new ()
+        where T : new()
     {
 #if UNITY_EDITOR
         [SerializeField] private T data = new T();

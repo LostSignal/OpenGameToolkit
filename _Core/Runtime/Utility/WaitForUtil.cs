@@ -11,9 +11,9 @@ namespace OGT
 
     public static class WaitForUtil
     {
-        public static readonly WaitForEndOfFrame EndOfFrame = new ();
-        private static readonly Dictionary<float, WaitForSeconds> WaitForSecondsCache = new ();
-        private static readonly Dictionary<float, WaitForSecondsRealtime> WaitForSecondsRealtimeCache = new ();
+        public static readonly WaitForEndOfFrame EndOfFrame = new();
+        private static readonly Dictionary<float, WaitForSeconds> WaitForSecondsCache = new();
+        private static readonly Dictionary<float, WaitForSecondsRealtime> WaitForSecondsRealtimeCache = new();
 
         public static WaitForSeconds Seconds(float time)
         {

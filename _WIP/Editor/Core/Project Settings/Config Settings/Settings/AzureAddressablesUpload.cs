@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="AzureAddressablesUpload.cs" company="Lost Signal LLC">
 //     Copyright (c) Lost Signal LLC. All rights reserved.
 // </copyright>
@@ -32,7 +32,7 @@ namespace OGT.Settings
         ////         return azureSettings?.CalculateBuildPath();
         ////     }
         //// }
-        //// 
+        ////
         //// //// [OGT.AppSettings.AzureAddressablesUploadSettings.LoadPath]
         //// public static string LoadPath
         //// {
@@ -168,12 +168,12 @@ namespace OGT.Settings
 
             // UnityEditor.AddressableAssets.Settings.AddressableAssetSettings settings = UnityEditor.AddressableAssets.AddressableAssetSettingsDefaultObject.Settings;
             // string buildPath = typeof(UploadAddressableToAzureSettings).FullName + "." + nameof(BuildPath);
-            // 
+            //
             // if (settings == null)
             // {
             //     return false;
             // }
-            // 
+            //
             // foreach (var group in settings.groups.Where(x => x.entries.IsNullOrEmpty() == false))
             // {
             //     foreach (var schema in group.Schemas.OfType<UnityEditor.AddressableAssets.Settings.GroupSchemas.BundledAssetGroupSchema>())

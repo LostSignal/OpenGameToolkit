@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 //-----------------------------------------------------------------------
 // <copyright file="AxisTest.cs" company="Lost Signal LLC">
@@ -188,6 +188,7 @@ namespace OGT.XR
         {
             this.endPosition = this.objectTransform.localPosition;
         }
+
 #endif
     }
 }

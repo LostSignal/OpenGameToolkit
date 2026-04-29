@@ -11,10 +11,10 @@ namespace OGT
 
     public class ConcurrentStack<T>
     {
-        private readonly object itemsLock = new ();
+        private readonly object itemsLock = new();
 
         [SerializeField]
-        private Stack<T> items = new ();
+        private Stack<T> items = new();
 
         public void Push(T t)
         {

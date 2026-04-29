@@ -54,7 +54,7 @@ public class PropertiesEditorWindow : EditorWindow
         //}
 
         //// GUILayout.Label("Click away to close this window.", EditorStyles.boldLabel);
-        //// 
+        ////
         //// if (GUILayout.Button("Click me!"))
         //// {
         ////     Debug.Log("Button clicked inside the popup.");

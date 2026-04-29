@@ -1,4 +1,3 @@
-
 // Whenever a property is set, mark the properties as dirty so they get saved to disk
 // Whenever a property is set, fire off an event so that the UI can update
 // Use uint instead of int for property IDs
@@ -23,7 +22,7 @@
 //    - Audio.SFX.IsMuted
 //    - Audio.SFX.Volume
 // - OGT Profile Settings
-//   - 
+//   -
 
 namespace OGT.Properties
 {
@@ -51,9 +50,9 @@ namespace OGT.Properties
         public string[] GetPropertyNames(Type type)
         {
             type = type == typeof(bool) ? typeof(BoolProperty) :
-                   type == typeof(int) ? typeof(IntProperty) :
-                   type == typeof(float) ? typeof(FloatProperty) :
-                   type == typeof(string) ? typeof(StringProperty) : null;
+                type == typeof(int) ? typeof(IntProperty) :
+                type == typeof(float) ? typeof(FloatProperty) :
+                type == typeof(string) ? typeof(StringProperty) : null;
 
             if (type == null)
             {
@@ -98,7 +97,6 @@ namespace OGT.Properties
                     throw new Exception($"Duplicate property ID {prop.Id} found in Properties ScriptableObject {this.name}. Each property ID must be unique.");
                 }
             }
-
         }
 
         public string GetPropertyNameById(int propertyId)
@@ -423,7 +421,6 @@ namespace OGT.Properties
                 throw new Exception($"String property with ID {propertyId} not found.");
             }
         }
-
 
         public void AddEnumHandler(int propertyId, Action<EnumValue, EnumValue> action)
         {

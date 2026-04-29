@@ -1,4 +1,3 @@
-
 namespace OGT.Properties
 {
     using Unity.VisualScripting;
@@ -7,7 +6,7 @@ namespace OGT.Properties
 
     public abstract class PropertyInspector<T> : Inspector where T : Property, new()
     {
-        public PropertyInspector(Metadata metadata) : base(metadata) { }
+        public PropertyInspector(Metadata metadata) : base(metadata) {}
 
         protected override float GetHeight(float width, GUIContent label)
         {
@@ -42,30 +41,30 @@ namespace OGT.Properties
     [Inspector(typeof(BoolProperty))]
     public class BoolPropertyInspector : PropertyInspector<BoolProperty>
     {
-        public BoolPropertyInspector(Metadata metadata) : base(metadata) { }
+        public BoolPropertyInspector(Metadata metadata) : base(metadata) {}
     }
 
     [Inspector(typeof(IntProperty))]
     public class IntPropertyInspector : PropertyInspector<IntProperty>
     {
-        public IntPropertyInspector(Metadata metadata) : base(metadata) { }
+        public IntPropertyInspector(Metadata metadata) : base(metadata) {}
     }
 
     [Inspector(typeof(FloatProperty))]
     public class FloatPropertyInspector : PropertyInspector<FloatProperty>
     {
-        public FloatPropertyInspector(Metadata metadata) : base(metadata) { }
+        public FloatPropertyInspector(Metadata metadata) : base(metadata) {}
     }
 
     [Inspector(typeof(StringProperty))]
     public class StringPropertyInspector : PropertyInspector<StringProperty>
     {
-        public StringPropertyInspector(Metadata metadata) : base(metadata) { }
+        public StringPropertyInspector(Metadata metadata) : base(metadata) {}
     }
 
     [Inspector(typeof(EnumProperty))]
     public class EnumPropertyInspector : PropertyInspector<EnumProperty>
     {
-        public EnumPropertyInspector(Metadata metadata) : base(metadata) { }
+        public EnumPropertyInspector(Metadata metadata) : base(metadata) {}
     }
 }

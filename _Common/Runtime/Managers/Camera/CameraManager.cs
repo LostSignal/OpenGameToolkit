@@ -23,7 +23,7 @@ namespace OGT
             get => this.cameraState;
         }
 
-        public int UpdateOrder => -1;
+        public int UpdateOrder => - 1;
 
         public void OnUpdate(float deltaTime)
         {

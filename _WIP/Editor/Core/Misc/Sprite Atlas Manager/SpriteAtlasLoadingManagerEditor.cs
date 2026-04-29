@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 //-----------------------------------------------------------------------
 // <copyright file="SpriteAtlasLoadingManagerEditor.cs" company="Lost Signal LLC">

@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="PurchasingManager.cs" company="Lost Signal LLC">
 //     Copyright (c) Lost Signal LLC. All rights reserved.
 // </copyright>
@@ -481,10 +481,10 @@ namespace OGT.PlayFab
                 ////     }
 
                 default:
-                    {
-                        fractionalUnit = 100;
-                        break;
-                    }
+                {
+                    fractionalUnit = 100;
+                    break;
+                }
             }
 
             return (int)(e.purchasedProduct.metadata.localizedPrice * fractionalUnit);

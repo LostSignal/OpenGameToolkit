@@ -131,7 +131,7 @@ namespace OGT.Networking
         //// public override void Initialize()
         //// {
         ////     this.StartCoroutine(Coroutine());
-        //// 
+        ////
         ////     IEnumerator Coroutine()
         ////     {
         ////         yield return UserInfoManager.WaitForInitialization();

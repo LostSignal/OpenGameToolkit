@@ -56,7 +56,6 @@ namespace OGT
             return true;
         }
 
-
         public static bool AssertNotNullOrEmpty(this ValidationReport report, MonoBehaviour monoBehaviour, ICollection collection, string nameOfObject)
         {
             if (collection != null && collection.Count > 0)

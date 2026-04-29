@@ -33,7 +33,7 @@ namespace OGT
         //// public override void Initialize()
         //// {
         ////     this.StartCoroutine(InitializeCoroutine());
-        //// 
+        ////
         ////     IEnumerator InitializeCoroutine()
         ////     {
         ////         if (this.isEnabled)
@@ -41,7 +41,7 @@ namespace OGT
         ////             yield return PlayFabManager.WaitForInitialization();
         ////             yield return PlayFabManager.Instance.GetRealtimeMessagesUrl();
         ////         }
-        //// 
+        ////
         ////         this.SetInstance(this);
         ////     }
         //// }

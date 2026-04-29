@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 //-----------------------------------------------------------------------
 // <copyright file="HavenContinuousMoveProvider.cs" company="Lost Signal LLC">

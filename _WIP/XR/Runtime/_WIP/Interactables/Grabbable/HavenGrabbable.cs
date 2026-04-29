@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 //-----------------------------------------------------------------------
 // <copyright file="HavenOffsetGrabbable.cs" company="Lost Signal LLC">
@@ -224,6 +224,7 @@ namespace OGT.Haven
             this.onUseStop?.Invoke();
             this.isBeingUsed = false;
         }
+
 #endif
     }
 }

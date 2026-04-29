@@ -13,14 +13,14 @@ namespace OGT
     {
         private static readonly OGTLogger Logger = OGTLogger.OGT;
 
-        private readonly object itemsLock = new ();
+        private readonly object itemsLock = new();
 
         [SerializeField]
-        private List<T> items = new ();
+        private List<T> items = new();
 
         public ConcurrentList()
         {
-            this.items = new ();
+            this.items = new();
         }
 
         public ConcurrentList(int capacity)

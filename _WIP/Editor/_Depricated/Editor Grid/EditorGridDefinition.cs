@@ -21,7 +21,7 @@ namespace OGT.EditorGrid
 
     public class EditorGridDefinition
     {
-        private readonly List<Column> columns = new ();
+        private readonly List<Column> columns = new();
 
         public EditorGridDefinition()
         {

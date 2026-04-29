@@ -24,6 +24,7 @@ namespace OGT
         {
             this.MoveToRoot();
         }
+
 #endif
 
         private void MoveToRoot()

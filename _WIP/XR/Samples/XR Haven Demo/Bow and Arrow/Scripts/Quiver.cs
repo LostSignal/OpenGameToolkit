@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 //-----------------------------------------------------------------------
 // <copyright file="Quiver.cs" company="Lost Signal LLC">
@@ -51,6 +51,7 @@ namespace Lost.Haven
                 hand.Select(arrow.Grabbable);
             }
         }
+
 #endif
     }
 }

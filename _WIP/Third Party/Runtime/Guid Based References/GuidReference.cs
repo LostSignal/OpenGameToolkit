@@ -58,9 +58,9 @@ namespace OGT
         }
 
         // Set up events to let users register to cleanup their own cached references on destroy or to cache off values
-        public event Action<GameObject> OnGuidAdded = (GameObject go) => { };
+        public event Action<GameObject> OnGuidAdded = (GameObject go) => {};
 
-        public event Action OnGuidRemoved = () => { };
+        public event Action OnGuidRemoved = () => {};
 
         // optimized accessor, and ideally the only code you ever call on this class
         public GameObject GameObject

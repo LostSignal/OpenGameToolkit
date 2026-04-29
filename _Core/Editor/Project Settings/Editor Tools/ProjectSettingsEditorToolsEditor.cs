@@ -61,6 +61,8 @@ namespace OGT
                     this.DrawMember("templateStateMachineBehaviour");
                     this.DrawMember("templateSubStateMachineBehaviour");
                     this.DrawMember("templateEditorTestScript");
+                    this.DrawMember("templateScriptableObject");
+                    this.DrawMember("templateEmptyCSharp");
                 });
             }
 
@@ -150,8 +152,6 @@ namespace OGT
 
                         GUILayout.Space(20);
                     }
-
-                    this.DrawMember("editorEventsIgnoreAssemblies", "Ignore Assemblies");
                 });
             }
         }

@@ -1,4 +1,3 @@
-
 namespace OGT
 {
     using UnityEditor;
@@ -72,7 +71,6 @@ namespace OGT
                 }
 
                 this.Space(10);
-
             }, true);
 
             // Drawing Panel Properties

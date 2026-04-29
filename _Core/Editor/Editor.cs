@@ -166,8 +166,8 @@ namespace OGT
                 float result = options.Columns.Sum(x => x.Width + columnPadding);
 
                 result += (options.ShowUpDownButtons && options.ShowAddDeleteButtons == false) ? 73.0f :
-                          (options.ShowAddDeleteButtons && options.ShowUpDownButtons == false) ? 81.0f :
-                          (options.ShowAddDeleteButtons && options.ShowUpDownButtons) ? 137.0f : 0.0f;
+                    (options.ShowAddDeleteButtons && options.ShowUpDownButtons == false) ? 81.0f :
+                    (options.ShowAddDeleteButtons && options.ShowUpDownButtons) ? 137.0f : 0.0f;
 
                 return result;
             }
@@ -331,7 +331,7 @@ namespace OGT
         }
     }
 
-    //// 
+    ////
     //// Needs to Support Enums (almost there, just need to get indexes and cache values)
     //// Needs to Support Lists
     ////

@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 using UnityEngine;
 
@@ -8,7 +8,7 @@ namespace Unity.FPS.AI
     // how the agent  is moving
     public class NavigationModule : MonoBehaviour
     {
-        [Header("Parameters")] [Tooltip("The maximum speed at which the enemy is moving (in world units per second).")]
+        [Header("Parameters")][Tooltip("The maximum speed at which the enemy is moving (in world units per second).")]
         public float MoveSpeed = 0f;
 
         [Tooltip("The maximum speed at which the enemy is rotating (degrees per second).")]

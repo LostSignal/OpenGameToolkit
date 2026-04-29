@@ -20,7 +20,7 @@ namespace OGT
         private static GuidManager instance;
 
         // Instance data
-        private readonly Dictionary<System.Guid, GuidInfo> guidToObjectMap = new ();
+        private readonly Dictionary<System.Guid, GuidInfo> guidToObjectMap = new();
 
         //// NOTE [bgish]: This class needs to be reset eventually, just not sure when
         ////               Try with Reload Domain and Reload Scene off

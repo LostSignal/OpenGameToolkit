@@ -13,7 +13,7 @@ namespace OGT
     {
         private bool isInitialized;
 
-        private event System.Action onInitialized = delegate { };
+        private event System.Action onInitialized = delegate {};
 
         public event System.Action OnInitialize
         {
@@ -75,6 +75,7 @@ namespace OGT
         {
             this.ResetToDefaults();
         }
+
 #endif
     }
 }

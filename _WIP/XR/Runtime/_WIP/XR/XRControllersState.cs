@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 //-----------------------------------------------------------------------
 // <copyright file="XRControllersState.cs" company="Lost Signal LLC">
@@ -18,10 +18,10 @@ namespace OGT.XR
 
     public class XRControllersState
     {
-        private static readonly StringBuilder StringBuilderCache = new ();
-        private static readonly List<InputDevice> InputDevicesList = new ();
+        private static readonly StringBuilder StringBuilderCache = new();
+        private static readonly List<InputDevice> InputDevicesList = new();
         private static readonly InputDeviceCharacteristics ControllerCharacteristics = InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.HeldInHand;
-        private static readonly XRControllersState ControllersState = new ();
+        private static readonly XRControllersState ControllersState = new();
 
         // Left Hand
         private bool isLeftControllerConnected;

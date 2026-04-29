@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="EditorBuildConfigFileBuidler.cs" company="Lost Signal LLC">
 //     Copyright (c) Lost Signal LLC. All rights reserved.
 // </copyright>
@@ -41,16 +41,16 @@ namespace OGT
             ////     {
             ////         continue;
             ////     }
-            //// 
+            ////
             ////     StringBuilder constantsBuilder = new();
             ////     constantsBuilder.AppendLine("    private const string Config{config_name}Path = \"{menu_item_name}\";");
             ////     constantsBuilder.AppendLine("    private const string Config{config_name}Guid = \"{config_guid}\";");
-            //// 
+            ////
             ////     string constantsString = constantsBuilder.ToString()
             ////         .Replace("{config_name}", buildConfig.SafeName)
             ////         .Replace("{config_guid}", buildConfig.Id)
             ////         .Replace("{menu_item_name}", GetMenuItemName(buildConfig));
-            //// 
+            ////
             ////     constants.AppendLine(constantsString);
             //// }
 
@@ -68,7 +68,7 @@ namespace OGT
             ////     {
             ////         continue;
             ////     }
-            //// 
+            ////
             ////     StringBuilder methodBuilder = new();
             ////     methodBuilder.AppendLine("    [MenuItem(Config{config_name}Path, false, 0)]                                                                      ".TrimEnd());
             ////     methodBuilder.AppendLine("    public static void Set{config_name}Config()                                                                        ".TrimEnd());
@@ -82,7 +82,7 @@ namespace OGT
             ////     methodBuilder.AppendLine("        Menu.SetChecked(Config{config_name}Path, ProjectSettingsBuildConfigs.IsActiveConfig(Config{config_name}Guid)); ".TrimEnd());
             ////     methodBuilder.AppendLine("        return true;                                                                                                   ".TrimEnd());
             ////     methodBuilder.AppendLine("    }                                                                                                                  ".TrimEnd());
-            //// 
+            ////
             ////     methods.Add(methodBuilder.ToString().Replace("{config_name}", buildConfig.SafeName));
             //// }
 
@@ -110,17 +110,17 @@ namespace OGT
         ////         GetSafeBuildConfigName(buildConfig.Parent) + "/" + buildConfig.SafeName :
         ////         buildConfig.SafeName;
         //// }
-        //// 
+        ////
         //// private static string GetMenuItemName(BuildConfig buildConfig)
         //// {
         ////     string menuItemName = "Tools/Lost/Configs/" + GetSafeBuildConfigName(buildConfig);
-        //// 
+        ////
         ////     // Removing the root config from the menu item path if we have more than one configs
         ////     if (ProjectSettingsBuildConfigs.Instance.BuildConfigs.Count > 1)
         ////     {
         ////         menuItemName = menuItemName.Replace(ProjectSettingsBuildConfigs.Instance.RootBuildConfig.SafeName + "/", string.Empty);
         ////     }
-        //// 
+        ////
         ////     return menuItemName;
         //// }
     }

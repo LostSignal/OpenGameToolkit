@@ -1,4 +1,3 @@
-
 using Unity.VisualScripting;
 
 namespace OGT.Properties

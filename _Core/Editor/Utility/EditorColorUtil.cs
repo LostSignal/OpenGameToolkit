@@ -12,7 +12,7 @@ namespace OGT
 
     public static class EditorColorUtil
     {
-        private static readonly Dictionary<Color, Texture2D> ColorCache = new ();
+        private static readonly Dictionary<Color, Texture2D> ColorCache = new();
 
         public static bool IsProTheme()
         {
@@ -30,7 +30,7 @@ namespace OGT
                 var pix = new Color32[1];
                 pix[0] = col;
 
-                Texture2D result = new (1, 1)
+                Texture2D result = new(1, 1)
                 {
                     hideFlags = HideFlags.DontSave,
                 };

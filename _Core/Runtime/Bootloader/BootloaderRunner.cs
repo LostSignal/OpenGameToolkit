@@ -1,4 +1,3 @@
-
 namespace OGT
 {
     using System.Collections;
@@ -105,22 +104,22 @@ namespace OGT
         ////             if (Resources.Load<Bootloader>("Bootloader") == null)
         ////             {
         ////                 string bootloaderAssetPath = "Assets/Resources/Bootloader.asset";
-        //// 
+        ////
         ////                 OGTLogger.OGTEditor.Log($"Creating Bootloader Scriptable Object at {bootloaderAssetPath}...");
-        //// 
+        ////
         ////                 // Making / Saving the Bootloader Object
         ////                 var bootloader = ScriptableObject.CreateInstance<Bootloader>();
         ////                 bootloader.name = nameof(Bootloader);
         ////                 CreateFolders(bootloaderAssetPath);
         ////                 UnityEditor.AssetDatabase.CreateAsset(bootloader, bootloaderAssetPath);
-        //// 
+        ////
         ////                 //// // Making / Saving the Managers Object
         ////                 //// var managers = ScriptableObject.CreateInstance<Managers>();
         ////                 //// managers.name = nameof(Managers);
         ////                 //// UnityEditor.AssetDatabase.CreateAsset(managers, "Assets/Resources/Managers.asset");
-        ////                 //// 
+        ////                 ////
         ////                 //// bootloader.managerInitializers = managers;
-        //// 
+        ////
         ////                 //// NOTE [bgish]: Old method when Managers was a lazy loaded object by guid
         ////                 //// // Making sure Bootloader points to Managers class
         ////                 //// bool found = UnityEditor.AssetDatabase.TryGetGUIDAndLocalFileIdentifier(managers, out string guid, out long localId);
@@ -130,27 +129,27 @@ namespace OGT
         ////                 ////     EditorUtil.SetDirty(bootloader);
         ////                 //// }
         ////             }
-        //// 
+        ////
         ////             void CreateFolders(string assetPath)
         ////             {
         ////                 var directory = System.IO.Path.GetDirectoryName(assetPath).Replace('\\', '/');
         ////                 var directories = directory.Split('/');
-        //// 
+        ////
         ////                 var rootFolder = directories[0];
         ////                 for (int i = 1; i < directories.Length; i++)
         ////                 {
         ////                     string folderPath = rootFolder + "/" + directories[i];
-        //// 
+        ////
         ////                     if (UnityEditor.AssetDatabase.AssetPathExists(folderPath) == false)
         ////                     {
         ////                         UnityEditor.AssetDatabase.CreateFolder(rootFolder, directories[i]);
         ////                     }
-        //// 
+        ////
         ////                     rootFolder = folderPath;
         ////                 }
         ////             }
         ////         }
-        //// 
+        ////
         ////         [EditorEvents.OnExitPlayMode]
         ////         private static void OnExitPlayMode()
         ////         {
@@ -158,7 +157,7 @@ namespace OGT
         ////             {
         ////                 Resources.UnloadAsset(instance);
         ////             }
-        //// 
+        ////
         ////             instance = null;
         ////             IsBooted = false;
         ////         }
@@ -191,20 +190,20 @@ namespace OGT
         //// {
         ////     IsBooted = false;
         //// }
-        //// 
+        ////
         //// [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         //// private static void InitializeBootloaderBeforeSceneLoad()
         //// {
         ////     instance = Resources.Load<Bootloader>("Bootloader");
-        //// 
+        ////
         ////     // Initialize Providers
         ////     foreach (var provicerInitializer in instance.providerInitializers)
         ////     {
         ////         provicerInitializer.Initialize();
         ////     }
-        //// 
+        ////
         ////     CoroutineRunner.Instance.StartCoroutine(Initialize());
-        //// 
+        ////
         ////     IEnumerator Initialize()
         ////     {
         ////         if (ShouldRunBootloader(instance))
@@ -212,10 +211,10 @@ namespace OGT
         ////             // TODO [bgish]: Get Current Version and Server Version
         ////             // TODO [bgish]: Force Update if needed
         ////             // TODO [bgish]: Set the addressables URL
-        //// 
+        ////
         ////             // Initialize Addressables
         ////             yield return UnityEngine.AddressableAssets.Addressables.InitializeAsync();
-        //// 
+        ////
         ////             // Initialize Managers
         ////             foreach (var managerInitializer in instance.managerInitializers)
         ////             {
@@ -223,10 +222,10 @@ namespace OGT
         ////                 {
         ////                     continue;
         ////                 }
-        //// 
+        ////
         ////                 var manager = managerInitializer.Initialize();
         ////                 instance.managers.Add(manager);
-        //// 
+        ////
         ////                 if (manager != ActivationManager.Instance)
         ////                 {
         ////                     ActivationManager.Register(manager);
@@ -235,15 +234,15 @@ namespace OGT
         ////                 {
         ////                     ActivationManager.Instance.IsPaused = true;
         ////                 }
-        //// 
+        ////
         ////                 yield return null;
         ////             }
-        //// 
+        ////
         ////             // Wait for all Managers to be ready
         ////             while (true)
         ////             {
         ////                 bool allDone = true;
-        //// 
+        ////
         ////                 foreach (var manager in instance.managers)
         ////                 {
         ////                     if (manager.IsReady == false)
@@ -252,38 +251,38 @@ namespace OGT
         ////                         break;
         ////                     }
         ////                 }
-        //// 
+        ////
         ////                 if (allDone)
         ////                 {
         ////                     break;
         ////                 }
-        //// 
+        ////
         ////                 yield return null;
         ////             }
-        //// 
+        ////
         ////             ActivationManager.Instance.IsPaused = false;
-        //// 
+        ////
         ////             // Load Always Loaded Scenes
         ////             foreach (var scene in instance.alwaysLoadedScenes)
         ////             {
         ////                 yield return scene.LoadScene();
         ////             }
         ////         }
-        //// 
+        ////
         ////         IsBooted = true;
         ////         onBooted?.Invoke();
         ////         onBooted = null;
         ////     }
-        //// 
+        ////
         ////     bool ShouldRunBootloader(Bootloader bootloader)
         ////     {
         ////         if (bootloader == null)
         ////         {
         ////             return false;
         ////         }
-        //// 
+        ////
         ////         var activeSceneName = SceneManager.GetActiveScene().name;
-        //// 
+        ////
         ////         foreach (var sceneToIgnore in bootloader.ignoreSceneNames)
         ////         {
         ////             if (activeSceneName == sceneToIgnore)
@@ -291,34 +290,34 @@ namespace OGT
         ////                 return false;
         ////             }
         ////         }
-        //// 
+        ////
         ////         return true;
         ////     }
         //// }
-        //// 
+        ////
         //// public static void PopulateSettings()
         //// {
         ////     var bootloader = Resources.Load<Bootloader>("Bootloader");
-        //// 
+        ////
         ////     if (bootloader == null)
         ////     {
         ////         return;
         ////     }
-        //// 
+        ////
         ////     bool didChange = false;
         ////     didChange |= PopulateInitializerList(ref bootloader.managerInitializers);
         ////     didChange |= PopulateInitializerList(ref bootloader.providerInitializers);
-        //// 
+        ////
         ////     if (didChange)
         ////     {
         ////         EditorUtil.SetDirty(bootloader);
         ////     }
         //// }
-        //// 
+        ////
         //// public static void ResetInitializers()
         //// {
         ////     var bootloader = Resources.Load<Bootloader>("Bootloader");
-        //// 
+        ////
         ////     if (bootloader != null)
         ////     {
         ////         bootloader.managerInitializers.Clear();
@@ -326,31 +325,31 @@ namespace OGT
         ////         EditorUtil.SetDirty(bootloader);
         ////     }
         //// }
-        //// 
+        ////
         //// public static bool PopulateInitializerList<T>(ref List<T> list)
         ////     where T : Initializer
         //// {
         ////     bool didChange = false;
-        //// 
+        ////
         ////     if (list == null)
         ////     {
         ////         list = new List<T>();
         ////         didChange = true;
         ////     }
-        //// 
+        ////
         ////     didChange |= RemoveNulls(list);
-        //// 
+        ////
         ////     foreach (var type in TypeUtil.GetAllTypesOf<T>())
         ////     {
         ////         didChange |= AddToListIfDoesNotExist(list, type);
         ////     }
-        //// 
+        ////
         ////     return didChange;
-        //// 
+        ////
         ////     static bool RemoveNulls(List<T> list)
         ////     {
         ////         bool foundNullItem = false;
-        //// 
+        ////
         ////         for (int i = list.Count - 1; i >= 0; i--)
         ////         {
         ////             if (list[i] == null)
@@ -359,10 +358,10 @@ namespace OGT
         ////                 list.RemoveAt(i);
         ////             }
         ////         }
-        //// 
+        ////
         ////         return foundNullItem;
         ////     }
-        //// 
+        ////
         ////     static bool AddToListIfDoesNotExist(List<T> list, Type type)
         ////     {
         ////         foreach (var setting in list)
@@ -372,19 +371,19 @@ namespace OGT
         ////                 return false;
         ////             }
         ////         }
-        //// 
+        ////
         ////         // Couldn't find it so adding a new one
         ////         var initializer = Activator.CreateInstance(type) as T;
-        //// 
+        ////
         ////         // Initializing the new manager settings
         ////         SetField(initializer, "name", initializer.Name);
         ////         SetField(initializer, "initializeAtStartup", true);
         ////         initializer.SetToDefaultValues();
-        //// 
+        ////
         ////         // Adding to the list
         ////         list.Add(initializer);
         ////         return true;
-        //// 
+        ////
         ////         static void SetField(object instance, string fieldName, object value)
         ////         {
         ////             var nameField = typeof(Initializer).GetField(fieldName, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
@@ -392,26 +391,26 @@ namespace OGT
         ////         }
         ////     }
         //// }
-        //// 
+        ////
         //// public void OnBeforeSerialize()
         //// {
         ////     this.json = this.GetJson();
         //// }
-        //// 
+        ////
         //// public void OnAfterDeserialize()
         //// {
         //// }
-        //// 
+        ////
         //// public string GetJson()
         //// {
         ////     if (this)
         ////     {
         ////         return JsonUtil.Serialize(this);
         ////     }
-        //// 
+        ////
         ////     return null;
         //// }
-        //// 
+        ////
         //// private Coroutine StartBootupSequence()
         //// {
         ////     return this.StartCoroutine(Coroutine());

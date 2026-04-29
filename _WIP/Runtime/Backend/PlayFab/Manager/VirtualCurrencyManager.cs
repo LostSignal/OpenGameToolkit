@@ -16,7 +16,7 @@ namespace OGT.PlayFab
 
     public class VirtualCurrencyManager
     {
-        private static readonly OGTLogger Logger = new ("PlayFab");
+        private static readonly OGTLogger Logger = new("PlayFab");
 
         private readonly Dictionary<string, int> virtualCurrencies = new Dictionary<string, int>();
         private readonly Dictionary<string, int> virtualCurrencyRechargeTimes = new Dictionary<string, int>();

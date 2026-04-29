@@ -14,7 +14,7 @@ namespace OGT.Networking
         private const string ColorKey = "Color";
         private const string InvalidColor = "000000";
 
-        private static readonly OGTLogger Logger = new ("Networking");
+        private static readonly OGTLogger Logger = new("Networking");
 
         private static readonly List<string> AllColors = new List<string>
         {

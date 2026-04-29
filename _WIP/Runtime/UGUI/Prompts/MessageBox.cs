@@ -59,12 +59,12 @@ namespace OGT
         //// {
         ////     return UnityTask<OkResult>.Run(this.ShowOkInternal(title, body));
         //// }
-        //// 
+        ////
         //// public UnityTask<YesNoResult> ShowYesNo(string title, string body)
         //// {
         ////     return UnityTask<YesNoResult>.Run(this.ShowYesNoInternal(title, body));
         //// }
-        //// 
+        ////
         //// public UnityTask<LeftRightResult> Show(string title, string body, string leftButtonText, string rightButtonText)
         //// {
         ////     return UnityTask<LeftRightResult>.Run(this.ShowInternal(title, body, leftButtonText, rightButtonText));

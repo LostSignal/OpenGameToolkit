@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 using Unity.FPS.Game;
 using UnityEngine;
@@ -119,7 +119,7 @@ namespace Unity.FPS.AI
                     break;
                 case AIState.Attack:
                     if (Vector3.Distance(m_EnemyController.KnownDetectedTarget.transform.position,
-                            m_EnemyController.DetectionModule.DetectionSourcePoint.position)
+                        m_EnemyController.DetectionModule.DetectionSourcePoint.position)
                         >= (AttackStopDistanceRatio * m_EnemyController.DetectionModule.AttackRange))
                     {
                         m_EnemyController.SetNavDestination(m_EnemyController.KnownDetectedTarget.transform.position);

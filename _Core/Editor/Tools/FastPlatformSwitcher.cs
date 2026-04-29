@@ -291,8 +291,8 @@ namespace OGT
         private static bool IsFileBlacklisted(string filename, string fullPath)
         {
             return IgnoredFiles.Contains(filename) ||
-                   IsIgnoredDirectory(fullPath) ||
-                   filename.StartsWith("shadercompiler-UnityShaderCompiler.exe");
+                IsIgnoredDirectory(fullPath) ||
+                filename.StartsWith("shadercompiler-UnityShaderCompiler.exe");
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 //-----------------------------------------------------------------------
 // <copyright file="Bow.cs" company="Lost Signal LLC">
@@ -179,6 +179,7 @@ namespace Lost.Haven
 
             this.Update();
         }
+
 #endif
     }
 }

@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 //-----------------------------------------------------------------------
 // <copyright file="VRIKEditor.cs" company="Lost Signal LLC">
@@ -16,7 +16,7 @@ namespace OGT
     [CustomEditor(typeof(VRIK))]
     public class VRIKEditor : Editor
     {
-        public override void OnInspectorGUI ()
+        public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
 

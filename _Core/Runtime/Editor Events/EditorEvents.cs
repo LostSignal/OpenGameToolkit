@@ -23,17 +23,17 @@ namespace OGT
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "Nesting for better discoverability.")]
     public static class EditorEvents
     {
-        public class EditorEvent : Attribute { }
-        public sealed class InitializeOnLoad : EditorEvent { }
-        public sealed class OnPreprocessBuildAttribute : EditorEvent { }
-        public sealed class OnPostprocessBuildAttribute : EditorEvent { }
-        public sealed class OnPostGenerateGradleAndroidProjectAttribute : EditorEvent { }
-        public sealed class OnProcessSceneAttribute : EditorEvent { }
-        public sealed class OnProcessSceneBuildAttribute : EditorEvent { }
-        public sealed class OnExitingPlayModeAttribute : EditorEvent { }
-        public sealed class OnExitPlayModeAttribute : EditorEvent { }
-        public sealed class OnEnterPlayModeAttribute : EditorEvent { }
-        public sealed class OnExitEditor : EditorEvent { }
+        public class EditorEvent : Attribute {}
+        public sealed class InitializeOnLoad : EditorEvent {}
+        public sealed class OnPreprocessBuildAttribute : EditorEvent {}
+        public sealed class OnPostprocessBuildAttribute : EditorEvent {}
+        public sealed class OnPostGenerateGradleAndroidProjectAttribute : EditorEvent {}
+        public sealed class OnProcessSceneAttribute : EditorEvent {}
+        public sealed class OnProcessSceneBuildAttribute : EditorEvent {}
+        public sealed class OnExitingPlayModeAttribute : EditorEvent {}
+        public sealed class OnExitPlayModeAttribute : EditorEvent {}
+        public sealed class OnEnterPlayModeAttribute : EditorEvent {}
+        public sealed class OnExitEditor : EditorEvent {}
 
 #if UNITY_EDITOR
 
@@ -43,8 +43,8 @@ namespace OGT
             UnityEditor.Android.IPostGenerateGradleAndroidProject,
 #endif
             IPreprocessBuildWithReport,
-            IPostprocessBuildWithReport,
-            IProcessSceneWithReport
+                                               IPostprocessBuildWithReport,
+                                               IProcessSceneWithReport
         {
             private static readonly StringBuilder stringBuilderCache = new StringBuilder();
             private static List<MethodInfo> EditorEventMethods = null;
@@ -210,6 +210,7 @@ namespace OGT
             {
                 ExecuteAttribute<EditorEvents.OnPostGenerateGradleAndroidProjectAttribute>(gradlePath);
             }
+
 #endif
 
             private static void PlayModeStateChanged(PlayModeStateChange state)
@@ -247,10 +248,15 @@ namespace OGT
                     results.Add(method);
                 }
 
-                LogFormat(
-                    "Searching all DLLs for EditorEvent Attributes found {0} attributes and took {1} milliseconds",
-                    results.Count,
-                    DateTime.Now.Subtract(typeCacheStart).TotalMilliseconds);
+                var totalMilliseconds = DateTime.Now.Subtract(typeCacheStart).TotalMilliseconds;
+
+                if (totalMilliseconds > 5)
+                {
+                    LogFormat(
+                        "Searching all DLLs for EditorEvent Attributes found {0} attributes and took {1} milliseconds",
+                        results.Count,
+                        totalMilliseconds);
+                }
 
                 return results;
             }

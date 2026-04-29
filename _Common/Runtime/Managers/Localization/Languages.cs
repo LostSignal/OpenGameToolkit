@@ -11,8 +11,8 @@ namespace OGT.Localization
 
     public static class Languages
     {
-        public static readonly Language English = new ("English", "English", "en", ",", ".", "Yes", "No");
-        public static readonly Language Vietnamese = new ("Vietnamese", "Tiếng Việt", "vi", ".", ",", "Có", "Không");
+        public static readonly Language English = new("English", "English", "en", ",", ".", "Yes", "No");
+        public static readonly Language Vietnamese = new("Vietnamese", "Tiếng Việt", "vi", ".", ",", "Có", "Không");
 
         private static ReadOnlyCollection<Language> languages;
         private static ReadOnlyCollection<string> languageNames;
@@ -40,7 +40,7 @@ namespace OGT.Localization
             {
                 if (languageNames == null)
                 {
-                    List<string> names = new ();
+                    List<string> names = new();
 
                     for (int i = 0; i < AllLanguages.Count; i++)
                     {

@@ -38,6 +38,8 @@ namespace OGT
         [SerializeField] private TextAsset templateStateMachineBehaviour;
         [SerializeField] private TextAsset templateSubStateMachineBehaviour;
         [SerializeField] private TextAsset templateEditorTestScript;
+        [SerializeField] private TextAsset templateScriptableObject;
+        [SerializeField] private TextAsset templateEmptyCSharp;
 
         // Generate Source Control Files
         [SerializeField] private SourceControlType sourceControlType;
@@ -77,6 +79,8 @@ namespace OGT
         public TextAsset TemplateStateMachineBehaviour => this.templateStateMachineBehaviour;
         public TextAsset TemplateSubStateMachineBehaviour => this.templateSubStateMachineBehaviour;
         public TextAsset TemplateEditorTestScript => this.templateEditorTestScript;
+        public TextAsset TemplateScriptableObject => this.templateScriptableObject;
+        public TextAsset TemplateEmptyCSharp => this.templateEmptyCSharp;
 
         // Source Control
         public SourceControlType SourceControl => this.sourceControlType;
@@ -115,6 +119,8 @@ namespace OGT
             this.templateStateMachineBehaviour = EditorUtil.GetAssetByGuid<TextAsset>("fed9948eb87d1be48ae323bd48cf729f");
             this.templateSubStateMachineBehaviour = EditorUtil.GetAssetByGuid<TextAsset>("09afd0c31b0565e4a8a74ecb68ceef24");
             this.templateEditorTestScript = EditorUtil.GetAssetByGuid<TextAsset>("c31e8a34fb6708144809d22dffdc73f6");
+            this.templateScriptableObject = EditorUtil.GetAssetByGuid<TextAsset>("83f8e3368b835a94ab733c61b5242d92");
+            this.templateEmptyCSharp = EditorUtil.GetAssetByGuid<TextAsset>("fcad2ad19eb144342a1420f52b3098f7");
 
             // ---- Source Control ----
 

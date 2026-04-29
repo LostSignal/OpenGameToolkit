@@ -41,10 +41,10 @@ namespace OGT
         //// public override void Initialize()
         //// {
         ////     //// Wait for UpdateManager
-        //// 
+        ////
         ////     //// TODO [bgish]: Need a way to force this to execute before almost anything else
         ////     //// UpdateManger.Instance.RegisterOnUpdate(DoWork);
-        //// 
+        ////
         ////     this.SetInstance(this);
         //// }
 

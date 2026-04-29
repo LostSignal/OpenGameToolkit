@@ -92,6 +92,7 @@ namespace Lost
 
             LightmapSettings.lightmaps = newLightmaps;
         }
+
 #endif
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]

@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="EditorBuildConfigDefinesHelper.cs" company="Lost Signal LLC">
 //     Copyright (c) Lost Signal LLC. All rights reserved.
 // </copyright>
@@ -21,18 +21,18 @@ namespace OGT
             //// {
             ////     return;
             //// }
-            //// 
+            ////
             //// HashSet<string> activeDefines = new();
             //// HashSet<string> definesToRemove = new();
-            //// 
+            ////
             //// GetActiveDefines(ProjectSettingsBuildConfigs.Instance.ActiveBuildConfig, activeDefines);
             //// GetAllDefines(ProjectSettingsBuildConfigs.Instance.BuildConfigs, definesToRemove);
-            //// 
+            ////
             //// foreach (var define in activeDefines)
             //// {
             ////     definesToRemove.Remove(define);
             //// }
-            //// 
+            ////
             //// UpdateProjectDefines(activeDefines, definesToRemove);
         }
 
@@ -42,7 +42,7 @@ namespace OGT
             //// {
             ////     string currentDefinesString = PlayerSettings.GetScriptingDefineSymbols(namedBuildTarget);
             ////     string definesString = GetDefinesString(namedBuildTarget, definesToAdd, definesToRemove);
-            //// 
+            ////
             ////     if (currentDefinesString != definesString)
             ////     {
             ////         PlayerSettings.SetScriptingDefineSymbols(namedBuildTarget, definesString);
@@ -61,11 +61,11 @@ namespace OGT
         ////                 defines.Add(define);
         ////             }
         ////         }
-        //// 
+        ////
         ////         GetActiveDefines(buildConfig.Parent, defines);
         ////     }
         //// }
-        //// 
+        ////
         //// private static void GetAllDefines(List<BuildConfig> buildConfigs, HashSet<string> defines)
         //// {
         ////     foreach (var buildConfig in buildConfigs)
@@ -79,11 +79,11 @@ namespace OGT
         ////         }
         ////     }
         //// }
-        //// 
+        ////
         //// private static string GetDefinesString(NamedBuildTarget namedBuildTarget, HashSet<string> definesToAdd, HashSet<string> definesToRemove)
         //// {
         ////     var currentDefines = PlayerSettings.GetScriptingDefineSymbols(namedBuildTarget).Split(';').ToList();
-        //// 
+        ////
         ////     foreach (var define in definesToAdd)
         ////     {
         ////         if (currentDefines.Contains(define) == false)
@@ -91,7 +91,7 @@ namespace OGT
         ////             currentDefines.Add(define);
         ////         }
         ////     }
-        //// 
+        ////
         ////     foreach (var define in definesToRemove)
         ////     {
         ////         if (currentDefines.Contains(define))
@@ -99,9 +99,9 @@ namespace OGT
         ////             currentDefines.Remove(define);
         ////         }
         ////     }
-        //// 
+        ////
         ////     currentDefines.Sort();
-        //// 
+        ////
         ////     return string.Join(";", currentDefines);
         //// }
     }

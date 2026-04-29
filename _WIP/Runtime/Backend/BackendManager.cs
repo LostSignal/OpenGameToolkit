@@ -57,7 +57,7 @@ namespace SNP
         //      Quit/Force Updated if Needed
         //      Initialize Addressables
         //    OnBootedEvent
-        //    
+        //
         // Bootloader Visual Script
         //    OnBooted
         //       LoginWith2FACode, LoginWithUsernameAndPassword or LoginAnnoymous
@@ -81,7 +81,7 @@ namespace SNP
         // LogIn-HasEverLoggedIn
 
         // Anonymous Login
-        // 
+        //
 
         // LinkEmailWithAnonymousAccount
         //   Does 2FA and passes in , then calls  Server.LinkServerCustomId

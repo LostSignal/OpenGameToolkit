@@ -1,4 +1,3 @@
-
 namespace OGT.Properties
 {
     using Unity.VisualScripting;

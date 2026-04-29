@@ -23,7 +23,7 @@ namespace OGT
         [SerializeField] private string postfixValue = string.Empty;
         [SerializeField] private UnityEvent onStartAnimation;
         [SerializeField] private UnityEvent onEndAnimation;
-        [SerializeField] private AnimationCurve animationCurve = new (new Keyframe { time = 0, value = 0 }, new Keyframe { time = 1, value = 1 });
+        [SerializeField] private AnimationCurve animationCurve = new(new Keyframe { time = 0, value = 0 }, new Keyframe { time = 1, value = 1 });
         [SerializeField] private IntFormat format;
 #pragma warning restore 0649
 

@@ -14,7 +14,7 @@ namespace OGT
     [Serializable]
     public class AppVersionsData
     {
-        [SerializeField] private List<AppVersion> appVersions = new ();
+        [SerializeField] private List<AppVersion> appVersions = new();
 
         public List<AppVersion> AppVersions
         {

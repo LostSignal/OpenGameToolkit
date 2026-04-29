@@ -368,87 +368,87 @@ namespace OGT.Networking
             switch (message.GetId())
             {
                 case JoinServerRequestMessage.Id:
+                {
+                    var requestJoinServer = (JoinServerRequestMessage)message;
+
+                    // Checking if this connection has already registered a user info, if so, they've already joined
+                    if (userInfo != null)
                     {
-                        var requestJoinServer = (JoinServerRequestMessage)message;
-
-                        // Checking if this connection has already registered a user info, if so, they've already joined
-                        if (userInfo != null)
-                        {
-                            Logger.LogErrorFormat("Got a JoinServerRequestMessage from ConnectionId {0} who has already joined.", userInfo.ConnectionId);
-                            this.SendJoinServerResponse(connectionId, userInfo.UserId, true);
-                            break;
-                        }
-
-                        if (requestJoinServer.UserInfo != null)
-                        {
-                            if (this.PrintDebugOutput)
-                            {
-                                Logger.LogFormat("Received JoinServerRequestMessage from UserId {0}", requestJoinServer.UserInfo.UserId);
-                            }
-
-                            requestJoinServer.UserInfo.ConnectionId = connectionId;
-                            _ = this.RequestJoinServer(new UserInfo(requestJoinServer.UserInfo));
-                        }
-                        else
-                        {
-                            Logger.LogError("JoinServerRequestMessage had a null UserInfo object.");
-                            this.SendJoinServerResponse(connectionId, -1, false);
-                        }
-
+                        Logger.LogErrorFormat("Got a JoinServerRequestMessage from ConnectionId {0} who has already joined.", userInfo.ConnectionId);
+                        this.SendJoinServerResponse(connectionId, userInfo.UserId, true);
                         break;
                     }
 
-                case UpdateUserInfoMessage.Id:
+                    if (requestJoinServer.UserInfo != null)
                     {
-                        if (userInfo == null)
-                        {
-                            Logger.LogError("Unregistered user tried to send a messages.");
-                            break;
-                        }
-
-                        var updateUserInfoMessage = (UpdateUserInfoMessage)message;
-
-                        if (updateUserInfoMessage.UserInfo != null)
-                        {
-                            updateUserInfoMessage.UserInfo.ConnectionId = connectionId;
-                        }
-                        else
-                        {
-                            Logger.LogError("UpdateUserInfoMessage had a null UserInfo object.");
-                            break;
-                        }
-
                         if (this.PrintDebugOutput)
                         {
-                            Logger.LogFormat("Received UpdateUserInfoMessage from UserId {0}", updateUserInfoMessage.UserInfo.UserId);
+                            Logger.LogFormat("Received JoinServerRequestMessage from UserId {0}", requestJoinServer.UserInfo.UserId);
                         }
 
-                        // checking is someone is trying to hack by changing their userId to something else
-                        if (userInfo.UserId != updateUserInfoMessage.UserInfo.UserId)
-                        {
-                            Logger.LogErrorFormat("User {0} is trying to change thier Id to {1}", userInfo.UserId, updateUserInfoMessage.UserInfo.UserId);
-                        }
-                        else
-                        {
-                            this.AddOrUpdateUserInfo(updateUserInfoMessage.UserInfo);
-                        }
+                        requestJoinServer.UserInfo.ConnectionId = connectionId;
+                        _ = this.RequestJoinServer(new UserInfo(requestJoinServer.UserInfo));
+                    }
+                    else
+                    {
+                        Logger.LogError("JoinServerRequestMessage had a null UserInfo object.");
+                        this.SendJoinServerResponse(connectionId, -1, false);
+                    }
 
+                    break;
+                }
+
+                case UpdateUserInfoMessage.Id:
+                {
+                    if (userInfo == null)
+                    {
+                        Logger.LogError("Unregistered user tried to send a messages.");
                         break;
                     }
+
+                    var updateUserInfoMessage = (UpdateUserInfoMessage)message;
+
+                    if (updateUserInfoMessage.UserInfo != null)
+                    {
+                        updateUserInfoMessage.UserInfo.ConnectionId = connectionId;
+                    }
+                    else
+                    {
+                        Logger.LogError("UpdateUserInfoMessage had a null UserInfo object.");
+                        break;
+                    }
+
+                    if (this.PrintDebugOutput)
+                    {
+                        Logger.LogFormat("Received UpdateUserInfoMessage from UserId {0}", updateUserInfoMessage.UserInfo.UserId);
+                    }
+
+                    // checking is someone is trying to hack by changing their userId to something else
+                    if (userInfo.UserId != updateUserInfoMessage.UserInfo.UserId)
+                    {
+                        Logger.LogErrorFormat("User {0} is trying to change thier Id to {1}", userInfo.UserId, updateUserInfoMessage.UserInfo.UserId);
+                    }
+                    else
+                    {
+                        this.AddOrUpdateUserInfo(updateUserInfoMessage.UserInfo);
+                    }
+
+                    break;
+                }
 
                 default:
+                {
+                    if (userInfo == null)
                     {
-                        if (userInfo == null)
-                        {
-                            Logger.LogError("Unregistered user tried to send a messages.");
-                        }
-                        else
-                        {
-                            this.serverReceivedMessage?.Invoke(userInfo, message, reliable);
-                        }
-
-                        break;
+                        Logger.LogError("Unregistered user tried to send a messages.");
                     }
+                    else
+                    {
+                        this.serverReceivedMessage?.Invoke(userInfo, message, reliable);
+                    }
+
+                    break;
+                }
             }
 
             this.messageCollection.RecycleMessage(message);

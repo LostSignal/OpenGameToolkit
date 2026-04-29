@@ -139,8 +139,8 @@ namespace OGT
             // updating the dots
             if (this.dotPrefab != null && this.dotContainer != null)
             {
-                Vector3 maxScale = new (this.maxScale, this.maxScale, this.maxScale);
-                Vector3 minScale = new (this.minScale, this.minScale, this.minScale);
+                Vector3 maxScale = new(this.maxScale, this.maxScale, this.maxScale);
+                Vector3 minScale = new(this.minScale, this.minScale, this.minScale);
 
                 for (int i = 0; i < this.ChildCount; i++)
                 {

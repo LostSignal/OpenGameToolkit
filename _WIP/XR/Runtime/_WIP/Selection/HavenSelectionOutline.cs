@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 //-----------------------------------------------------------------------
 // <copyright file="HavenSelectionOutline.cs" company="Lost Signal LLC">
@@ -105,6 +105,7 @@ namespace OGT
             this.materialPropertyBlock.SetFloat(this.highlightedPropertyId, value);
             this.targetRenderer.SetPropertyBlock(this.materialPropertyBlock);
         }
+
 #endif
     }
 }

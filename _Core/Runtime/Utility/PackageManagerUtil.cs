@@ -19,7 +19,7 @@ namespace OGT
     {
         private static readonly OGTLogger Logger = OGTLogger.OGTEditor;
 
-        private static readonly List<string> PackageIdsToAdd = new ();
+        private static readonly List<string> PackageIdsToAdd = new();
         private static AddRequest addRequest = null;
         private static bool isProcessing = false;
 

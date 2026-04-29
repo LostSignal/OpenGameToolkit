@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="IniSerializer.cs" company="Lost Signal">
 //     Copyright (c) Lost Signal. All rights reserved.
 // </copyright>
@@ -297,7 +297,7 @@ namespace OGT
             if (equalsIndex == -1)
             {
                 Console.WriteLine($"ERROR - Line {line.Nunber}: Property line does not contain '=' character!");
-                return false; ;
+                return false;;
             }
 
             return true;

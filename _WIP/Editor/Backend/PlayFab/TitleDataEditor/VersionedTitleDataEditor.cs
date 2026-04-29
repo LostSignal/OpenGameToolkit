@@ -32,7 +32,7 @@ namespace OGT.PlayFab
     }
 
     public abstract class VersionedTitleDataEditorWindow<BaseType, TitleDataType> : EditorWindow, ITitleDataEditorWindow
-        where BaseType : new ()
+        where BaseType : new()
         where TitleDataType : VersionedTitleData<BaseType>
     {
         private TitleDataType titleDataObject;

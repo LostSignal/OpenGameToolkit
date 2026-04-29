@@ -14,7 +14,7 @@ namespace OGT
         private const int ByteObfuscatorLength = 4 * 1024; // 4 kilobytes
         private const int ByteSeed = 830378379;
 
-        private static readonly List<byte> ByteObfuscatorList = new (ByteObfuscatorLength);
+        private static readonly List<byte> ByteObfuscatorList = new(ByteObfuscatorLength);
 
         static Obfuscator()
         {

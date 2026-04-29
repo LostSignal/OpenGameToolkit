@@ -12,7 +12,7 @@ namespace OGT.PlayFab
     using UnityEngine;
 
     public class VersionedTitleData<T> : ScriptableObject
-        where T : new ()
+        where T : new()
     {
 #if UNITY_EDITOR
         [SerializeField] private List<T> data = new List<T> { new T() };

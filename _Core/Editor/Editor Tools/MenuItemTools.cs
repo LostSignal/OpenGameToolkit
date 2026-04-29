@@ -128,7 +128,7 @@ namespace OGT
 
                     var asset = file.Replace("\\", "/").Replace("./", string.Empty);
 
-                    if (asset.StartsWith("Packages/") == false)
+                    if (asset.StartsWith("Packages/") == false && Provider.isActive)
                     {
                         Provider.Checkout(asset, CheckoutMode.Asset).Wait();
                     }

@@ -16,8 +16,8 @@ namespace OGT
     public class GuidReferenceDrawer : PropertyDrawer
     {
         // Cache off GUI content to avoid creating garbage every frame in editor
-        private readonly GUIContent sceneLabel = new ("Scene", "The target object is expected in this scene asset.");
-        private readonly GUIContent clearButtonGUI = new ("Clear", "Remove Cross Scene Reference");
+        private readonly GUIContent sceneLabel = new("Scene", "The target object is expected in this scene asset.");
+        private readonly GUIContent clearButtonGUI = new("Clear", "Remove Cross Scene Reference");
 
         private SerializedProperty guidProp;
         private SerializedProperty sceneProp;
@@ -56,7 +56,7 @@ namespace OGT
                 byteArray[i] = (byte)byteProp.intValue;
             }
 
-            System.Guid currentGuid = new (byteArray);
+            System.Guid currentGuid = new(byteArray);
             GameObject currentGO = GuidManager.ResolveGuid(currentGuid);
             GuidComponent currentGuidComponent = currentGO != null ? currentGO.GetComponent<GuidComponent>() : null;
             GuidComponent component = null;
@@ -73,7 +73,7 @@ namespace OGT
                 EditorGUI.LabelField(guidCompPosition, new GUIContent(this.nameProp.stringValue, "Target GameObject is not currently loaded."), EditorStyles.objectField);
                 GUI.enabled = guiEnabled;
 
-                Rect clearButtonRect = new (guidCompPosition)
+                Rect clearButtonRect = new(guidCompPosition)
                 {
                     xMin = guidCompPosition.xMax,
                 };

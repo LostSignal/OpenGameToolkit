@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 //-----------------------------------------------------------------------
 // <copyright file="HavenRig.cs" company="Lost Signal LLC">
@@ -393,7 +393,6 @@ namespace OGT.Haven
             }
         }
 
-
         private void OnSettingsChanged(bool oldValue, bool newValue) => this.OnSettingsChanged();
         private void OnSettingsChanged(float oldValue, float newValue) => this.OnSettingsChanged();
         private void OnSettingsChanged(EnumValue oldValue, EnumValue newValue) => this.OnSettingsChanged();
@@ -452,8 +451,8 @@ namespace OGT.Haven
             {
                 // General
                 MovementMode = this.movementMode.CurrentValueIndex == 0 ? MovementMode.ContinuousAndTeleport :
-                               this.movementMode.CurrentValueIndex == 1 ? MovementMode.ContinuousOnly :
-                                MovementMode.TeleportOnly,
+                    this.movementMode.CurrentValueIndex == 1 ? MovementMode.ContinuousOnly :
+                    MovementMode.TeleportOnly,
 
                 // Movement
                 AllowStrafe = this.enableStrafe.Value,
@@ -461,8 +460,8 @@ namespace OGT.Haven
                 MovementHand = this.movementHand.CurrentValueIndex == 0 ? Hand.Left : Hand.Right,
 
                 MovementSource = this.movementSource.CurrentValueIndex == 0 ? ContinuousMovementSource.Head :
-                                 this.movementSource.CurrentValueIndex == 1 ? ContinuousMovementSource.RightHand :
-                                 ContinuousMovementSource.LeftHand,
+                    this.movementSource.CurrentValueIndex == 1 ? ContinuousMovementSource.RightHand :
+                    ContinuousMovementSource.LeftHand,
 
                 // Turning
                 TurnMode = this.turnMode.CurrentValueIndex == 0 ? TurnMode.Snap : TurnMode.Continuous,

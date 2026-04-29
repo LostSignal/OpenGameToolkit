@@ -1,4 +1,3 @@
-
 namespace OGT.Properties
 {
     using UnityEngine;

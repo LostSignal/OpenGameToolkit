@@ -1,4 +1,3 @@
-﻿
 using OGT;
 using OGT.PlayFab;
 using PlayFab.ClientModels;

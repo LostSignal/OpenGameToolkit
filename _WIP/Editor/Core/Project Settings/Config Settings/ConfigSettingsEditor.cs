@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="ConfigSettingsEditor.cs" company="Lost Signal">
 //     Copyright (c) Lost Signal. All rights reserved.
 // </copyright>
@@ -172,7 +172,6 @@ namespace OGT.Settings
                 }
 
                 // settingsFile.ParentId = EditorGUILayout.TextField("Parent Id", settingsFile.ParentId);
-
             }
         }
 

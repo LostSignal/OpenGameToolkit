@@ -18,7 +18,7 @@ namespace OGT.EditorGrid
         private static readonly int RowHeight = 20;
 
         private static readonly OGTLogger Logger = OGTLogger.OGTEditor;
-        private static readonly List<Color> BackgroundColors = new ();
+        private static readonly List<Color> BackgroundColors = new();
 
         private static GUIStyle columnHeaderGuiStyle = null;
         private static GUIStyle rowGuiStyle = null;

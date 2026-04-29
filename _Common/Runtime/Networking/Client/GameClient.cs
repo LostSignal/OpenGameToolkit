@@ -369,48 +369,48 @@ namespace OGT.Networking
                     break;
 
                 case UserInfoMessage.Id:
+                {
+                    var userInfoMessage = (UserInfoMessage)message;
+
+                    if (userInfoMessage.UserInfo.UserId != this.UserId)
                     {
-                        var userInfoMessage = (UserInfoMessage)message;
-
-                        if (userInfoMessage.UserInfo.UserId != this.UserId)
+                        if (this.printDebugOutput)
                         {
-                            if (this.printDebugOutput)
-                            {
-                                Logger.Log($"Received UserInfoMessage for {userInfoMessage.UserInfo}");
-                            }
-
-                            this.AddOrUpdateUserInfo(userInfoMessage.UserInfo);
-                        }
-                        else
-                        {
-                            if (this.printDebugOutput)
-                            {
-                                Logger.Log($"Received UserInfoMessage For Myself {userInfoMessage.UserInfo}");
-                            }
-
-                            this.myUserInfo.CopyFrom(userInfoMessage.UserInfo);
-                            this.clientUserInfoUpdated?.Invoke(this.myUserInfo);
+                            Logger.Log($"Received UserInfoMessage for {userInfoMessage.UserInfo}");
                         }
 
-                        break;
+                        this.AddOrUpdateUserInfo(userInfoMessage.UserInfo);
                     }
+                    else
+                    {
+                        if (this.printDebugOutput)
+                        {
+                            Logger.Log($"Received UserInfoMessage For Myself {userInfoMessage.UserInfo}");
+                        }
+
+                        this.myUserInfo.CopyFrom(userInfoMessage.UserInfo);
+                        this.clientUserInfoUpdated?.Invoke(this.myUserInfo);
+                    }
+
+                    break;
+                }
 
                 case UserDisconnectedMessage.Id:
+                {
+                    var userDisconnectedMessage = (UserDisconnectedMessage)message;
+                    long userId = userDisconnectedMessage.UserId;
+
+                    Logger.LogFormat("UserDisconnectedMessage For UserId {0}", userDisconnectedMessage.UserId);
+
+                    UserInfo removedUserInfo = this.RemoveUserInfo(userId);
+
+                    if (removedUserInfo != null)
                     {
-                        var userDisconnectedMessage = (UserDisconnectedMessage)message;
-                        long userId = userDisconnectedMessage.UserId;
-
-                        Logger.LogFormat("UserDisconnectedMessage For UserId {0}", userDisconnectedMessage.UserId);
-
-                        UserInfo removedUserInfo = this.RemoveUserInfo(userId);
-
-                        if (removedUserInfo != null)
-                        {
-                            this.clientUserDisconnected?.Invoke(removedUserInfo, userDisconnectedMessage.WasConnectionLost);
-                        }
-
-                        break;
+                        this.clientUserDisconnected?.Invoke(removedUserInfo, userDisconnectedMessage.WasConnectionLost);
                     }
+
+                    break;
+                }
 
                 default:
                     break;

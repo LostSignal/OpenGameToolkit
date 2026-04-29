@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="ConfigSettings.cs" company="Lost Signal">
 //     Copyright (c) Lost Signal. All rights reserved.
 // </copyright>
@@ -110,20 +110,20 @@ namespace OGT.Settings
         //     {
         //         return;
         //     }
-        // 
+        //
         //     // Recording defines before we possibly alter them
         //     List<string> definesBefore = new();
         //     BuildTargetGroupUtil.GetValid().ForEach(x => definesBefore.Add(PlayerSettings.GetScriptingDefineSymbols(x)));
-        // 
+        //
         //     EditorBuildConfigDefinesHelper.UpdateProjectDefines();
-        // 
+        //
         //     // Recording defines after we've possibly altered them
         //     List<string> definesAfter = new();
         //     BuildTargetGroupUtil.GetValid().ForEach(x => definesAfter.Add(PlayerSettings.GetScriptingDefineSymbols(x)));
-        // 
+        //
         //     // checking to see if the scripting defines have changed
         //     bool forceRecompile = definesBefore.Count != definesAfter.Count;
-        // 
+        //
         //     if (forceRecompile == false)
         //     {
         //         for (int i = 0; i < definesBefore.Count; i++)
@@ -135,14 +135,14 @@ namespace OGT.Settings
         //             }
         //         }
         //     }
-        // 
+        //
         //     if (forceRecompile)
         //     {
         //         // TODO [bgish]: Is this neccessary, if so implement
         //     }
-        // 
+        //
         //     WriteRuntimeConfigFile();
-        // 
+        //
         //     // TODO [bgish]: Write out the MenuItems class? (force recompile if new)
         // }
 
@@ -153,7 +153,7 @@ namespace OGT.Settings
         //     {
         //         return;
         //     }
-        // 
+        //
         //     WriteRuntimeConfigFile();
         // }
 
@@ -163,53 +163,53 @@ namespace OGT.Settings
         //     {
         //         return;
         //     }
-        // 
+        //
         //     RuntimeBuildConfig.Reset();
-        // 
+        //
         //     BuildConfig activeConfig = Instance.ActiveBuildConfig;
-        // 
+        //
         //     if (activeConfig == null)
         //     {
         //         return;
         //     }
-        // 
+        //
         //     // Collecting all the runtime config values
         //     var runtimeConfigValues = new Dictionary<string, string>();
-        // 
+        //
         //     foreach (var settings in GetActiveConfigSettings())
         //     {
         //         settings.GetRuntimeConfigSettings(activeConfig, runtimeConfigValues);
         //     }
-        // 
+        //
         //     // Generating the runtime config object and serializing to json
         //     var runtimeConfig = new RuntimeBuildConfig(activeConfig.Id, activeConfig.SafeName, runtimeConfigValues);
         //     string configJson = JsonUtility.ToJson(runtimeConfig, true);
-        // 
+        //
         //     // Early out if the file file hasn't chenged
         //     if (File.Exists(RuntimeBuildConfig.FilePath) && File.ReadAllText(RuntimeBuildConfig.FilePath) == configJson)
         //     {
         //         return;
         //     }
-        // 
+        //
         //     Directory.CreateDirectory(Path.GetDirectoryName(RuntimeBuildConfig.FilePath));
         //     File.WriteAllText(RuntimeBuildConfig.FilePath, configJson);
         //     AssetDatabase.ImportAsset(RuntimeBuildConfig.FilePath);
         //     AssetDatabase.Refresh();
         // }
-        // 
+        //
         // private static IEnumerable<BuildConfigSettings> GetActiveConfigSettings()
         // {
         //     var activeConfig = Instance.ActiveBuildConfig;
-        // 
+        //
         //     if (activeConfig == null)
         //     {
         //         yield break;
         //     }
-        // 
+        //
         //     foreach (var type in TypeUtil.GetAllTypesOf<BuildConfigSettings>())
         //     {
         //         var settings = activeConfig.GetSettings(type);
-        // 
+        //
         //         if (settings != null)
         //         {
         //             yield return settings;

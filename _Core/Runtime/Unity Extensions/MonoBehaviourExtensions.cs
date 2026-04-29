@@ -16,7 +16,7 @@ namespace OGT
         private static readonly OGTLogger Logger = OGTLogger.OGT;
 
         public static void EditorSetValue<T>(this MonoBehaviour monoBehaviour, ref T memberVariable, T newValue)
-    where T : IEquatable<T>
+            where T : IEquatable<T>
         {
 #if UNITY_EDITOR
             if (memberVariable?.Equals(newValue) == false)
@@ -44,7 +44,7 @@ namespace OGT
         }
 
         public static void EditorGetFirstComponentInChildren<T>(this MonoBehaviour monoBehaviour, ref T memberVariable, bool ignoreIfNotNull = false)
-    where T : Component
+            where T : Component
         {
 #if UNITY_EDITOR
             if (ignoreIfNotNull && memberVariable != null)

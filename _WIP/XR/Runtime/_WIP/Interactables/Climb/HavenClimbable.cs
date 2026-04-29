@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 //-----------------------------------------------------------------------
 // <copyright file="HavenClimbable.cs" company="Lost Signal LLC">
@@ -120,6 +120,7 @@ namespace OGT.Haven
 
             HavenInteractableUtil.SetupInteractable(this);
         }
+
 #endif
     }
 }

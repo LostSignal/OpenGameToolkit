@@ -39,7 +39,7 @@ namespace OGT.SSS
             //// Rect pos = new Rect(position.x, position.y, 100, position.height);
             //// Rect color = new Rect(position.x + 250, position.y, 50, position.height);
             //// Rect contentPosition = EditorGUI.PrefixLabel(position, label);
-            //// 
+            ////
             //// if (position.height > 16f)
             //// {
             ////     position.height = 16f;
@@ -47,7 +47,7 @@ namespace OGT.SSS
             ////     contentPosition = EditorGUI.IndentedRect(position);
             ////     contentPosition.y += 18f;
             //// }
-            //// 
+            ////
             //// contentPosition.width *= 0.75f;
             //// EditorGUI.indentLevel = 0;
             //// //EditorGUI.PropertyField(position, property, GUIContent.none);
@@ -56,7 +56,7 @@ namespace OGT.SSS
             //// EditorGUI.indentLevel = indent;
             //// EditorGUI.EndProperty();
         }
-   
+
         public static class ReorderableListPropertyDrawer
         {
             private static readonly Dictionary<SerializedProperty, ReorderableList> _lists = new Dictionary<SerializedProperty, ReorderableList>();
@@ -120,7 +120,6 @@ namespace OGT.SSS
 
                 EditorGUI.PropertyField(rect, element, guiContent, true);
             }
-
 
             private static Dropdown actionsDropdownCache;
 
@@ -205,7 +204,7 @@ namespace OGT.SSS
                         subFolder = new DropdownItem(null, folders[i]);
                         current.AddChild(subFolder);
                     }
-                    
+
                     current = subFolder;
                 }
 
@@ -213,6 +212,4 @@ namespace OGT.SSS
             }
         }
     }
-
-    
 }

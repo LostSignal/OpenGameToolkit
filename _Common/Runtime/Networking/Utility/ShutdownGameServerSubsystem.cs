@@ -11,7 +11,7 @@ namespace OGT.Networking
 
     public class ShutdownGameServerSubsystem : IGameServerSubsystem
     {
-        private static readonly OGTLogger Logger = new ("Networking");
+        private static readonly OGTLogger Logger = new("Networking");
 
         private GameServer gameServer = null;
         private DateTime noUsersDateTime = DateTime.MinValue;

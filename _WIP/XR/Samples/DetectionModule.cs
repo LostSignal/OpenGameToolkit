@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 using Lost;
 using System.Linq;
@@ -98,8 +98,8 @@ namespace Unity.FPS.AI
             }
 
             IsTargetInAttackRange = KnownDetectedTarget != null &&
-                                    Vector3.Distance(transform.position, KnownDetectedTarget.transform.position) <=
-                                    AttackRange;
+                Vector3.Distance(transform.position, KnownDetectedTarget.transform.position) <=
+                AttackRange;
 
             // Detection events
             if (!HadKnownTarget &&

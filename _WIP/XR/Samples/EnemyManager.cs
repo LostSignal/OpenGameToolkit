@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 using System.Collections.Generic;
 using Unity.FPS.Game;

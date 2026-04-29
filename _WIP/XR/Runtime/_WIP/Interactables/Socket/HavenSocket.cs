@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 //-----------------------------------------------------------------------
 // <copyright file="HavenSocket.cs" company="Lost Signal LLC">
@@ -115,6 +115,7 @@ namespace OGT.Haven
 
             EditorUtil.SetIfNull(this, ref this.havenSocketSettings, "c336bbd69f11b7d48aef5ba5aea19c37");
         }
+
 #endif
     }
 }

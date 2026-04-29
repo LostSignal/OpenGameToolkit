@@ -43,7 +43,7 @@ namespace OGT
 
         public static void SimpleMeshToObjFile(Mesh mesh, string filename)
         {
-            using (StreamWriter sw = new(filename))
+            using (StreamWriter sw = new(filename) )
             {
                 sw.Write(MeshToString(mesh));
             }

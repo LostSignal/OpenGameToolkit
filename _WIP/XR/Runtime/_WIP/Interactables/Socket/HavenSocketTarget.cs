@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 //-----------------------------------------------------------------------
 // <copyright file="HavenSocketTarget.cs" company="Lost Signal LLC">
@@ -113,6 +113,7 @@ namespace OGT.Haven
                 Debug.LogException(ex);
             }
         }
+
 #endif
     }
 }

@@ -106,15 +106,15 @@ namespace OGT.Networking
             //// if (Application.isEditor && Application.isPlaying == false && this.networkIdentity == null)
             //// {
             ////     var networkIdentity = this.GetComponentInParent<NetworkIdentity>();
-            //// 
+            ////
             ////     if (networkIdentity == null)
             ////     {
             ////         networkIdentity = EditorUtil.GetOrAddComponent<NetworkIdentity>(this);
             ////     }
-            //// 
+            ////
             ////     networkIdentity.EditorOnlyAddBehaviour(this);
             //// }
-            //// 
+            ////
             //// this.AssertGetComponentInParent(ref this.networkIdentity);
         }
 

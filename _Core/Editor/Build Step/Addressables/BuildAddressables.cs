@@ -17,7 +17,7 @@ namespace OGT
             // AddressableAssetSettings.BuildPlayerContent();
 
             //// var pathToBuiltProject = report.summary.outputPath;
-            //// 
+            ////
             //// // Making sure we have a simple web server to run the game with
             //// var simpleWebServerExePath = Path.Combine(pathToBuiltProject, "SimpleWebServer.exe");
             //// if (File.Exists(simpleWebServerExePath) == false)

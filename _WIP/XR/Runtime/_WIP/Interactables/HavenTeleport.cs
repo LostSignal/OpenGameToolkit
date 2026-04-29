@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 //-----------------------------------------------------------------------
 // <copyright file="HavenTeleport.cs" company="Lost Signal LLC">
@@ -174,6 +174,7 @@ namespace OGT.Haven
         {
             this.onHoverStop.SafeInvoke();
         }
+
 #endif
     }
 }

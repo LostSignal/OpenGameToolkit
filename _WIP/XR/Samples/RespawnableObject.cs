@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 using System;
 using System.Collections;

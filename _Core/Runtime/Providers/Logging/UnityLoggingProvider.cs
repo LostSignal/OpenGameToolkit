@@ -38,28 +38,28 @@ namespace OGT
             switch (level)
             {
                 case LoggingLevel.Info:
-                    {
-                        UnityEngine.Debug.Log($"{channel.Name}: {message}", context as UnityEngine.Object);
-                        break;
-                    }
+                {
+                    UnityEngine.Debug.Log($"{channel.Name}: {message}", context as UnityEngine.Object);
+                    break;
+                }
 
                 case LoggingLevel.Warning:
-                    {
-                        UnityEngine.Debug.LogWarning($"{channel.Name}: {message}", context as UnityEngine.Object);
-                        break;
-                    }
+                {
+                    UnityEngine.Debug.LogWarning($"{channel.Name}: {message}", context as UnityEngine.Object);
+                    break;
+                }
 
                 case LoggingLevel.Error:
-                    {
-                        UnityEngine.Debug.LogError($"{channel.Name}: {message}", context as UnityEngine.Object);
-                        break;
-                    }
+                {
+                    UnityEngine.Debug.LogError($"{channel.Name}: {message}", context as UnityEngine.Object);
+                    break;
+                }
 
                 case LoggingLevel.Assert:
-                    {
-                        UnityEngine.Debug.LogAssertion($"{channel.Name}: {message}", context as UnityEngine.Object);
-                        break;
-                    }
+                {
+                    UnityEngine.Debug.LogAssertion($"{channel.Name}: {message}", context as UnityEngine.Object);
+                    break;
+                }
 
                 default:
                     //// TODO [bgish]: Log an Error!

@@ -41,7 +41,7 @@ namespace OGT
         //// public override void Initialize()
         //// {
         ////     this.StartCoroutine(InitializeCoroutine());
-        //// 
+        ////
         ////     IEnumerator InitializeCoroutine()
         ////     {
         ////         if (this.storageLocation == StorageLocation.HardCoded)
@@ -56,17 +56,17 @@ namespace OGT
         ////         {
         ////             throw new Exception($"Unknown StorageLocation {this.storageLocation} Found!");
         ////         }
-        //// 
+        ////
         ////         this.SetInstance(this);
-        //// 
+        ////
         ////         yield break;
         ////     }
         //// }
-        //// 
+        ////
         //// public Coroutine ShowForceUpdateDialog()
         //// {
         ////     return CoroutineRunner.Instance.StartCoroutine(Coroutine());
-        //// 
+        ////
         ////     static IEnumerator Coroutine()
         ////     {
         ////         // TODO [bgish]: Implement

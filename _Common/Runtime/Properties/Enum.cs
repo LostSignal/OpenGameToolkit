@@ -1,4 +1,3 @@
-
 namespace OGT.Properties
 {
     using System.Collections.Generic;
@@ -34,6 +33,7 @@ namespace OGT.Properties
             UnityEditor.AssetDatabase.ImportAsset(UnityEditor.AssetDatabase.GetAssetPath(this));
             UnityEditor.AssetDatabase.Refresh();
         }
+
 #endif
     }
 }

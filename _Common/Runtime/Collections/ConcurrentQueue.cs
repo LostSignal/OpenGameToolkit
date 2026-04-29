@@ -10,10 +10,10 @@ namespace OGT
 
     public class ConcurrentQueue<T>
     {
-        private readonly object itemsLock = new ();
+        private readonly object itemsLock = new();
 
         [SerializeField]
-        private System.Collections.Generic.Queue<T> items = new ();
+        private System.Collections.Generic.Queue<T> items = new();
 
         public bool TryDequeue(out T output)
         {

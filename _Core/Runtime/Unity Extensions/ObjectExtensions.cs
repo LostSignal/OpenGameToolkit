@@ -1,4 +1,3 @@
-
 namespace OGT
 {
     using UnityEditor;
@@ -118,6 +117,7 @@ namespace OGT
                     GetRootGameObject(gameObject.transform.parent.gameObject) :
                     gameObject;
             }
+
 #else
             throw new System.Exception("ObjectExtension.GetInspectorObjectType called in payer build!");
 #endif

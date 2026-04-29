@@ -1,4 +1,3 @@
-
 namespace OGT
 {
 #if UNITY_EDITOR

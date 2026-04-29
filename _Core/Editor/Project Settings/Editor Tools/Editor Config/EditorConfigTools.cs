@@ -68,7 +68,7 @@ namespace OGT
                     else
                     {
                         return solutionContents.Insert(globalIndex, GetEditorconfigString());
-                    }                    
+                    }
                 }
                 else if (path.ToLower().EndsWith(".slnx"))
                 {
@@ -81,9 +81,9 @@ namespace OGT
                     else
                     {
                         return solutionContents.Insert(
-                            solutionIndex + "<Solution>".Length, 
+                            solutionIndex + "<Solution>".Length,
                             "\r\n  <Folder Name=\"/Solution Items/\">\r\n    <File Path=\".editorconfig\" />\r\n  </Folder>");
-                    }                    
+                    }
                 }
                 else
                 {
@@ -92,7 +92,7 @@ namespace OGT
             }
 
             return solutionContents;
-            
+
             static string GetEditorconfigString()
             {
                 var builder = new StringBuilder();

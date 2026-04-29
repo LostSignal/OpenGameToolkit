@@ -27,7 +27,7 @@ namespace OGT.Networking
         }
 
         public void RegisterMessage<T>()
-            where T : Message, new ()
+            where T : Message, new()
         {
             Message message = new T();
             short messageId = message.GetId();

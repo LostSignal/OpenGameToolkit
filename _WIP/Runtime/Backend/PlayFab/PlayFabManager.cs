@@ -99,26 +99,26 @@ namespace OGT.PlayFab
             ////     LostMessages.BootloaderDownloadingCatalog();
             ////     yield return this.Catalog.GetCatalog();
             //// }
-            //// 
+            ////
             //// // Stores
             //// if (this.settings.LoadStoresAtStartup?.Count > 0)
             //// {
             ////     LostMessages.BootloaderLoadingStores();
-            //// 
+            ////
             ////     foreach (var store in this.settings.LoadStoresAtStartup)
             ////     {
             ////         // TODO [bgish]: Tell the loading dialog that we're getting store "X"
             ////         yield return this.Store.GetStore(store);
             ////     }
             //// }
-            //// 
+            ////
             //// // Initializing purchasing, but no need to wait on it later
             //// if (this.settings.LoadPurchasing)
             //// {
             ////     LostMessages.BootloaderInitializingPurchasing();
             ////     yield return this.Purchasing.Initialize();
             //// }
-            //// 
+            ////
             //// // Push Notifications
             //// if (Application.platform == RuntimePlatform.IPhonePlayer && this.settings.RegisterIosPushNotificationsAtStartup)
             //// {

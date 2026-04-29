@@ -15,8 +15,8 @@ namespace OGT
     {
         private const uint CurrentVersion = 1;
 
-        private static readonly Networking.NetworkWriter Writer = new ((byte[])null);
-        private static readonly Networking.NetworkReader Reader = new ((byte[])null);
+        private static readonly Networking.NetworkWriter Writer = new((byte[])null);
+        private static readonly Networking.NetworkReader Reader = new((byte[])null);
         private static readonly OGTLogger Logger = OGTLogger.OGT;
 
         private Dictionary<string, int> intData;

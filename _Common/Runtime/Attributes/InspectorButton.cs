@@ -1,4 +1,3 @@
-
 namespace OGT
 {
     public class InspectorButton : System.Attribute

@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 //-----------------------------------------------------------------------
 // <copyright file="HavenAxisDragInteractable.cs" company="Lost Signal LLC">
@@ -24,10 +24,10 @@ namespace OGT.Haven
     public class HavenAxisDragInteractable : UnityEngine.XR.Interaction.Toolkit.Interactables.XRBaseInteractable
     {
         [Serializable]
-        public class DragDistanceEvent : UnityEvent<float> { }
+        public class DragDistanceEvent : UnityEvent<float> {}
 
         [Serializable]
-        public class DragStepEvent : UnityEvent<int> { }
+        public class DragStepEvent : UnityEvent<int> {}
 
         [Tooltip("The Rigidbody that will be moved. If null will try to grab one on that object or its children")]
         public Rigidbody MovingRigidbody;

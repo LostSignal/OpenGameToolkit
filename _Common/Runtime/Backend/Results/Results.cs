@@ -41,16 +41,16 @@ namespace OGT
     }
 
     // -------------------- Friends --------------------
-    public class GetFriendsResult : BaseResult { }
-    public class GetFriendInvitesResult : BaseResult { }
-    public class AcceptFriendInviteResult : BaseResult { }
-    public class RejectFriendInviteResult : BaseResult { }
+    public class GetFriendsResult : BaseResult {}
+    public class GetFriendInvitesResult : BaseResult {}
+    public class AcceptFriendInviteResult : BaseResult {}
+    public class RejectFriendInviteResult : BaseResult {}
 
     // -------------------- Inbox --------------------
-    public class SendInboxItemResult : BaseResult { }
-    
-    public class GetInboxItemsResult : BaseResult 
-    { 
+    public class SendInboxItemResult : BaseResult {}
+
+    public class GetInboxItemsResult : BaseResult
+    {
         public List<InboxItem> InboxItems { get; set; }
     }
 
@@ -65,8 +65,8 @@ namespace OGT
         public bool IsRead { get; set; }
     }
 
-    public class RemoveInboxItemsResult : BaseResult { }
-    public class MarkInboxItemsReadResult : BaseResult { }
+    public class RemoveInboxItemsResult : BaseResult {}
+    public class MarkInboxItemsReadResult : BaseResult {}
 
     // -------------------- Party --------------------
 

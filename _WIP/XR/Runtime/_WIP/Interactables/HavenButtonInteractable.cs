@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 //-----------------------------------------------------------------------
 // <copyright file="HavenAxisDragInteractable.cs" company="Lost Signal LLC">
@@ -18,10 +18,10 @@ namespace OGT.Haven
     public class HavenButtonInteractable : MonoBehaviour
     {
         [System.Serializable]
-        public class ButtonPressedEvent : UnityEvent { }
+        public class ButtonPressedEvent : UnityEvent {}
 
         [System.Serializable]
-        public class ButtonReleasedEvent : UnityEvent { }
+        public class ButtonReleasedEvent : UnityEvent {}
 
         public Vector3 Axis = new Vector3(0, -1, 0);
         public float MaxDistance;

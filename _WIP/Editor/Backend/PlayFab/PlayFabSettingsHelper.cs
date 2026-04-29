@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 //-----------------------------------------------------------------------
 // <copyright file="PlayFabSettingsHelper.cs" company="Lost Signal LLC">
@@ -24,13 +24,13 @@ namespace OGT.PlayFab
             ////     if (assembly.GetName().Name == "PlayFabServerSDK")
             ////     {
             ////         Type t = assembly.GetType("PlayFab.PlayFabSettings");
-            //// 
+            ////
             ////         if (t != null)
             ////         {
             ////             // Setting the DeveloperSecretKey
             ////             FieldInfo developerSecretKeyField = t.GetField("DeveloperSecretKey", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
             ////             developerSecretKeyField.SetValue(null, ProjectSettingsBuildConfigs.Instance.ActiveBuildConfig.GetSettings<PlayFabSettings>().SecretKey);
-            //// 
+            ////
             ////             // Setting the TitleId
             ////             FieldInfo titleIdField = t.GetField("TitleId", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
             ////             titleIdField.SetValue(null, ProjectSettingsBuildConfigs.Instance.ActiveBuildConfig.GetSettings<PlayFabSettings>().TitleId);

@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 //-----------------------------------------------------------------------
 // <copyright file="BowArrow.cs" company="Lost Signal LLC">
@@ -219,6 +219,7 @@ namespace Lost.Haven
                 this.trailRenderer.emitting = false;
             }
         }
+
 #endif
     }
 }

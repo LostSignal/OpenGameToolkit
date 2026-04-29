@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 //-----------------------------------------------------------------------
 // <copyright file="VRIK.cs" company="Lost Signal LLC">
@@ -125,38 +125,38 @@ namespace OGT
             switch (this.avatarType)
             {
                 case AvatarType.ReadyPlayerMe:
-                    {
-                        this.head.TrackingPositionOffset = new Vector3(0.0f, 0.0f, 0.0f);
-                        this.head.TrackingRotationOffset = new Vector3(0.0f, 0.0f, 0.0f);
+                {
+                    this.head.TrackingPositionOffset = new Vector3(0.0f, 0.0f, 0.0f);
+                    this.head.TrackingRotationOffset = new Vector3(0.0f, 0.0f, 0.0f);
 
-                        this.leftHand.TrackingPositionOffset = new Vector3(-0.02f, 0.0f, -0.1f);
-                        this.leftHand.TrackingRotationOffset = new Vector3(165.2f, 254.57f, -81.2f);
+                    this.leftHand.TrackingPositionOffset = new Vector3(-0.02f, 0.0f, -0.1f);
+                    this.leftHand.TrackingRotationOffset = new Vector3(165.2f, 254.57f, -81.2f);
 
-                        this.rightHand.TrackingPositionOffset = new Vector3(0.02f, 0.0f, -0.1f);
-                        this.rightHand.TrackingRotationOffset = new Vector3(-165.2f, -254.57f, 81.2f);
+                    this.rightHand.TrackingPositionOffset = new Vector3(0.02f, 0.0f, -0.1f);
+                    this.rightHand.TrackingRotationOffset = new Vector3(-165.2f, -254.57f, 81.2f);
 
-                        break;
-                    }
+                    break;
+                }
                 case AvatarType.Synty:
-                    {
-                        this.head.TrackingPositionOffset = new Vector3();
-                        this.head.TrackingRotationOffset = new Vector3();
-                        this.leftHand.TrackingPositionOffset = new Vector3();
-                        this.leftHand.TrackingRotationOffset = new Vector3();
-                        this.rightHand.TrackingPositionOffset = new Vector3();
-                        this.rightHand.TrackingRotationOffset = new Vector3();
-                        break;
-                    }
+                {
+                    this.head.TrackingPositionOffset = new Vector3();
+                    this.head.TrackingRotationOffset = new Vector3();
+                    this.leftHand.TrackingPositionOffset = new Vector3();
+                    this.leftHand.TrackingRotationOffset = new Vector3();
+                    this.rightHand.TrackingPositionOffset = new Vector3();
+                    this.rightHand.TrackingRotationOffset = new Vector3();
+                    break;
+                }
                 default:
-                    {
-                        this.head.TrackingPositionOffset = new Vector3();
-                        this.head.TrackingRotationOffset = new Vector3();
-                        this.leftHand.TrackingPositionOffset = new Vector3();
-                        this.leftHand.TrackingRotationOffset = new Vector3();
-                        this.rightHand.TrackingPositionOffset = new Vector3();
-                        this.rightHand.TrackingRotationOffset = new Vector3();
-                        break;
-                    }
+                {
+                    this.head.TrackingPositionOffset = new Vector3();
+                    this.head.TrackingRotationOffset = new Vector3();
+                    this.leftHand.TrackingPositionOffset = new Vector3();
+                    this.leftHand.TrackingRotationOffset = new Vector3();
+                    this.rightHand.TrackingPositionOffset = new Vector3();
+                    this.rightHand.TrackingRotationOffset = new Vector3();
+                    break;
+                }
             }
 
             void SetupTwoBoneContraint(GameObject parent, string gameObjectName, string rootName, string midName, string tipName, VRMap vrMap)

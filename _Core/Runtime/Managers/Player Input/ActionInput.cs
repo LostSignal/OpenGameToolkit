@@ -1,4 +1,3 @@
-
 namespace OGT
 {
     public struct ActionInput

@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 
 #if true // UNITY

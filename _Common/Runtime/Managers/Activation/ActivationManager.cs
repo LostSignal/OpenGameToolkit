@@ -61,12 +61,14 @@ namespace OGT
             objects = new Queue<object>(1000);
             isProcessing = false;
         }
+
 #else
         static ActivationManager()
         {
             objects = new Queue<object>(1000);
             isProcessing = false;
-        }        
+        }
+
 #endif
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 //-----------------------------------------------------------------------
 // <copyright file="HavenSimple.cs" company="Lost Signal LLC">
@@ -69,6 +69,7 @@ namespace OGT.Haven
             base.Awake();
             ActivationManager.Register(this);
         }
+
 #endif
     }
 }

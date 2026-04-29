@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="ProjectSettingsTemplateFiles.cs" company="Lost Signal">
 //     Copyright (c) Lost Signal. All rights reserved.
 // </copyright>
@@ -14,60 +14,50 @@ namespace OGT
     {
         public static void OnWillCreateAsset(string assetPath)
         {
-            if (ProjectSettingsEditorTools.Instance.OverrideTemplateFiles)
+            if (assetPath.EndsWith(".cs") && ProjectSettingsEditorTools.Instance.OverrideTemplateFiles)
             {
                 OverrideCSharpTemplateFiles(assetPath);
             }
         }
 
-        private static void OverrideCSharpTemplateFiles(string assetPath)
+        private static void OverrideCSharpTemplateFiles(string csharpAssetPath)
         {
-            if (ProjectSettingsEditorTools.Instance.OverrideTemplateFiles == false)
+            EditorApplication.delayCall += () =>
             {
-                return;
-            }
+                // Getting the new template files
+                TextAsset templateFile = GetTemplateTextAsset(csharpAssetPath);
 
-            if (assetPath.EndsWith(".cs.meta") == false)
-            {
-                return;
-            }
+                if (templateFile == null)
+                {
+                    Debug.Log("OGT: Override Template File: No template file found for: " + csharpAssetPath);
+                    return;
+                }
 
-            // Getting the full asset path by removing the ".meta" extension
-            assetPath = assetPath.Substring(0, assetPath.LastIndexOf("."));
+                // Determining the company name and namespace
+                bool isLostFolder = csharpAssetPath.StartsWith("Packages/com.lostsignal.");
+                string companyName = "Lost Signal LLC";
+                string nameSpace = "Lost";
 
-            // Getting the new template files
-            TextAsset templateFile = GetTemplateTextAsset(assetPath);
+                if (isLostFolder == false)
+                {
+                    companyName = string.IsNullOrWhiteSpace(PlayerSettings.companyName) ? "Player Settings Company Not Defined" : PlayerSettings.companyName;
+                    nameSpace = string.IsNullOrWhiteSpace(EditorSettings.projectGenerationRootNamespace) ? "Editor Settings RootNamespace Not Defined" : EditorSettings.projectGenerationRootNamespace;
+                }
 
-            if (templateFile == null)
-            {
-                return;
-            }
+                // Getting the script name and the template file to use
+                string scriptName = Path.GetFileNameWithoutExtension(csharpAssetPath);
 
-            // Determining the company name and namespace
-            bool isLostFolder = assetPath.StartsWith("Packages/com.lostsignal.") ||
-                                assetPath.StartsWith("Packages/com.opengametoolkit.");
-            string companyName = "Lost Signal LLC";
-            string nameSpace = "Lost";
+                // Writing the C# File
+                string fileContents = templateFile == null ? File.ReadAllText(csharpAssetPath) : templateFile.text;
 
-            if (isLostFolder == false)
-            {
-                companyName = string.IsNullOrWhiteSpace(PlayerSettings.companyName) ? "Player Settings Company Not Defined" : PlayerSettings.companyName;
-                nameSpace = string.IsNullOrWhiteSpace(EditorSettings.projectGenerationRootNamespace) ? "EditorSettingsRootNamespaceNotDefined" : EditorSettings.projectGenerationRootNamespace;
-            }
+                fileContents = fileContents.Replace("#COMPANY_NAME#", companyName)
+                    .Replace("#ROOTNAMESPACE#", nameSpace)
+                    .Replace("#SCRIPTNAME#", scriptName)
+                    .Replace("#NOTRIM#", string.Empty);
 
-            // Getting the script name and the template file to use
-            string scriptName = Path.GetFileNameWithoutExtension(assetPath);
-
-            // Writing the C# File
-            string fileContents = templateFile == null ? File.ReadAllText(assetPath) : templateFile.text;
-
-            fileContents = fileContents.Replace("#COMPANY_NAME#", companyName)
-                .Replace("#ROOTNAMESPACE#", nameSpace)
-                .Replace("#SCRIPTNAME#", scriptName)
-                .Replace("#NOTRIM#", string.Empty);
-
-            File.WriteAllText(assetPath, FileUtil.ConvertLineEndings(fileContents));
-            AssetDatabase.Refresh();
+                File.WriteAllText(csharpAssetPath, FileUtil.ConvertLineEndings(fileContents));
+                AssetDatabase.Refresh();
+            };
         }
 
         private static TextAsset GetTemplateTextAsset(string assetPath)
@@ -100,6 +90,14 @@ namespace OGT
             else if (fileContents.Contains(": MonoBehaviour"))
             {
                 return ProjectSettingsEditorTools.Instance.TemplateMonoBehaviour;
+            }
+            else if (fileContents.Contains(": ScriptableObject"))
+            {
+                return ProjectSettingsEditorTools.Instance.TemplateScriptableObject;
+            }
+            else if (fileContents.Contains(":") == false)
+            {
+                return ProjectSettingsEditorTools.Instance.TemplateEmptyCSharp;
             }
 
             return null;

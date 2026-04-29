@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 
 #if !USING_UNITY_XR_INTERACTION_TOOLKIT
@@ -78,7 +78,7 @@ namespace UnityEngine.XR.Interaction.Toolkit.Interactables
     public enum InteractableSelectMode
     {
         Multiple,
-        Single,
+            Single,
     }
 }
 
