@@ -14,14 +14,14 @@ namespace OGT
     public class CountDownTimerText : MonoBehaviour
     {
 #pragma warning disable 0649, 0044
-        [SerializeField] private string finishedText;
-
-        // Hidden Serialized Fields
-        [SerializeField][HideInInspector] private Text text;
+        [SerializeField] private string finishedText = "00:00:00";
+        [SerializeField] private Text text;
 #pragma warning restore 0649, 0044
 
         private DateTime target;
-        private float timer;
+        private float updateTextTimer;
+
+        public Action OnTimerComplete;
 
         public DateTime Target
         {
@@ -37,54 +37,58 @@ namespace OGT
             }
         }
 
-        private void OnValidate()
-        {
-            this.EditorGetComponent<Text>(ref this.text);
-        }
+        private void OnValidate() => this.EditorGetComponent<Text>(ref this.text);
 
-        private void Awake()
-        {
-            this.OnValidate();
-        }
+        private void Awake() => this.OnValidate();
 
-        private void OnEnable()
-        {
-            this.UpdateText();
-        }
+        private void OnEnable() => this.UpdateText();
 
         private void Update()
         {
-            this.timer += Time.unscaledDeltaTime;
+            // Making sure we don't update the text every frame, since that is a little expensive, but we also want to make sure it updates at least every second
+            this.updateTextTimer += Time.unscaledDeltaTime;
 
-            if (this.timer < 1.0f)
+            if (this.updateTextTimer >= 1.0f)
             {
-                return;
+                this.updateTextTimer = 0.0f;
+                this.UpdateText();
             }
-
-            this.timer = 0.0f;
-
-            this.UpdateText();
         }
 
         private void UpdateText()
         {
-            // update text can be called before Awake is called, so this is very necessary, but this will get called again OnEnable
+            // Update text can be called before Awake is called, so this is very necessary, but this will get called again OnEnable
             if (this.text == null)
             {
+                Debug.LogError("CountDownTimerText is missing a reference to the Text component", this);
                 return;
             }
 
             var utcNow = DateTime.UtcNow;
 
-            // seeing if we're finished
-            if (utcNow > this.Target)
+            // Seeing if we're finished
+            if (utcNow > this.target)
             {
-                this.text.text = string.IsNullOrEmpty(this.finishedText) == false ? this.finishedText : "00:00:00";
+                this.text.text = this.finishedText;
+                this.enabled = false;
+                this.OnTimerComplete?.Invoke();
             }
             else
             {
-                TimeSpan timeLeft = this.Target.Subtract(utcNow);
-                this.text.text = string.Format("{0:D2}:{1:D2}:{2:D2}", timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds);
+                if (this.enabled == false)
+                {
+                    this.enabled = true;
+                }
+
+                TimeSpan timeLeft = this.target.Subtract(utcNow);
+
+                BetterStringBuilder.New().
+                    AppendTwoDigitNumber(timeLeft.Hours).
+                    Append(':').
+                    AppendTwoDigitNumber(timeLeft.Minutes).
+                    Append(':').
+                    AppendTwoDigitNumber(timeLeft.Seconds).
+                    Set(this.text);
             }
         }
     }
