@@ -53,13 +53,13 @@ namespace OGT
         ////     // TODO [bgish]: Implement
         //// }
 
-        private void OnEnable()
-        {
-            //// UnityAnalyticsManager.OnInitialized += () =>
-            //// {
-            ////     UnityAnalyticsManager.Instance.RegisterAnalyticsProvider(this);
-            //// };
-        }
+        //// private void OnEnable()
+        //// {
+        ////     //// UnityAnalyticsManager.OnInitialized += () =>
+        ////     //// {
+        ////     ////     UnityAnalyticsManager.Instance.RegisterAnalyticsProvider(this);
+        ////     //// };
+        //// }
     }
 }
 

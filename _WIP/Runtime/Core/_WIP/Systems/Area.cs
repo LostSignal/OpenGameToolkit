@@ -49,7 +49,7 @@ namespace OGT
             }
             else
             {
-                throw new NotImplementedException($"{nameof(Area)} IsInside encountered unknown {nameof(AreaType)} {this.Type}");
+                throw new NotImplementedException($"{nameof(Area)} IsInside encountered unknown {nameof(AreaType)} {this.Type.ToString()}");
             }
         }
 

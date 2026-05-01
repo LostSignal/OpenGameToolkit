@@ -100,7 +100,21 @@ namespace OGT
 
             objects = null;
             isProcessing = false;
+
+            Platform.OnUpdate -= this.OnPlatformUpdate;
+            Platform.OnLateUpdate -= this.OnPlatformLateUpdate;
+            Platform.OnFixedUpdate -= this.OnPlatformFixedUpdate;
         }
+
+#if UNITY_6000_0_OR_NEWER
+        // NOTE [bgish]: Doing static deregistering twice so ProjectAuditor wont complain
+        private void OnDisable()
+        {            
+            Platform.OnUpdate -= this.OnPlatformUpdate;
+            Platform.OnLateUpdate -= this.OnPlatformLateUpdate;
+            Platform.OnFixedUpdate -= this.OnPlatformFixedUpdate;
+        }
+#endif
 
         private void OnPlatformUpdate(object sender, System.EventArgs e)
         {

@@ -10,20 +10,19 @@ namespace OGT
 
     public static class JsonUtil
     {
-        static JsonUtil()
-        {
-            JsonSerializerSettings.Converters.Add(new RGBAConverter());
-            JsonSerializerSettings.Converters.Add(new PositionConverter());
-        }
-
-        public static JsonSerializerSettings JsonSerializerSettings { get; private set; } = new JsonSerializerSettings
+        private static readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings()
         {
             Formatting = Formatting.Indented,
             DateFormatString = "yyyy-MM-ddTHH:mm:ssZ",
             NullValueHandling = NullValueHandling.Ignore,
+            Converters = new JsonConverter[]
+            {
+                new RGBAConverter(),
+                new PositionConverter(),
+            },
         };
 
-        public static JsonSerializerSettings JsonSerializerSettingsWithTypes { get; private set; } = new JsonSerializerSettings(JsonSerializerSettings)
+        private static readonly JsonSerializerSettings jsonSerializerSettingsWithTypes = new JsonSerializerSettings(jsonSerializerSettings)
         {
             TypeNameHandling = TypeNameHandling.All,
         };
@@ -35,17 +34,17 @@ namespace OGT
                 return null;
             }
 
-            return JsonConvert.SerializeObject(obj, includeTypeInformation ? JsonSerializerSettingsWithTypes : JsonSerializerSettings);
+            return JsonConvert.SerializeObject(obj, includeTypeInformation ? jsonSerializerSettingsWithTypes : jsonSerializerSettings);
         }
 
         public static T Deserialize<T>(string json, bool includeTypeInformation = false)
         {
-            return JsonConvert.DeserializeObject<T>(json, includeTypeInformation ? JsonSerializerSettingsWithTypes : JsonSerializerSettings);
+            return JsonConvert.DeserializeObject<T>(json, includeTypeInformation ? jsonSerializerSettingsWithTypes : jsonSerializerSettings);
         }
 
-        public static object Deserialize(string json, System.Type type)
+        public static object Deserialize(string json, System.Type type, bool includeTypeInformation = false)
         {
-            return JsonConvert.DeserializeObject(json, type, JsonSerializerSettings);
+            return JsonConvert.DeserializeObject(json, type, includeTypeInformation ? jsonSerializerSettingsWithTypes : jsonSerializerSettings);
         }
     }
 }

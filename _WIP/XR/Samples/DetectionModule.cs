@@ -38,10 +38,10 @@ namespace Unity.FPS.AI
         const string k_AnimAttackParameter = "Attack";
         const string k_AnimOnDamagedParameter = "OnDamaged";
 
-        protected virtual void Start()
-        {
-            // DebugUtility.HandleErrorIfNullFindObject<ActorsManager, DetectionModule>(m_ActorsManager, this);
-        }
+        //// protected virtual void Start()
+        //// {
+        ////     // DebugUtility.HandleErrorIfNullFindObject<ActorsManager, DetectionModule>(m_ActorsManager, this);
+        //// }
 
         public virtual void HandleTargetDetection(Actor actor, Collider[] selfColliders)
         {

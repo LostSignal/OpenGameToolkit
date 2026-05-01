@@ -61,15 +61,18 @@ namespace OGT
             }
         }
 
+        public override void OnManagerDestroyed()
+        {
+            SpriteAtlasManager.atlasRequested -= this.RequestAtlas;
+        }
+
+        // NOTE [bgish]: Doing static deregistering twice so ProjectAuditor wont complain
+        private void OnDisable() => SpriteAtlasManager.atlasRequested -= this.RequestAtlas;
+
         protected override Task InitializeManager(Bootloader bootloader)
         {
             SpriteAtlasManager.atlasRequested += this.RequestAtlas;
             return Task.CompletedTask;
-        }
-
-        private void OnDestroy()
-        {
-            SpriteAtlasManager.atlasRequested -= this.RequestAtlas;
         }
 
         public void RegisterAtlas(string tag, string guid)

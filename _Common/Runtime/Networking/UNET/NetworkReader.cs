@@ -24,6 +24,11 @@ namespace OGT.Networking
 
         private readonly NetBuffer netBuffer;
 
+#if UNITY_6000_0_OR_NEWER
+        [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics() => stringReaderBuffer = new byte[InitialStringBufferSize];
+#endif
+
         public NetworkReader()
         {
             this.netBuffer = new NetBuffer();

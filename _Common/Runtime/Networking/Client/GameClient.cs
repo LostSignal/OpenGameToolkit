@@ -282,7 +282,7 @@ namespace OGT.Networking
                         break;
 
                     default:
-                        Logger.LogErrorFormat("Found unknown ClientEvent type {0}", clientEvent.EventType);
+                        Logger.LogErrorFormat("Found unknown ClientEvent type {0}", (object)clientEvent.EventType.ToString());
                         break;
                 }
             }
@@ -293,7 +293,7 @@ namespace OGT.Networking
             }
             catch (Exception ex)
             {
-                Logger.LogError($"Encountered an exception updating the client: {ex.Message}");
+                Logger.LogErrorFormat("Encountered an exception updating the client: {0}", (object)ex.Message);
                 Logger.LogException(ex);
             }
         }
@@ -353,7 +353,7 @@ namespace OGT.Networking
 
                     if (this.printDebugOutput)
                     {
-                        Logger.LogFormat("JoinServerResponseMessage.Accepted = {0}", joinServerResponse.Accepted);
+                        Logger.LogFormat("JoinServerResponseMessage.Accepted = {0}", (object)joinServerResponse.Accepted.ToString());
                     }
 
                     if (joinServerResponse.Accepted)
@@ -400,7 +400,7 @@ namespace OGT.Networking
                     var userDisconnectedMessage = (UserDisconnectedMessage)message;
                     long userId = userDisconnectedMessage.UserId;
 
-                    Logger.LogFormat("UserDisconnectedMessage For UserId {0}", userDisconnectedMessage.UserId);
+                    Logger.LogFormat("UserDisconnectedMessage For UserId {0}", (object)userDisconnectedMessage.UserId.ToString());
 
                     UserInfo removedUserInfo = this.RemoveUserInfo(userId);
 

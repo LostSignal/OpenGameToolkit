@@ -13,6 +13,8 @@ namespace OGT.Networking
     // this is used instead of MemoryStream and BinaryReader/BinaryWriter to avoid allocations.
     public class NetBuffer
     {
+        private static readonly OGTLogger Logger = new OGTLogger("Networking");
+
         private const int InitialSize = 64;
         private const float GrowthFactor = 1.5f;
         private const int BufferSizeWarning = 1024 * 1024 * 128;
@@ -204,14 +206,14 @@ namespace OGT.Networking
             }
 
             int newLen = (int)Math.Ceiling(this.byteBuffer.Length * GrowthFactor);
+
             while (this.position + count >= newLen)
             {
                 newLen = (int)Math.Ceiling(newLen * GrowthFactor);
 
                 if (newLen > BufferSizeWarning)
                 {
-                    // TODO [bgish]: Add this back?
-                    // OGT.Logger.LogWarning("NetworkBuffer size is " + newLen + " bytes!");
+                    Logger.LogWarning("NetworkBuffer has increased to {0} bytes!", (object)newLen.ToString());
                 }
             }
 

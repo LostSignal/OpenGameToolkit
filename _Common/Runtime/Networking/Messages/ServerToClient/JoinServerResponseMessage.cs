@@ -12,6 +12,8 @@ namespace OGT.Networking
 
         public bool Accepted { get; set; }
 
+        public override string GetTypeName() => nameof(JoinServerResponseMessage);
+
         public override short GetId()
         {
             return Id;

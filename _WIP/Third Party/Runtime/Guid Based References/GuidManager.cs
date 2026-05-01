@@ -8,7 +8,6 @@ namespace OGT
 {
     using System;
     using System.Collections.Generic;
-    using OGT;
     using UnityEngine;
 
     // Class to handle registering and accessing objects by GUID
@@ -32,14 +31,8 @@ namespace OGT
         ////     OGT.Logger.Log("RuntimeInit");
         //// }
 
-        [EditorEvents.OnEnterPlayMode]
-        public static void OnEnterPlaymode()
-        {
-            if (instance != null)
-            {
-                instance.guidToObjectMap.Clear();
-            }
-        }
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics() => instance = null;
 
         // All the public API is static so you need not worry about creating an instance
         public static bool Add(GuidComponent guidComponent)

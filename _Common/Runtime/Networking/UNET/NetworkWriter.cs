@@ -21,6 +21,11 @@ namespace OGT.Networking
         private static readonly byte[] StringWriteBuffer = new byte[MaxStringLength];
         private static UIntFloat floatConverter;
 
+#if UNITY_6000_0_OR_NEWER
+        [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics() => floatConverter = default;
+#endif
+
         private readonly NetBuffer netBuffer;
 
         public NetworkWriter()

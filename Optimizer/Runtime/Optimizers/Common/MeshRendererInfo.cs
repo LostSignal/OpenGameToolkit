@@ -85,6 +85,7 @@ namespace OGT
             set => this.octreeVolumeIndex = value;
         }
 
+#if UNITY_EDITOR
         public static List<MeshRendererInfo> GetMeshRendererInfos(List<GameObject> gameObjects)
         {
             List<MeshRendererInfo> results = new List<MeshRendererInfo>();
@@ -145,5 +146,6 @@ namespace OGT
                 return lodLevel;
             }
         }
+#endif
     }
 }

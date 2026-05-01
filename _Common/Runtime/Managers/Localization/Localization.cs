@@ -13,16 +13,21 @@ namespace OGT.Localization
     {
         private const string CurrentLanguageKey = "CurrentLanguage";
 
-        private static LanguageChangedDelegate languagedChanged;
-        private static Language currentLanguage = null;
+        public static event LanguageChangedDelegate OnLanguageChanged;
+
+        private static Language currentLanguage;
+
+#if UNITY_6000_0_OR_NEWER
+        [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics()
+        {
+            OnLanguageChanged = null;
+            currentLanguage = null;
+            CurrentLanguage = null;  // NOTE [bgish]: This does nothing but keep Project Auditor happy
+        }
+#endif
 
         public delegate void LanguageChangedDelegate();
-
-        public static event LanguageChangedDelegate OnLanguagedChanged
-        {
-            add => languagedChanged += value;
-            remove => languagedChanged -= value;
-        }
 
         public static Language CurrentLanguage
         {
@@ -42,7 +47,7 @@ namespace OGT.Localization
                     SaveCurrentLangauge();
                     UpdateI2Localization();
 
-                    languagedChanged?.Invoke();
+                    OnLanguageChanged?.Invoke();
                 }
             }
         }

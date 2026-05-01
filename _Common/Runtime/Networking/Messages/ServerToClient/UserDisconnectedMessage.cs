@@ -14,6 +14,8 @@ namespace OGT.Networking
 
         public bool WasConnectionLost { get; set; }
 
+        public override string GetTypeName() => nameof(UserDisconnectedMessage);
+
         public override short GetId()
         {
             return Id;

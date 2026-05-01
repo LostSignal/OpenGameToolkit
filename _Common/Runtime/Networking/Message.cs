@@ -8,6 +8,8 @@ namespace OGT.Networking
 {
     public abstract class Message
     {
+        public abstract string GetTypeName();
+
         public abstract short GetId();
 
         public virtual void Serialize(NetworkWriter writer)

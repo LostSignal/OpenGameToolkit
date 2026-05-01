@@ -135,7 +135,7 @@ namespace OGT
         {
             this.OnValidate();
 
-            Localization.Localization.OnLanguagedChanged += this.UpdateText;
+            Localization.Localization.OnLanguageChanged += this.UpdateText;
         }
 
         private void OnEnable()
@@ -145,7 +145,7 @@ namespace OGT
 
         private void OnDestroy()
         {
-            Localization.Localization.OnLanguagedChanged -= this.UpdateText;
+            Localization.Localization.OnLanguageChanged -= this.UpdateText;
         }
 
         private void UpdateText()

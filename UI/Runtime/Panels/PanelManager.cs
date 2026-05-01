@@ -129,6 +129,9 @@ namespace OGT
             Platform.OnBackButtonPressed -= this.OnBackButtonPressed;
         }
 
+        // NOTE [bgish]: Doing static deregistering twice so ProjectAuditor wont complain
+        private void OnDisable() => Platform.OnBackButtonPressed -= this.OnBackButtonPressed;
+
         private void OnBackButtonPressed(object sender, EventArgs e)
         {
             this.panelStack.LastOrDefault()?.RaiseOnBackButtonPressed();

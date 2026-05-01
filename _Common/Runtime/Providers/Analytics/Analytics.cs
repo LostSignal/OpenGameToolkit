@@ -12,6 +12,11 @@ namespace OGT
     {
         private static List<IAnalyticsProvider> analyticsProviders = new(5);
 
+#if UNITY_6000_0_OR_NEWER
+        [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics() => analyticsProviders = new List<IAnalyticsProvider>(5);
+#endif
+
         public static void Send(string eventName, Dictionary<string, object> data)
         {
             foreach (var provider in analyticsProviders)

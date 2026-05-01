@@ -48,7 +48,7 @@ namespace OGT.Networking
 
             if (this.messagePools.ContainsKey(messageId) == false)
             {
-                Logger.LogError($"Tried to recycle Message {message.GetType().Name} with Id {messageId} without registering it!");
+                Logger.LogErrorFormat("Tried to recycle Message {0} with Id {1} without registering it!", (object)message.GetTypeName(), (object)messageId.ToString());
                 return;
             }
 
@@ -69,7 +69,7 @@ namespace OGT.Networking
         {
             if (this.messagePools.TryGetValue(messageId, out List<Message> pool) == false)
             {
-                Logger.LogError($"Tried to get Message Id {messageId} without registering it!");
+                Logger.LogError($"Tried to get Message Id {messageId.ToString()} without registering it!");
                 return null;
             }
 
@@ -88,7 +88,7 @@ namespace OGT.Networking
                 }
                 else
                 {
-                    Logger.LogError($"Tried to get Message Id {messageId} without registering it!");
+                    Logger.LogError($"Tried to get Message Id {messageId.ToString()} without registering it!");
                     return null;
                 }
             }

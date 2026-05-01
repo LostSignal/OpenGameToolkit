@@ -66,6 +66,7 @@ namespace OGT
         protected abstract Task InitializeManager(Bootloader bootloader);
 
 #if UNITY_6000_0_OR_NEWER
+
         private void OnDestroy()
         {
             this.OnManagerDestroyed();

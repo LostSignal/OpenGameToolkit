@@ -22,6 +22,8 @@ namespace OGT.Networking
 
         public byte[] DataBytes { get; set; } = new byte[1024];
 
+        public override string GetTypeName() => nameof(NetworkBehaviourMessage);
+
         public override short GetId()
         {
             return Id;

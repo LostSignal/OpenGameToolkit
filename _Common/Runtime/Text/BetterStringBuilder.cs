@@ -4,8 +4,6 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Runtime.CompilerServices;
-
 namespace OGT
 {
     public enum IntFormat
@@ -47,6 +45,16 @@ namespace OGT
         public char[] CurrentCharBuffer => CharBuffer;
 
         public int CurrentCharBufferLength => currentLength;
+
+#if UNITY_6000_0_OR_NEWER
+        [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics()
+        {
+            currentLength = 0;
+            thousandsSeperator = ",";
+            decimalSeperator = ".";
+        }
+#endif
 
         public static BetterStringBuilder New()
         {
@@ -129,7 +137,7 @@ namespace OGT
                     return this.AppendAbbreviated(value);
 
                 default:
-                    Logger.LogErrorFormat("Found Unknown IntFormat {0}", format);
+                    Logger.LogErrorFormat("Found Unknown IntFormat {0}", format.ToString());
                     return this.AppendLong(value, false);
             }
         }

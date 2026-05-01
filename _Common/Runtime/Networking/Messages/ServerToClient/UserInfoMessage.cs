@@ -17,6 +17,8 @@ namespace OGT.Networking
 
         public UserInfo UserInfo { get; set; }
 
+        public override string GetTypeName() => nameof(UserInfoMessage);
+
         public override short GetId()
         {
             return Id;

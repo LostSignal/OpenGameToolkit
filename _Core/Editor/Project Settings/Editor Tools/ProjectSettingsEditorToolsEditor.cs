@@ -25,7 +25,6 @@ namespace OGT
 
             DrawGenerateIgnoreFiles();
             DrawGenerateEditorConfig();
-            DrawEditorEventsConfig();
 
             if (GUILayout.Button("Reset To Defaults"))
             {
@@ -131,26 +130,6 @@ namespace OGT
                         }
 
                         EditorGUILayout.Space(5);
-                    }
-                });
-            }
-
-            void DrawEditorEventsConfig()
-            {
-                this.BoxArea("Editor Events", () =>
-                {
-                    // Special case for setting editor events to always print at the Info level
-                    if (OGTLogger.GetLoggingLevel("Editor Events") != LoggingLevel.Info)
-                    {
-                        GUILayout.Space(10);
-
-                        if (GUILayout.Button("Set 'Editor Event' Logging Level to Info"))
-                        {
-                            OGTLogger.SetLoggingLevel("Editor Events", LoggingLevel.Info);
-                            UnityLoggingProvider.SaveChannels();
-                        }
-
-                        GUILayout.Space(20);
                     }
                 });
             }

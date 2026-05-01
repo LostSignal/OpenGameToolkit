@@ -32,6 +32,12 @@ namespace OGT
             return instance;
         }
 
+        protected static void ResetStatics()
+        {
+            instance = null;
+            initialized = false;
+        }
+
         private void OnDestroy()
         {
             if (instance == this)

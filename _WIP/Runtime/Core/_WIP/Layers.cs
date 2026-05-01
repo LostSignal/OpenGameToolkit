@@ -97,8 +97,7 @@ namespace OGT
             InitializeLayers();
         }
 
-        [EditorEvents.InitializeOnLoad]
-        [EditorEvents.OnEnterPlayMode]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void InitializeLayers()
         {
             defaultLayer = LayerMask.NameToLayer("Default");

@@ -17,6 +17,15 @@ namespace OGT.Localization
         private static ReadOnlyCollection<Language> languages;
         private static ReadOnlyCollection<string> languageNames;
 
+#if UNITY_6000_0_OR_NEWER
+        [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.AfterAssembliesLoaded)]
+        private static void ResetStatics()
+        {
+            languages = null;
+            languageNames = null;
+        }
+#endif
+
         public static ReadOnlyCollection<Language> AllLanguages
         {
             get

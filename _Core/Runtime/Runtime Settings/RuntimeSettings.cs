@@ -15,6 +15,11 @@ namespace OGT
         private static readonly OGTLogger Logger = OGTLogger.OGT;
         private static Dictionary<string, object> Settings = null;
 
+#if UNITY_6000_0_OR_NEWER
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics() => Settings = null;
+#endif
+
         public static T GetSetting<T>(string settingsName, T defaultValue = default)
         {
             LoadSettings();

@@ -41,5 +41,8 @@ namespace OGT
 
             return singleton.GetComponent<T>();
         }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics() => rootInstance = null;
     }
 }

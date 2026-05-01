@@ -285,6 +285,9 @@ namespace OGT.PlantGenerator
                 EditorUtil.SetDirty(this);
             }
         }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics() => layerId = -1;
     }
 }
 

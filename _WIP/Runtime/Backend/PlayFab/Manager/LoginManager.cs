@@ -11,6 +11,7 @@ namespace OGT.PlayFab
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Runtime.CompilerServices;
     using global::PlayFab;
     using global::PlayFab.ClientModels;
     using global::PlayFab.Internal;
@@ -44,6 +45,19 @@ namespace OGT.PlayFab
 
             playfabManager.GlobalPlayFabResultHandler += this.OnGlobalPlayFabResultHandler;
             PlayFabSettings.GlobalErrorHandler += this.PlayfabEvents_OnGlobalErrorEvent;
+        }
+
+        ~LoginManager()
+        {
+            this.playfabManager.GlobalPlayFabResultHandler -= this.OnGlobalPlayFabResultHandler;
+            PlayFabSettings.GlobalErrorHandler -= this.PlayfabEvents_OnGlobalErrorEvent;
+        }
+
+        // NOTE [bgish]: This is a hack to make Project Auditor happy since it doesn't understant non-monobehaviour classes
+        private void OnDisable()
+        {
+            this.playfabManager.GlobalPlayFabResultHandler -= this.OnGlobalPlayFabResultHandler;
+            PlayFabSettings.GlobalErrorHandler -= this.PlayfabEvents_OnGlobalErrorEvent;
         }
 
         public string SessionTicket => this.loginResult?.SessionTicket;

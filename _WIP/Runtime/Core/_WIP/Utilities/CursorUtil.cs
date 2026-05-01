@@ -10,18 +10,16 @@ namespace OGT
 
     public static class CursorUtil
     {
-        public static bool CursorLockedAndHidden
+        public static void SetCursorLockedAndHidden()
         {
-            get
-            {
-                return Cursor.visible == false;
-            }
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
 
-            set
-            {
-                Cursor.lockState = value ? CursorLockMode.Locked : CursorLockMode.None;
-                Cursor.visible = value == false;
-            }
+        public static void SetCursorUnlockedAndVisible()
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
     }
 }

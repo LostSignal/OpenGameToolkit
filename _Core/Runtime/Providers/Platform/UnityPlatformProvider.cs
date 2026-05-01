@@ -35,14 +35,23 @@ namespace OGT
 
         public delegate void OnResetDelegate();
 
-        public static event OnResetDelegate OnReset;
-
         private static UnityDispatcher dispatcher;
 
         public UnityPlatformProvider()
         {
             CreateDispatcher();
             Application.wantsToQuit += this.UnityWantsToQuit;
+        }
+
+        ~UnityPlatformProvider()
+        {
+            Application.wantsToQuit -= this.UnityWantsToQuit;
+        }
+
+        // NOTE [bgish]: This is a hack to make Project Auditor happy since it doesn't understant non-monobehaviour classes
+        private void OnDisable()
+        {
+            Application.wantsToQuit -= this.UnityWantsToQuit;
         }
 
         public event EventHandler OnBackButtonPressed
@@ -449,31 +458,12 @@ namespace OGT
 
         public double GetTimeSinceStartup() => Time.realtimeSinceStartupAsDouble;
 
-        [EditorEvents.OnExitPlayMode]
-        public static void Reset()
-        {
-            try
-            {
-                OnReset?.Invoke();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogException(ex);
-            }
-        }
-
-        [EditorEvents.OnEnterPlayMode]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void OnEnterPlayMode()
         {
+            dispatcher = null;
             isApplicationQuitting = false;
             CreateDispatcher();
-        }
-
-        [EditorEvents.OnExitPlayMode]
-        private static void OnExitPlayMode()
-        {
-            isApplicationQuitting = false;
-            dispatcher = null;
         }
 
         private static void CreateDispatcher()

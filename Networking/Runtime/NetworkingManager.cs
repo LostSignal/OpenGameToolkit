@@ -85,11 +85,29 @@ namespace OGT.Networking
             this.bootloader = bootloader;
 
             Application.quitting += this.OnApplicationQuit;
-            Platform.OnUpdate += (e, o) => this.Update();
+            Platform.OnUpdate += this.UpdateEvent;
 
             this.originalRunInBackground = Application.runInBackground;
 
             return Task.CompletedTask;
+        }
+
+        private void UpdateEvent(object sender, EventArgs e)
+        {
+            this.Update();
+        }
+
+        public override void OnManagerDestroyed()
+        {
+            Application.quitting -= this.OnApplicationQuit;
+            Platform.OnUpdate -= this.UpdateEvent;
+        }
+
+        // NOTE [bgish]: Doing static deregistering twice so ProjectAuditor wont complain
+        private void OnDisable()
+        {
+            Application.quitting -= this.OnApplicationQuit;
+            Platform.OnUpdate -= this.UpdateEvent;
         }
 
         public NetworkingMode Mode

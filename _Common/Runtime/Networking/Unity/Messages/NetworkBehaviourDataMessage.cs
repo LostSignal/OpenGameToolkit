@@ -20,6 +20,8 @@ namespace OGT.Networking
 
         public string DataValue { get; set; }
 
+        public override string GetTypeName() => nameof(NetworkBehaviourDataMessage);
+
         public override short GetId()
         {
             return Id;

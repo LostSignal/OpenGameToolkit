@@ -23,6 +23,9 @@ namespace OGT.PlayFab
     {
         private static ISerializerPlugin serializerPlugin;
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics() => serializerPlugin = null;
+
 #pragma warning disable 0649
         [SerializeField] private LoginMethod loginMethod;
         [SerializeField] private Settings settings;
@@ -405,7 +408,7 @@ namespace OGT.PlayFab
             yield return task.Result.Result;
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             PlayFabSettings.GlobalErrorHandler -= this.OnGlobalErrorEvent;
         }

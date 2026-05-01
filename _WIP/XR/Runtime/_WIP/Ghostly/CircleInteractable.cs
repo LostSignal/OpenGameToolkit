@@ -72,7 +72,7 @@ namespace HavenXR
                     }
                     else
                     {
-                        Logger.LogError($"CircleInteractable found unknown rotationalAxis {this.rotationalAxis}", this);
+                        Logger.LogError($"CircleInteractable found unknown rotationalAxis {this.rotationalAxis.ToString()}", this);
                     }
 
                     this.spinningTransform.localRotation = Quaternion.Euler(localRotation);

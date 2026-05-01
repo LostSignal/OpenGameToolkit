@@ -12,6 +12,8 @@ namespace OGT.Networking
 
         public long NetworkId { get; set; }
 
+        public override string GetTypeName() => nameof(NetworkIdentityReleaseOwnershipRequest);
+
         public override short GetId()
         {
             return Id;

@@ -27,6 +27,11 @@ namespace OGT
         private string channelName;
         private int channelHash;
 
+#if UNITY_6000_0_OR_NEWER
+        [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics() => DefaultLoggingLevel = LoggingLevel.Info;
+#endif
+
         public OGTLogger(string channelName)
         {
             this.channelName = channelName;

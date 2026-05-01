@@ -227,7 +227,7 @@ namespace OGT
 
                 default:
                 {
-                    Logger.LogErrorFormat("Found Unknown Timespan Format {0}", this.GetFormat());
+                    Logger.LogErrorFormat("Found Unknown Timespan Format {0}", this.GetFormat().ToString());
                     break;
                 }
             }

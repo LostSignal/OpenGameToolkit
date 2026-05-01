@@ -26,6 +26,8 @@ namespace OGT.Networking
 
         public bool CanChangeOwner { get; set; }
 
+        public override string GetTypeName() => nameof(NetworkIdentityRequestUpdate);
+
         public override short GetId()
         {
             return Id;

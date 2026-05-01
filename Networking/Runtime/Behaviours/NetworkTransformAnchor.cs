@@ -15,16 +15,8 @@ namespace OGT.Networking
 
         private static Transform anchorTransform;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1810:Initialize reference type static fields inline", Justification = "Must register for events.")]
-        static NetworkTransformAnchor()
-        {
-            UnityPlatformProvider.OnReset += Reset;
-
-            static void Reset()
-            {
-                anchorTransform = null;
-            }
-        }
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics() => anchorTransform = null;
 
         public static Vector3 InverseTransformPosition(Vector3 worldSpace)
         {

@@ -25,7 +25,8 @@ namespace OGT
 
         private Transform characterTransform;
 
-        static Character() => UnityPlatformProvider.OnReset += Characters.Clear;
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics() => Characters.Clear();
 
         public static ReadOnlyCollection<Character> AllCharacters
         {

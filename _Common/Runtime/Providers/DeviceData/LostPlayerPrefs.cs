@@ -15,6 +15,11 @@ namespace OGT
 
         private static bool isDirty;
 
+#if UNITY_6000_0_OR_NEWER
+        [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics() => isDirty = false;
+#endif
+
         public static bool HasKey(string key)
         {
 #if UNITY

@@ -8,6 +8,13 @@ namespace OGT
         private static readonly Dictionary<int, WorldSpace> WorldSpaceCache = new();
         private static long CurrentFrame = -1L;
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics()
+        {
+            WorldSpaceCache.Clear();
+            CurrentFrame = -1L;
+        }
+
         public static Vector3 GetWorldSpace(this OGT.Input input, Camera camera, float distance)
         {
             if (CurrentFrame != Time.frameCount)

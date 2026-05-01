@@ -6,15 +6,10 @@
 
 namespace OGT
 {
-    using System.Collections;
     using UnityEngine;
 
     public static class AnimationCurveExtensions
     {
-        public static float TimeLength(this AnimationCurve curve)
-        {
-            var keys = curve.keys;
-            return keys[keys.Length - 1].time;
-        }
+        public static float TimeLength(this AnimationCurve curve) => curve[curve.length - 1].time;
     }
 }

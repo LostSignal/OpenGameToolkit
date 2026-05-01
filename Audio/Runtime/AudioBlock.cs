@@ -41,6 +41,9 @@ namespace OGT
             RoundRobin,
         }
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics() => audioManagerInstance = null;
+
         [InspectorButton]
         public void PlayOneShot() => this.InternalPlay(default, default, false, false);
 
@@ -97,7 +100,7 @@ namespace OGT
                 }
                 else
                 {
-                    Logger.LogError($"AudioBlock {this.name} enountered unkonwn PlayType {this.playType}", this);
+                    Logger.LogError($"AudioBlock {this.name} enountered unkonwn PlayType {this.playType.ToString()}", this);
                     return null;
                 }
             }
@@ -123,19 +126,19 @@ namespace OGT
 
             if (audioManager == null)
             {
-                Logger.LogError($"Tried to play AudioBlock {this.name} before AudioManager was initialized.", this);
+                Logger.LogErrorFormat(this, "Tried to play AudioBlock {0} before AudioManager was initialized.", this.name);
                 return null;
             }
 
             if (this.audioChannel == null)
             {
-                Logger.LogError($"AudioBlock {this.name} failed to play.  It does not have a valid AudioChannel.", this);
+                Logger.LogErrorFormat(this, "AudioBlock {0} failed to play.  It does not have a valid AudioChannel.", this.name);
                 return null;
             }
 
             if (audioManager.ContainsAudioChannel(this.audioChannel) == false)
             {
-                Logger.LogError($"AudioBlock {this.name} failed to play.  Audio Channel {this.audioChannel.name} is not registered with the Audio Manager.", this);
+                Logger.LogErrorFormat(this, "AudioBlock {0} failed to play.  Audio Channel {1} is not registered with the Audio Manager.", this.name, this.audioChannel.name);
                 return null;
             }
 
@@ -158,10 +161,7 @@ namespace OGT
 
             if (isLooping == false)
             {
-                CoroutineRunner.Instance.ExecuteDelayed(audioSource.clip.length, () =>
-                {
-                    audioBlockInstance.Stop();
-                });
+                CoroutineRunner.Instance.ExecuteDelayed(audioSource.clip.length, audioBlockInstance.Stop);
             }
 
             return audioBlockInstance;

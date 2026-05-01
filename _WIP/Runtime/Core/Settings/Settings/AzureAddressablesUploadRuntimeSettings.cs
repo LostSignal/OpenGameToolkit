@@ -8,10 +8,35 @@ namespace OGT.Settings
 {
     public static class AzureAddressablesUploadRuntimeSettings
     {
+        private static string downloadUrl;
+
         public static string DownloadUrl
         {
-            get => RuntimeSettings.GetSetting<string>("AzureAddressablesUpload.DownloadUrl");
-            set => RuntimeSettings.SetSetting("AzureAddressablesUpload.DownloadUrl", value);
+            get
+            {
+                if (string.IsNullOrEmpty(downloadUrl))
+                {
+                    downloadUrl = RuntimeSettings.GetSetting<string>("AzureAddressablesUpload.DownloadUrl");
+                }
+
+                return downloadUrl;
+            }
+
+#if UNITY_EDITOR
+            set
+            {
+                downloadUrl = value;
+                RuntimeSettings.SetSetting("AzureAddressablesUpload.DownloadUrl", value);
+            }
+#endif
         }
+
+#if UNITY_6000
+        [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics()
+        {
+            downloadUrl = null;
+        }
+#endif
     }
 }

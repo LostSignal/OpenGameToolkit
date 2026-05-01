@@ -40,6 +40,8 @@ namespace OGT
 
         public static void AddOrRemoveDefine(string assemblyName, string define)
         {
+            #if UNITY_EDITOR
+
             bool typeExists = AppDomain.CurrentDomain.GetAssemblies().Any(assembly =>
             {
                 int endIndex = assembly.FullName.IndexOf(", Version=");
@@ -54,6 +56,8 @@ namespace OGT
             {
                 ProjectDefinesHelper.RemoveDefineFromProject(define);
             }
+
+            #endif
         }
 
         public static void AddDefineToProject(string defineToAdd)

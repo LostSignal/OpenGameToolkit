@@ -95,6 +95,9 @@ namespace OGT.Networking
             SceneManager.sceneLoaded -= this.OnSceneLoaded;
         }
 
+        // NOTE [bgish]: This is a hack to make Project Auditor happy since it doesn't understant non-monobehaviour classes
+        private void OnDisable() => SceneManager.sceneLoaded -= this.OnSceneLoaded;
+
         public void ClientReceivedMessage(Message message)
         {
             switch (message.GetId())

@@ -14,6 +14,11 @@ namespace OGT
     {
         private static IPlatformProvider platformProvider = null;
 
+#if UNITY_6000_0_OR_NEWER
+        [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics() => platformProvider = null;
+#endif
+
         public static bool IsEditor =>
             platformProvider.IsEditor;
 

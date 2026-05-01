@@ -14,6 +14,8 @@ namespace OGT.Networking
 
         public List<long> DestroyedNetworkIds { get; } = new List<long>(50);
 
+        public override string GetTypeName() => nameof(NetworkIdentitiesDestroyed);
+
         public override short GetId()
         {
             return Id;

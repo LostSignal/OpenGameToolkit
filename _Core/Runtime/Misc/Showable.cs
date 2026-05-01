@@ -245,5 +245,8 @@ namespace OGT
                 this.hideCoroutine = null;
             }
         }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics() => clipsToRemoveCache.Clear();
     }
 }

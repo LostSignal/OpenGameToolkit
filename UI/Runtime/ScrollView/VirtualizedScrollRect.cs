@@ -190,7 +190,7 @@ namespace OGT
                 Logger.LogWarning("VirtualizedScrollRect has not been tested yet for Horizontal GrowType. It will probably not work.", this);
             }
 
-            OGT.Localization.Localization.OnLanguagedChanged += this.ReplaceAllVisibleTiles;
+            OGT.Localization.Localization.OnLanguageChanged += this.ReplaceAllVisibleTiles;
         }
 
         protected virtual void Update()
@@ -229,7 +229,7 @@ namespace OGT
 
         private void OnDestroy()
         {
-            OGT.Localization.Localization.OnLanguagedChanged -= this.ReplaceAllVisibleTiles;
+            OGT.Localization.Localization.OnLanguageChanged -= this.ReplaceAllVisibleTiles;
         }
 
         private void CalculateTopAndBottomDragDistances()

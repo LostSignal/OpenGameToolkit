@@ -22,7 +22,7 @@ namespace OGT
         public TimingLogger(string message)
         {
             this.message = message;
-            this.startTime = DateTime.Now;
+            this.startTime = DateTime.UtcNow;
         }
 
         public static string GetTimeAsString(DateTime start, DateTime end)
@@ -61,7 +61,7 @@ namespace OGT
         /// </remarks>
         public void Dispose()
         {
-            Logger.Log($"{this.message} took {GetTimeAsString(this.startTime, DateTime.Now)}");
+            Logger.Log($"{this.message} took {GetTimeAsString(this.startTime, DateTime.UtcNow)}");
         }
     }
 }

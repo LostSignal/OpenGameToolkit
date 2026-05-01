@@ -260,7 +260,7 @@ namespace OGT.Networking
                     // Sending the update off to all the clients
                     if (this.PrintDebugOutput)
                     {
-                        Logger.Log($"Updateing UserData {user.UserId}");
+                        Logger.Log($"Updateing UserData {user.UserId.ToString()}");
                     }
 
                     var userInfoMessage = (UserInfoMessage)this.messageCollection.GetMessage(UserInfoMessage.Id);
@@ -298,7 +298,7 @@ namespace OGT.Networking
                         break;
 
                     default:
-                        Logger.LogErrorFormat("Found unknown ServerEvent type {0}", serverEvent.EventType);
+                        Logger.LogErrorFormat("Found unknown ServerEvent type {0}", serverEvent.EventType.ToString());
                         break;
                 }
             }
@@ -374,7 +374,7 @@ namespace OGT.Networking
                     // Checking if this connection has already registered a user info, if so, they've already joined
                     if (userInfo != null)
                     {
-                        Logger.LogErrorFormat("Got a JoinServerRequestMessage from ConnectionId {0} who has already joined.", userInfo.ConnectionId);
+                        Logger.LogErrorFormat("Got a JoinServerRequestMessage from ConnectionId {0} who has already joined.", userInfo.ConnectionId.ToString());
                         this.SendJoinServerResponse(connectionId, userInfo.UserId, true);
                         break;
                     }
@@ -383,7 +383,7 @@ namespace OGT.Networking
                     {
                         if (this.PrintDebugOutput)
                         {
-                            Logger.LogFormat("Received JoinServerRequestMessage from UserId {0}", requestJoinServer.UserInfo.UserId);
+                            Logger.LogFormat("Received JoinServerRequestMessage from UserId {0}", requestJoinServer.UserInfo.UserId.ToString());
                         }
 
                         requestJoinServer.UserInfo.ConnectionId = connectionId;
@@ -420,13 +420,13 @@ namespace OGT.Networking
 
                     if (this.PrintDebugOutput)
                     {
-                        Logger.LogFormat("Received UpdateUserInfoMessage from UserId {0}", updateUserInfoMessage.UserInfo.UserId);
+                        Logger.LogFormat("Received UpdateUserInfoMessage from UserId {0}", (object)updateUserInfoMessage.UserInfo.UserId.ToString());
                     }
 
                     // checking is someone is trying to hack by changing their userId to something else
                     if (userInfo.UserId != updateUserInfoMessage.UserInfo.UserId)
                     {
-                        Logger.LogErrorFormat("User {0} is trying to change thier Id to {1}", userInfo.UserId, updateUserInfoMessage.UserInfo.UserId);
+                        Logger.LogErrorFormat("User {0} is trying to change thier Id to {1}", (object)userInfo.UserId.ToString(), (object)updateUserInfoMessage.UserInfo.UserId.ToString());
                     }
                     else
                     {
@@ -542,7 +542,7 @@ namespace OGT.Networking
 
             if (userInfo.ConnectionId != connectionId)
             {
-                Logger.LogErrorFormat("Trying to close old connection {0}.  User {1} already has connectionId {2}", connectionId, userInfo.UserId, userInfo.ConnectionId);
+                Logger.LogErrorFormat("Trying to close old connection {0}.  User {1} already has connectionId {2}", (object)connectionId.ToString(), (object)userInfo.UserId.ToString(), (object)userInfo.ConnectionId.ToString());
                 return;
             }
 
@@ -559,7 +559,7 @@ namespace OGT.Networking
                 }
             }
 
-            Logger.AssertFormat(usersRemovedCount == 1, "Couldn't properly remove users {0}.  Found {1} when should have found 1", userInfo.UserId, usersRemovedCount);
+            Logger.AssertFormat(usersRemovedCount == 1, "Couldn't properly remove users {0}.  Found {1} when should have found 1", (object)userInfo.UserId.ToString(), (object)usersRemovedCount.ToString());
 
             // Send the disconnected message to all remaining users
             var userDisconnected = (UserDisconnectedMessage)this.messageCollection.GetMessage(UserDisconnectedMessage.Id);
@@ -624,7 +624,7 @@ namespace OGT.Networking
             {
                 if (await subsystem.AllowPlayerToJoin(userInfo) == false)
                 {
-                    Logger.LogError($"Subsystem {subsystem.Name} failed user {userInfo.UserId}");
+                    Logger.LogError($"Subsystem {subsystem.Name.ToString()} failed user {userInfo.UserId.ToString()}");
                     this.failedJoinConnectionIds.Add(userInfo);
                     return;
                 }
@@ -643,7 +643,7 @@ namespace OGT.Networking
         {
             if (this.PrintDebugOutput)
             {
-                Logger.Log($"Sending JoinServerResponseMessage to UserId {userId} With Accepted = {success}");
+                Logger.Log($"Sending JoinServerResponseMessage to UserId {userId.ToString()} With Accepted = {success.ToString()}");
             }
 
             var joinServerResponse = (JoinServerResponseMessage)this.messageCollection.GetMessage(JoinServerResponseMessage.Id);
