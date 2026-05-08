@@ -199,6 +199,12 @@ namespace OGT
             }
         }
 
+        private void OnValidate()
+        {
+            this.enableOnShow ??= new List<GameObject>();
+            this.disableOnHide ??= new List<GameObject>();
+        }
+
         public void Validate(ValidationReport report, bool isSceneObject)
         {
             // Making sure lists are created

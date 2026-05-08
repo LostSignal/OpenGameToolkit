@@ -82,6 +82,18 @@ namespace OGT
             report.CreateValidationError(monoBehaviour, "Assert Not Null", description);
         }
 
+        public static void AssertNotNull(this ValidationReport report, Component component, object obj, string nameOfObject)
+        {
+            if (IsNull(obj) == false)
+            {
+                return;
+            }
+
+            string description = $"MonoBehaviour {component.GetType().Name} \"{GetFullName(component)}\" has null object {nameOfObject}";
+
+            report.CreateValidationError(component, "Assert Not Null", description);
+        }
+
         public static void AssertNull(this ValidationReport report, MonoBehaviour monoBehaviour, object obj, string nameOfObject)
         {
             if (IsNull(obj))

@@ -36,13 +36,13 @@ namespace OGT.XR
     ////
     ////     bool staticWorldSpace;
 
-    [RequireComponent(typeof(Dialog))]
+    [RequireComponent(typeof(Panel))]
     public class XRDialog : MonoBehaviour
     {
 #pragma warning disable 0649
         [SerializeField] private XRDialogSettings settings;
         [SerializeField] private bool isGrabable;
-        [SerializeField][HideInInspector] private Dialog dialog;
+        [SerializeField][HideInInspector] private Panel panel;
         [SerializeField][HideInInspector] private Canvas dialogCanvas;
 #pragma warning restore 0649
 
@@ -64,16 +64,15 @@ namespace OGT.XR
 
         private void OnValidate()
         {
-            this.EditorGetComponent(ref this.dialog);
+            this.EditorGetComponent(ref this.panel);
             this.EditorGetComponent(ref this.dialogCanvas);
         }
 
         private void Awake()
         {
             this.OnValidate();
-            this.enabled = this.dialog.ShowOnAwake;
-            this.dialog.OnShow.AddListener(this.OnShow);
-            this.dialog.OnHide.AddListener(this.OnHide);
+            this.panel.Showable.OnShowStart.AddListener(this.OnShow);
+            this.panel.Showable.OnHideEnd.AddListener(this.OnHide);
             this.originalPlaneDistance = this.dialogCanvas.planeDistance;
         }
 
@@ -193,8 +192,10 @@ namespace OGT.XR
 
                 if (this.dialogCanvas.renderMode == RenderMode.WorldSpace)
                 {
-                    this.dialogCanvas.renderMode = this.dialog.IsOverlayCamera ? RenderMode.ScreenSpaceOverlay : RenderMode.ScreenSpaceCamera;
-                    this.dialogCanvas.planeDistance = this.originalPlaneDistance;
+                    throw new System.NotImplementedException();
+
+                    //this.dialogCanvas.renderMode = this.panel.IsOverlayCamera ? RenderMode.ScreenSpaceOverlay : RenderMode.ScreenSpaceCamera;
+                    //this.dialogCanvas.planeDistance = this.originalPlaneDistance;
                 }
             }
         }
