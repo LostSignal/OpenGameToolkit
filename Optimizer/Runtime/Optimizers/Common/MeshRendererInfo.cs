@@ -146,6 +146,7 @@ namespace OGT
                 return lodLevel;
             }
         }
+
 #endif
     }
 }

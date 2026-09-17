@@ -11,7 +11,7 @@ namespace OGT
 
     public static class ColorUtil
     {
-        private static readonly Dictionary<char, int> HexToDecimal = new()
+        public static readonly Dictionary<char, int> HexToDecimal = new()
         {
             { '0', 0 }, { '1', 1 }, { '2', 2 }, { '3', 3 }, { '4', 4 },
             { '5', 5 }, { '6', 6 }, { '7', 7 }, { '8', 8 }, { '9', 9 },
@@ -23,7 +23,7 @@ namespace OGT
             { 'f', 15 }, { 'F', 15 },
         };
 
-        private static readonly char[] DecimalToHex = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+        public static readonly char[] DecimalToHex = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
         public static RGBA ParseColorHexString(string colorHexString)
         {
@@ -34,22 +34,22 @@ namespace OGT
 
             if (colorHexString.Length == 3)
             {
-                r = HexToDecimal[colorHexString[0]] << 4 | HexToDecimal[colorHexString[0]];
-                g = HexToDecimal[colorHexString[1]] << 4 | HexToDecimal[colorHexString[1]];
-                b = HexToDecimal[colorHexString[2]] << 4 | HexToDecimal[colorHexString[2]];
+                r = (HexToDecimal[colorHexString[0]] << 4 | HexToDecimal[colorHexString[0]]) / 255.0f;
+                g = (HexToDecimal[colorHexString[1]] << 4 | HexToDecimal[colorHexString[1]]) / 255.0f;
+                b = (HexToDecimal[colorHexString[2]] << 4 | HexToDecimal[colorHexString[2]]) / 255.0f;
             }
             else if (colorHexString.Length == 6)
             {
-                r = HexToDecimal[colorHexString[0]] << 4 | HexToDecimal[colorHexString[1]];
-                g = HexToDecimal[colorHexString[2]] << 4 | HexToDecimal[colorHexString[3]];
-                b = HexToDecimal[colorHexString[4]] << 4 | HexToDecimal[colorHexString[5]];
+                r = (HexToDecimal[colorHexString[0]] << 4 | HexToDecimal[colorHexString[1]]) / 255.0f;
+                g = (HexToDecimal[colorHexString[2]] << 4 | HexToDecimal[colorHexString[3]]) / 255.0f;
+                b = (HexToDecimal[colorHexString[4]] << 4 | HexToDecimal[colorHexString[5]]) / 255.0f;
             }
             else if (colorHexString.Length == 8)
             {
-                r = HexToDecimal[colorHexString[0]] << 4 | HexToDecimal[colorHexString[1]];
-                g = HexToDecimal[colorHexString[2]] << 4 | HexToDecimal[colorHexString[3]];
-                b = HexToDecimal[colorHexString[4]] << 4 | HexToDecimal[colorHexString[5]];
-                a = HexToDecimal[colorHexString[6]] << 4 | HexToDecimal[colorHexString[7]];
+                r = (HexToDecimal[colorHexString[0]] << 4 | HexToDecimal[colorHexString[1]]) / 255.0f;
+                g = (HexToDecimal[colorHexString[2]] << 4 | HexToDecimal[colorHexString[3]]) / 255.0f;
+                b = (HexToDecimal[colorHexString[4]] << 4 | HexToDecimal[colorHexString[5]]) / 255.0f;
+                a = (HexToDecimal[colorHexString[6]] << 4 | HexToDecimal[colorHexString[7]]) / 255.0f;
             }
 
             return new RGBA(r, g, b, a);

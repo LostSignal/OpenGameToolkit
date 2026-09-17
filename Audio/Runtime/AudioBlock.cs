@@ -9,6 +9,7 @@
 
 namespace OGT
 {
+    using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -27,6 +28,7 @@ namespace OGT
         [SerializeField] private float minVolume = 1.0f;
         [SerializeField] private float maxVolume = 1.0f;
         [SerializeField] private float cooldownTime = 0.0f;
+        [SerializeField] private float fadeInTime = 0.0f;
         [SerializeField] private PlayType playType;
 #pragma warning restore 0649
 
@@ -157,6 +159,14 @@ namespace OGT
             audioSource.pitch = this.GetPitch(pitchPercentageOverride);
             audioSource.volume = this.GetVolume(volumePercentageOverride) * this.audioChannel.Volume;
             audioSource.loop = isLooping;
+
+            if (this.fadeInTime > 0.0f)
+            {
+                float finalVolume = audioSource.volume;
+                audioSource.volume = 0.0f;
+                CoroutineRunner.Instance.StartCoroutine(FadeInVolume(finalVolume, audioSource));
+            }
+
             audioSource.Play();
 
             if (isLooping == false)
@@ -165,6 +175,20 @@ namespace OGT
             }
 
             return audioBlockInstance;
+
+            IEnumerator FadeInVolume(float volume, AudioSource audioSource)
+            {
+                float elapsedTime = 0.0f;
+
+                while (elapsedTime < this.fadeInTime)
+                {
+                    audioSource.volume = Mathf.Lerp(0.0f, volume, elapsedTime / this.fadeInTime);
+                    elapsedTime += Time.deltaTime;
+                    yield return null;
+                }
+
+                audioSource.volume = volume;
+            }
         }
 
         public void AddAudioBlockInstance(AudioBlockInstance instance)

@@ -27,8 +27,8 @@ namespace OGT.Networking
         private readonly NetworkWriter messageWriter = new NetworkWriter();
 
         // User/connection management
-        private readonly Dictionary<long, UserInfo> userIdToUserInfoMap = new Dictionary<long, UserInfo>();
-        private readonly HashSet<long> knownUserIds = new HashSet<long>();
+        private readonly Dictionary<string, UserInfo> userIdToUserInfoMap = new Dictionary<string, UserInfo>();
+        private readonly HashSet<string> knownUserIds = new HashSet<string>();
         private readonly List<UserInfo> users = new List<UserInfo>();
         private readonly ReadOnlyCollection<UserInfo> readonlyUsersList;
 
@@ -150,7 +150,7 @@ namespace OGT.Networking
             get => this.readonlyUsersList;
         }
 
-        public long UserId { get; private set; }
+        public string UserId { get; private set; }
 
         public bool HasJoinedServer { get; private set; }
 
@@ -398,9 +398,9 @@ namespace OGT.Networking
                 case UserDisconnectedMessage.Id:
                 {
                     var userDisconnectedMessage = (UserDisconnectedMessage)message;
-                    long userId = userDisconnectedMessage.UserId;
+                    string userId = userDisconnectedMessage.UserId;
 
-                    Logger.LogFormat("UserDisconnectedMessage For UserId {0}", (object)userDisconnectedMessage.UserId.ToString());
+                    Logger.LogFormat("UserDisconnectedMessage For UserId {0}", (object)userId);
 
                     UserInfo removedUserInfo = this.RemoveUserInfo(userId);
 
@@ -446,7 +446,7 @@ namespace OGT.Networking
             return userInfo;
         }
 
-        private UserInfo RemoveUserInfo(long userId)
+        private UserInfo RemoveUserInfo(string userId)
         {
             if (this.userIdToUserInfoMap.TryGetValue(userId, out UserInfo userInfo))
             {

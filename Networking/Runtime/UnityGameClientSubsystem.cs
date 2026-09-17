@@ -217,7 +217,7 @@ namespace OGT.Networking
             this.isConnected = false;
         }
 
-        public NetworkIdentity CreateDynamicNetworkIdentity(string resourceName, long networkId, long ownerId, UnityEngine.Vector3 position, UnityEngine.Quaternion rotation)
+        public NetworkIdentity CreateDynamicNetworkIdentity(string resourceName, long networkId, string ownerId, UnityEngine.Vector3 position, UnityEngine.Quaternion rotation)
         {
             if (this.gameClient.PrintDebugOutput)
             {

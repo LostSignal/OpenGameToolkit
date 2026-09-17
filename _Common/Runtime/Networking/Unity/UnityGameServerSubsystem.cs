@@ -54,7 +54,7 @@ namespace OGT.Networking
         private readonly NetworkIdentitiesDestroyed networkBehaviourDestoryed = new NetworkIdentitiesDestroyed();
 
         private GameServer gameServer;
-        private long serverId = InvalidId;
+        private string serverId = null;
 
         public enum NotifyType
         {
@@ -118,7 +118,7 @@ namespace OGT.Networking
                     var unityNetworkObject = this.serverState.GetUnityNetworkObject(requestUpdateMessage.NetworkId);
 
                     // Making sure a "Server" player has been selected
-                    if (this.serverId == InvalidId)
+                    if (this.serverId == null)
                     {
                         if (this.gameServer.PrintDebugOutput)
                         {
@@ -324,11 +324,11 @@ namespace OGT.Networking
         {
             if (this.gameServer.PrintDebugOutput)
             {
-                Logger.Log($"SERVER: User Connected - {userInfo.UserHexId} - {userInfo.DisplayName}");
+                Logger.Log($"SERVER: User Connected - {userInfo.UserId} - {userInfo.DisplayName}");
             }
 
             // Detecting if we're Migrating the server state to this new user
-            if (this.serverId == InvalidId)
+            if (this.serverId == null)
             {
                 if (this.gameServer.PrintDebugOutput)
                 {
@@ -350,7 +350,7 @@ namespace OGT.Networking
         {
             if (this.gameServer.PrintDebugOutput)
             {
-                Logger.Log($"SERVER: User Connected - {userInfo.UserHexId} - {userInfo.DisplayName}");
+                Logger.Log($"SERVER: User Connected - {userInfo.UserId} - {userInfo.DisplayName}");
             }
 
             // Making sure to destroy all object this user owns, but DestoryOnDisconnect is true
@@ -415,8 +415,8 @@ namespace OGT.Networking
 
         private void MigrateServerToNewUser(UserInfo userInfo, NotifyType notifyType)
         {
-            long oldServerId = this.serverId;
-            long newServerId = userInfo != null ? userInfo.UserId : InvalidId;
+            string oldServerId = this.serverId;
+            string newServerId = userInfo != null ? userInfo.UserId : null;
             this.serverId = newServerId;
 
             if (this.gameServer.PrintDebugOutput)
@@ -449,13 +449,13 @@ namespace OGT.Networking
             }
         }
 
-        private void UpdateOwnerForAllUnityNetworkObjects(long oldOwnerId, long newOwerId)
+        private void UpdateOwnerForAllUnityNetworkObjects(string oldOwnerId, string newOwnerId)
         {
             foreach (var unityNetworkObject in this.serverState.GetAllUnityNetworkObjects())
             {
                 if (unityNetworkObject.OwnerId == oldOwnerId)
                 {
-                    unityNetworkObject.OwnerId = newOwerId;
+                    unityNetworkObject.OwnerId = newOwnerId;
                     unityNetworkObject.CanChangeOwner = unityNetworkObject.InitialCanChangeOwner;
                 }
             }
@@ -505,7 +505,7 @@ namespace OGT.Networking
         {
             public long NetworkId { get; set; }
 
-            public long OwnerId { get; set; }
+            public string OwnerId { get; set; }
 
             public string ResourceName { get; set; }
 

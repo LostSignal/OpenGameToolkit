@@ -24,7 +24,10 @@ namespace OGT.Haven
         public void Validate(ValidationReport report, bool isSceneObject)
         {
             EditorUtil.SetIfNull(this, ref this.havenSimpleSettings, "c533b0e320be29a468a40f3bad7648b2");
+
+#if USING_UNITY_XR_INTERACTION_TOOLKIT
             HavenInteractableUtil.SetupInteractable(this);
+#endif
 
             report.AssertNotNull(this, this.havenSimpleSettings, nameof(this.havenSimpleSettings));
         }

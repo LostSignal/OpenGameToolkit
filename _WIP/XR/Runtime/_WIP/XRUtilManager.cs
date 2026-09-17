@@ -82,8 +82,8 @@ namespace OGT.XR
 #if USING_UNITY_XR_MANAGEMENT
             if (this.printDebugInfo)
             {
-                UnityEngine.XR.XRDevice.deviceLoaded += (device) => Logger.Log($"XRUtilManager: Device Loaded - {device}");
                 UnityEngine.XR.InputDevices.deviceConnected += (device) => Logger.Log($"XRUtilManager: Device Connected - {device.name}");
+                UnityEngine.XR.InputDevices.deviceDisconnected += (device) => Logger.Log($"XRUtilManager: Device Disconnected - {device.name}");
                 UnityEngine.XR.InputDevices.deviceConfigChanged += (device) => Logger.Log($"XRUtilManager: Device Config Changed - {device}");
 
                 Logger.Log($"XRUtilManager: SystemInfo.deviceName - {SystemInfo.deviceName}");

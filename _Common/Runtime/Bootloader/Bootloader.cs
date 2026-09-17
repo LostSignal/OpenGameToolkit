@@ -28,9 +28,20 @@ namespace OGT
         [Header("App Settings")]
         [SerializeField] private AppOrientation supportedOrientation;
 
+        [Header("Startup")]
+        [SerializeField] private string startupSceneName;
+        [SerializeField] private string initialSceneGuid;
+        [SerializeField] private bool unloadStartupOnBooted;
+
         private List<Manager> managers;
 
         public AppOrientation SupportedOrientation => this.supportedOrientation;
+
+        public string StartupSceneName => this.startupSceneName;
+
+        public string InitialSceneGuid => this.initialSceneGuid;
+
+        public bool UnloadStartupOnBooted => this.unloadStartupOnBooted;
 
         public bool IsBooted
         {
@@ -58,7 +69,7 @@ namespace OGT
             remove => this.onBooted -= value;
         }
 
-        public async void Boot()
+        public async Task Boot()
         {
             // Registering all providers
             foreach (var provider in this.GetChildrenOfType<IProviderInitializer>())

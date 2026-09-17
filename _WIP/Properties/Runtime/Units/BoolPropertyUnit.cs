@@ -1,3 +1,5 @@
+#if USING_UNITY_VISUAL_SCRIPTING
+
 namespace OGT.Properties
 {
     using Unity.VisualScripting;
@@ -107,3 +109,5 @@ namespace OGT.Properties
         }
     }
 }
+
+#endif

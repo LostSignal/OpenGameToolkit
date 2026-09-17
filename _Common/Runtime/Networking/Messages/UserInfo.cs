@@ -13,6 +13,8 @@ namespace OGT.Networking
     {
         private static readonly Random Rand = new Random();
 
+        public Action OnInfoChanged;
+
         public UserInfo()
         {
             this.CustomData = new Dictionary<string, string>();
@@ -26,11 +28,9 @@ namespace OGT.Networking
 
         public static UserInfo GenerateRandomUserInfo()
         {
-            long userId = ((long)Rand.Next(int.MinValue, int.MaxValue) << 32) & ((long)Rand.Next(int.MinValue, int.MaxValue));
-            string hexId = userId.ToString("X");
-            string displayName = $"Player{hexId.Substring(0, Math.Min(4, hexId.Length))}";
-
-            return new UserInfo { UserId = userId, UserHexId = hexId, DisplayName = displayName };
+            string userId = Rand.Next(1000, 9999).ToString();
+            string displayName = $"Player{userId}";
+            return new UserInfo { UserId = userId, DisplayName = displayName };
         }
 
         /// <summary>
@@ -39,9 +39,7 @@ namespace OGT.Networking
         /// <value>The connection id.</value>
         public long ConnectionId { get; set; }
 
-        public long UserId { get; set; }
-
-        public string UserHexId { get; set; }
+        public string UserId { get; set; }
 
         public string DisplayName { get; set; }
 
@@ -50,8 +48,7 @@ namespace OGT.Networking
         public void Deserialize(NetworkReader reader)
         {
             this.ConnectionId = reader.ReadInt64();
-            this.UserId = reader.ReadInt64();
-            this.UserHexId = reader.ReadString();
+            this.UserId = reader.ReadString();
             this.DisplayName = reader.ReadString();
 
             // CustomData
@@ -72,7 +69,6 @@ namespace OGT.Networking
         {
             writer.Write(this.ConnectionId);
             writer.Write(this.UserId);
-            writer.Write(this.UserHexId);
             writer.Write(this.DisplayName);
 
             // CustomData
@@ -89,7 +85,6 @@ namespace OGT.Networking
         {
             this.ConnectionId = source.ConnectionId;
             this.UserId = source.UserId;
-            this.UserHexId = source.UserHexId;
             this.DisplayName = source.DisplayName;
 
             // CustomData
@@ -101,6 +96,16 @@ namespace OGT.Networking
             }
         }
 
+        public UserInfo Copy()
+        {
+            return new UserInfo(this);
+        }
+
+        public void NotifyInfoChanged()
+        {
+            this.OnInfoChanged?.Invoke();
+        }
+
         public override string ToString()
         {
             var builder = BetterStringBuilder.New()
@@ -108,8 +113,6 @@ namespace OGT.Networking
                 .Append(this.ConnectionId)
                 .Append(", UserId = ")
                 .Append(this.UserId)
-                .Append(", UserHexId = ")
-                .Append(this.UserHexId)
                 .Append(", DisplayName = ")
                 .Append(this.DisplayName)
                 .Append(", Custom Data Count = ")

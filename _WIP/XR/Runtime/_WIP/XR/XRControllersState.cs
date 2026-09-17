@@ -50,18 +50,24 @@ namespace OGT.XR
 
         public XRControllersState()
         {
-            UnityEngine.XR.XRDevice.deviceLoaded += DeviceLoaded;
+            UnityEngine.XR.InputDevices.deviceConfigChanged += DeviceConntected;
             UnityEngine.XR.InputDevices.deviceConnected += DeviceConntected;
+        }
 
-            void DeviceLoaded(string name)
-            {
-                InputDevices.GetDevices(InputDevicesList);
-            }
+        ~XRControllersState()
+        {
+            UnityEngine.XR.InputDevices.deviceConfigChanged -= DeviceConntected;
+            UnityEngine.XR.InputDevices.deviceConnected -= DeviceConntected;
+        }
 
-            void DeviceConntected(InputDevice inputDevice)
-            {
-                InputDevices.GetDevices(InputDevicesList);
-            }
+        private void DeviceLoaded(string name)
+        {
+            InputDevices.GetDevices(InputDevicesList);
+        }
+
+        private void DeviceConntected(InputDevice inputDevice)
+        {
+            InputDevices.GetDevices(InputDevicesList);
         }
 
         public static XRControllersState Instance

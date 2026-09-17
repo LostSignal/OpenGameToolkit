@@ -12,7 +12,7 @@ namespace OGT.Networking
 
         public long NetworkId { get; set; }
 
-        public long OwnerId { get; set; }
+        public string OwnerId { get; set; }
 
         public bool IsEnabled { get; set; }
 
@@ -36,7 +36,7 @@ namespace OGT.Networking
             base.Deserialize(reader);
 
             this.NetworkId = (long)reader.ReadPackedUInt64();
-            this.OwnerId = (long)reader.ReadPackedUInt64();
+            this.OwnerId = reader.ReadString();
             this.IsEnabled = reader.ReadBoolean();
             this.ResourceName = reader.ReadString();
             this.Position = reader.ReadPosition3D();
@@ -49,7 +49,7 @@ namespace OGT.Networking
             base.Serialize(writer);
 
             writer.WritePackedUInt64((ulong)this.NetworkId);
-            writer.WritePackedUInt64((ulong)this.OwnerId);
+            writer.Write(this.OwnerId);
             writer.Write(this.IsEnabled);
             writer.Write(this.ResourceName);
             writer.Write(this.Position);

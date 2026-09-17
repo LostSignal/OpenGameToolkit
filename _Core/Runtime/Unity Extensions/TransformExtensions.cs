@@ -6,6 +6,7 @@
 
 namespace OGT
 {
+    using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -122,6 +123,60 @@ namespace OGT
             if (transform != null)
             {
                 transform.gameObject.SafeSetActive(active);
+            }
+        }
+
+        public static Coroutine LerpToLocalPosition(this Transform transform, Vector3 targetLocalPosition, float lerpSpeed)
+        {
+            return CoroutineRunner.Instance.StartCoroutine(Coroutine());
+
+            IEnumerator Coroutine()
+            {
+                var startPosition = transform.localPosition;
+                var endPosition = targetLocalPosition;
+
+                float currentTime = 0f;
+                while (true)
+                {
+                    currentTime += Time.deltaTime;
+                    transform.localPosition = Vector3.Lerp(startPosition, endPosition, currentTime / lerpSpeed);
+
+                    if (currentTime >= lerpSpeed)
+                    {
+                        break;
+                    }
+
+                    yield return null;
+                }
+
+                transform.localPosition = endPosition;
+            }
+        }
+
+        public static Coroutine LerpToWorldPosition(this Transform transform, Vector3 targetWorldPosition, float lerpSpeed)
+        {
+            return CoroutineRunner.Instance.StartCoroutine(Coroutine());
+
+            IEnumerator Coroutine()
+            {
+                var startPosition = transform.position;
+                var endPosition = targetWorldPosition;
+
+                float currentTime = 0f;
+                while (true)
+                {
+                    currentTime += Time.deltaTime;
+                    transform.position = Vector3.Lerp(startPosition, endPosition, currentTime / lerpSpeed);
+
+                    if (currentTime >= lerpSpeed)
+                    {
+                        break;
+                    }
+
+                    yield return null;
+                }
+
+                transform.position = endPosition;
             }
         }
     }

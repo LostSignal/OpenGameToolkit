@@ -9,7 +9,7 @@ namespace OGT
     using TMPro;
     using UnityEngine;
 
-    public class NewSpinnerBox : PanelLogic
+    public class SpinnerBox : PanelLogic
     {
 #pragma warning disable 0649, 0044
         [SerializeField] private ModalWidget modalWidget;

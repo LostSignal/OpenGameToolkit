@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEditor;
 using OGT.Properties;
-using Unity.VisualScripting;
 
 public class PropertiesEditorWindow : EditorWindow
 {

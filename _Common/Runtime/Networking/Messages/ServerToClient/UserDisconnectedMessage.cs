@@ -10,7 +10,7 @@ namespace OGT.Networking
     {
         public const short Id = 4;
 
-        public long UserId { get; set; }
+        public string UserId { get; set; }
 
         public bool WasConnectionLost { get; set; }
 
@@ -25,7 +25,7 @@ namespace OGT.Networking
         {
             base.Deserialize(reader);
 
-            this.UserId = reader.ReadInt64();
+            this.UserId = reader.ReadString();
             this.WasConnectionLost = reader.ReadBoolean();
         }
 

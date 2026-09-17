@@ -4,7 +4,9 @@
     "references": [
         "GUID:07eef6138bd086b4a8b900f81c87383a",
         "GUID:fe25561d224ed4743af4c60938a59d0b",
+        "GUID:5e0b455853cd340e0813387221dfd501",
         "GUID:5540e30183c82e84b954c033c388e06c",
+        "GUID:1104de264d522446f8274872ebf70b3d",
         "GUID:883598a1d14d64bda9d1d6e183355ea9",
         "GUID:be0d2672886cc45b2bcea5a5053a5347",
         "GUID:f220a277eefae4d3aa9e31c2b43bb307"
@@ -36,6 +38,11 @@
             "name": "com.unity.services.cloudcode",
             "expression": "0.0.0",
             "define": "USING_UGS_CLOUDCODE"
+        },
+        {
+            "name": "com.unity.services.analytics",
+            "expression": "0.0.0",
+            "define": "USING_UGS_ANALYTICS"
         }
     ],
     "noEngineReferences": false

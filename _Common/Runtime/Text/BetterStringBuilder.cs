@@ -54,6 +54,7 @@ namespace OGT
             thousandsSeperator = ",";
             decimalSeperator = ".";
         }
+
 #endif
 
         public static BetterStringBuilder New()

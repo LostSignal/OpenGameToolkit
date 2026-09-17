@@ -13,9 +13,7 @@ namespace OGT
     {
         bool IsUserInfoReady { get; }
 
-        long UserId { get; }
-
-        string UserHexId { get; }
+        string UserId { get; }
 
         string DisplayName { get; }
 
@@ -33,9 +31,7 @@ namespace OGT
 
         public bool IsUserInfoReady => true;
 
-        public long UserId => this.userInfo.UserId;
-
-        public string UserHexId => this.userInfo.UserHexId;
+        public string UserId => this.userInfo.UserId;
 
         public string DisplayName => this.userInfo.DisplayName;
 

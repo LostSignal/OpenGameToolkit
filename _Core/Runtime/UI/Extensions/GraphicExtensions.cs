@@ -15,7 +15,7 @@ public static class GraphicExtensions
         return CrossFadeAlpha(graphic, graphic.color.a, 0.0f, duration);
     }
 
-    private static Coroutine CrossFadeAlpha(Graphic graphic, float startAlpha, float endAlpha, float duration)
+    private static Coroutine CrossFadeAlpha(this Graphic graphic, float startAlpha, float endAlpha, float duration)
     {
 #if UNITY_EDITOR
         if (Application.isPlaying == false)

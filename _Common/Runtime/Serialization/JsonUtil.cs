@@ -15,6 +15,7 @@ namespace OGT
             Formatting = Formatting.Indented,
             DateFormatString = "yyyy-MM-ddTHH:mm:ssZ",
             NullValueHandling = NullValueHandling.Ignore,
+            ObjectCreationHandling = ObjectCreationHandling.Replace,
             Converters = new JsonConverter[]
             {
                 new RGBAConverter(),

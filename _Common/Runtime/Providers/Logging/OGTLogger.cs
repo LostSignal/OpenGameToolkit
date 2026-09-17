@@ -40,6 +40,8 @@ namespace OGT
             GetOrCreateLoggingChannel(this.channelName, this.channelHash, DefaultLoggingLevel);
         }
 
+        public bool IsLoggingEnabled => GetLoggingLevel(this.channelName) != LoggingLevel.None;
+
         public static IEnumerable<LoggingChannel> GetChannels()
         {
             foreach (var channel in Channels)

@@ -1,45 +1,125 @@
+//-----------------------------------------------------------------------
+// <copyright file="BootloaderRunner.cs" company="Lost Signal LLC">
+//     Copyright (c) Lost Signal LLC. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
+
 namespace OGT
 {
-    using System.Collections;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using Unity.Scripting.LifecycleManagement;
     using UnityEngine;
     using UnityEngine.AddressableAssets;
+    using UnityEngine.ResourceManagement.AsyncOperations;
+    using UnityEngine.SceneManagement;
 
     //// NOTE [bgish]: This is responsible for determining at startup which bootloader obejct to instantiate
     ////               and call Boot on it.  It also needs to look at the editor settings "if in the editor"
     ////               and make sure it doesn't run if it's not suppose to.
-    public static class BootloaderRunner
+    [AutoStaticsCleanup]
+    public static partial class BootloaderRunner
     {
         private static readonly OGTLogger Logger = OGTLogger.Bootloader;
+
+        public static Action OnBootloaderComplete;
 
         public static string BootloaderGuid => RuntimeSettings.GetSetting<string>("OGT.Bootloader");
 
         public static bool IsBootloaderEnabled => string.IsNullOrEmpty(BootloaderGuid) == false;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
-        private static void InitializeBootloaderAfterAssemblies()
+        private async static void InitializeBootloaderAfterAssemblies()
         {
-            CoroutineRunner.Instance.StartCoroutine(BootCoroutine());
+            var bootloaderGuid = RuntimeSettings.GetSetting<string>("OGT.Bootloader");
 
-            static IEnumerator BootCoroutine()
+            if (string.IsNullOrEmpty(bootloaderGuid))
             {
-                var bootloaderGuid = RuntimeSettings.GetSetting<string>("OGT.Bootloader");
-
-                if (string.IsNullOrEmpty(bootloaderGuid))
-                {
-                    yield break;
-                }
-
-                yield return UnityEngine.AddressableAssets.Addressables.InitializeAsync();
-
-                var bootloaderAssetReference = new AssetReference(bootloaderGuid);
-                var load = bootloaderAssetReference.LoadAssetAsync<GameObject>();
-                yield return load;
-
-                var bootloaderGameObject = GameObject.Instantiate(load.Result);
-                bootloaderGameObject.name = $"OGT - {load.Result.name}";
-                GameObject.DontDestroyOnLoad(bootloaderGameObject);
-                bootloaderGameObject.GetComponent<Bootloader>().Boot();
+                return;
             }
+
+            await UnityEngine.AddressableAssets.Addressables.InitializeAsync().Task;
+
+            var bootloaderLoadStopwatch = Stopwatch.StartNew();
+            var bootloaderAssetReference = new AssetReference(bootloaderGuid);
+            var load = bootloaderAssetReference.LoadAssetAsync<GameObject>();
+            await load.Task;
+            bootloaderLoadStopwatch.Stop();
+
+            var bootloaderInstantiateStopwatch = Stopwatch.StartNew();
+            var bootloaderGameObject = GameObject.Instantiate(load.Result);
+            bootloaderGameObject.name = $"OGT - {load.Result.name}";
+            GameObject.DontDestroyOnLoad(bootloaderGameObject);
+            bootloaderInstantiateStopwatch.Stop();
+
+            var bootloader = bootloaderGameObject.GetComponent<Bootloader>();
+
+            var bootStopwatch = Stopwatch.StartNew();
+            await bootloader.Boot();
+            bootStopwatch.Stop();
+
+            var analyticsManager = bootloader.FindManager<AnalyticsManager>();
+            var eventData = new Dictionary<string, object>
+            {
+                { "bootloader_load_time_ms", bootloaderLoadStopwatch.Elapsed.TotalMilliseconds },
+                { "bootloader_instantiate_time_ms", bootloaderInstantiateStopwatch.Elapsed.TotalMilliseconds },
+                { "boot_time_ms", bootStopwatch.Elapsed.TotalMilliseconds },
+            };
+
+            if (string.IsNullOrWhiteSpace(bootloader.StartupSceneName) == false && SceneManager.GetActiveScene().name == bootloader.StartupSceneName)
+            {
+                var initialSceneAssetReference = new AssetReference(bootloader.InitialSceneGuid);
+
+                var initialSceneLoadStopwatch = Stopwatch.StartNew();
+                var loadSceneHandle = initialSceneAssetReference.LoadSceneAsync(LoadSceneMode.Additive, false);
+
+                await loadSceneHandle.Task;
+                initialSceneLoadStopwatch.Stop();
+
+                if (loadSceneHandle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    var sceneInstance = loadSceneHandle.Result;
+
+                    var initialSceneActivationStopwatch = Stopwatch.StartNew();
+                    await sceneInstance.ActivateAsync();
+                    initialSceneActivationStopwatch.Stop();
+
+                    var scene = loadSceneHandle.Result.Scene;
+
+                    SceneManager.SetActiveScene(scene);
+
+                    var activationManager = bootloader.FindManager<ActivationManager>();
+
+                    var activationManagerWaitStopwatch = Stopwatch.StartNew();
+
+                    while (activationManager.IsProcessing)
+                    {
+                        await System.Threading.Tasks.Task.Yield();
+                    }
+
+                    activationManagerWaitStopwatch.Stop();
+
+                    eventData["initial_scene_load_time_ms"] = initialSceneLoadStopwatch.Elapsed.TotalMilliseconds;
+                    eventData["initial_scene_activate_time_ms"] = initialSceneActivationStopwatch.Elapsed.TotalMilliseconds;
+                    eventData["activation_manager_wait_time_ms"] = activationManagerWaitStopwatch.Elapsed.TotalMilliseconds;
+
+                    GC.Collect();
+
+                    if (bootloader.UnloadStartupOnBooted)
+                    {
+                        await SceneManager.UnloadSceneAsync(bootloader.StartupSceneName);
+                    }
+
+                    OnBootloaderComplete?.Invoke();
+                }
+                else
+                {
+                    Logger.LogError($"Failed to load initial scene {bootloader.InitialSceneGuid}");
+                }
+            }
+
+            analyticsManager?.Send("bootloader_timing", eventData);
         }
     }
 }

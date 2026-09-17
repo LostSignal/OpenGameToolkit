@@ -36,7 +36,7 @@ namespace OGT.Networking
 
         private GameClient gameClient = null;
         private bool isRequestingOwnership;
-        private long ownerId;
+        private string ownerId;
 
         public delegate void NetworkIdentityDestroyedDelegate(long networkId);
 
@@ -80,7 +80,7 @@ namespace OGT.Networking
 
         public long NetworkId => this.networkId;
 
-        public long OwnerId => this.ownerId;
+        public string OwnerId => this.ownerId;
 
         public string ResourceName { get; set; }
 
@@ -178,7 +178,7 @@ namespace OGT.Networking
             this.networkId = NewId();
         }
 
-        public void SetOwner(long ownerId, bool canChangeOwner)
+        public void SetOwner(string ownerId, bool canChangeOwner)
         {
             if (this.isRequestingOwnership)
             {

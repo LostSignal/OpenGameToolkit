@@ -1,3 +1,5 @@
+#if USING_UNITY_VISUAL_SCRIPTING
+
 using Unity.VisualScripting;
 
 namespace OGT.Properties
@@ -13,3 +15,5 @@ namespace OGT.Properties
             string.IsNullOrEmpty(unit.BoolProperty?.Name) ? string.Empty : unit.BoolProperty.Name;
     }
 }
+
+#endif

@@ -13,7 +13,7 @@ namespace Lost
     {
         public static void ShowInsufficientCurrency(this PanelManager panelManager, Action yesAction, Action noAction)
         {
-            var yesNoDialog = panelManager.GetPanel<NewMessageBox>();
+            var yesNoDialog = panelManager.GetPanel<MessageBox>();
             yesNoDialog.ShowYesNo("Not Enough Currency", "Not enough currency to make this purchase.", yesAction, noAction);
         }
     }

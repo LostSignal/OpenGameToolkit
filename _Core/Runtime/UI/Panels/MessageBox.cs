@@ -5,7 +5,7 @@ namespace OGT
     using UnityEngine;
     using UnityEngine.Serialization;
 
-    public class NewMessageBox : PanelLogic
+    public class MessageBox : PanelLogic
     {
         public enum YesNoResult
         {

@@ -197,7 +197,7 @@ namespace OGT.SSS
 
                 for (int i = 0; i < folders.Length; i++)
                 {
-                    var subFolder = current.children.FirstOrDefault(x => x.name == folders[i]);
+                    var subFolder = current.childList.FirstOrDefault(x => x.name == folders[i]);
 
                     if (subFolder == null)
                     {

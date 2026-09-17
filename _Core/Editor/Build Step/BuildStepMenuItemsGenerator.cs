@@ -20,7 +20,10 @@ namespace OGT
             foreach (var postBuildStepType in TypeCache.GetTypesDerivedFrom<PostBuildStep>().Where(x => x.IsAbstract == false))
             {
                 var buildStepName = GetBuildStepName(postBuildStepType);
-                var buildStepNameNoSpace = buildStepName.Replace(" ", string.Empty);
+                var buildStepNameNoSpace = buildStepName
+                    .Replace(" ", string.Empty)
+                    .Replace("(", string.Empty)
+                    .Replace(")", string.Empty);
 
                 menuItems.Add(new MenuItemData
                 {
@@ -34,7 +37,10 @@ namespace OGT
             foreach (var preBuildStepType in TypeCache.GetTypesDerivedFrom<PreBuildStep>().Where(x => x.IsAbstract == false))
             {
                 var buildStepName = GetBuildStepName(preBuildStepType);
-                var buildStepNameNoSpace = buildStepName.Replace(" ", string.Empty);
+                var buildStepNameNoSpace = buildStepName
+                    .Replace(" ", string.Empty)
+                    .Replace("(", string.Empty)
+                    .Replace(")", string.Empty);
 
                 menuItems.Add(new MenuItemData
                 {

@@ -33,7 +33,7 @@ namespace OGT.Networking
         };
 
         private readonly System.Random random = new System.Random();
-        private readonly Dictionary<long, string> userColorMap = new Dictionary<long, string>();
+        private readonly Dictionary<string, string> userColorMap = new();
         private readonly List<string> colorPool = new List<string>();
         private readonly object colorLock = new object();
 

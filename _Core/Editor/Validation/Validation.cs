@@ -11,6 +11,7 @@ namespace OGT.Validation
     using System.Linq;
     using System.Text;
     using UnityEditor;
+    using UnityEditor.SceneManagement;
     using UnityEngine;
 
     public static class Validation
@@ -25,7 +26,26 @@ namespace OGT.Validation
             ValidateObjects(gameObjects, true);
         }
 
-        [MenuItem("Tools/OGT/Validation/Validate Prefabs and ScriptableObjects", priority = MenuItemPriorities.Validation + 1)]
+        [MenuItem("Tools/OGT/Validation/Validate Open Prefab", priority = MenuItemPriorities.Validation + 1)]
+        public static void ValidateOpenPrefab()
+        {
+            var prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
+
+            if (prefabStage == null || prefabStage.prefabContentsRoot == null)
+            {
+                Logger.LogError("No prefab is currently open in Prefab Mode.");
+                return;
+            }
+
+            var gameObjects = prefabStage.prefabContentsRoot
+                .GetComponentsInChildren<Transform>(true)
+                .Select(t => t.gameObject)
+                .ToList<UnityEngine.Object>();
+
+            ValidateObjects(gameObjects, true);
+        }
+
+        [MenuItem("Tools/OGT/Validation/Validate Prefabs and ScriptableObjects", priority = MenuItemPriorities.Validation + 2)]
         public static void ValidatePrefabsAndScriptableObjects()
         {
             var prefabsAndScriptableObjects = new List<UnityEngine.Object>();

@@ -17,9 +17,11 @@ namespace OGT.Networking
 
         private const int InitialSize = 64;
         private const float GrowthFactor = 1.5f;
-        private const int BufferSizeWarning = 1024 * 1024 * 128;
+        private const int BufferSizeWarning = 1024 * 1024 * 10;
+
 
         private byte[] byteBuffer;
+        private char[] charBuffer;
         private uint position;
 
         public NetBuffer()
@@ -74,7 +76,7 @@ namespace OGT.Networking
                 throw new IndexOutOfRangeException("NetworkReader:ReadBytes out of range: (" + count + ") " + this.ToString());
             }
 
-            for (ushort i = 0; i < count; i++)
+            for (uint i = 0; i < count; i++)
             {
                 buffer[i] = this.byteBuffer[this.position + i];
             }
@@ -191,6 +193,52 @@ namespace OGT.Networking
         public override string ToString()
         {
             return string.Format("NetBuf sz:{0} pos:{1}", this.byteBuffer.Length, this.position);
+        }
+
+        /// <summary>
+        /// Encodes the written portion of the buffer ([0, Position)) as base64.
+        /// </summary>
+        public string ToBase64()
+        {
+            int charCount = 4 * (((int)this.position + 2) / 3);
+
+            if (charBuffer == null || charBuffer.Length < charCount)
+            {
+                charBuffer = new char[charCount];
+            }
+
+            Convert.TryToBase64Chars(new ReadOnlySpan<byte>(this.byteBuffer, 0, (int)this.position), charBuffer, out int charsWritten);
+            return new string(charBuffer, 0, charsWritten);
+        }
+
+        /// <summary>
+        /// Replaces the buffer contents with the decoded base64 bytes and seeks to zero. Returns the number of decoded bytes.
+        /// </summary>
+        public int SetBytesFromBase64(string base64)
+        {
+            int padding = 0;
+
+            if (base64.Length > 0 && base64[base64.Length - 1] == '=')
+            {
+                padding++;
+
+                if (base64.Length > 1 && base64[base64.Length - 2] == '=')
+                {
+                    padding++;
+                }
+            }
+
+            int byteCount = (3 * (base64.Length / 4)) - padding;
+
+            if (this.byteBuffer == null || this.byteBuffer.Length < byteCount)
+            {
+                this.byteBuffer = new byte[byteCount];
+            }
+
+            Convert.TryFromBase64Chars(base64.AsSpan(), this.byteBuffer, out int bytesWritten);
+            this.position = 0;
+
+            return bytesWritten;
         }
 
         internal ArraySegment<byte> AsArraySegment()

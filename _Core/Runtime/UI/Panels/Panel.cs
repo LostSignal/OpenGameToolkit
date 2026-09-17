@@ -1,3 +1,9 @@
+//-----------------------------------------------------------------------
+// <copyright file="Panel.cs" company="Lost Signal LLC">
+//     Copyright (c) Lost Signal LLC. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
+
 namespace OGT
 {
     using System;
@@ -23,11 +29,12 @@ namespace OGT
         [SerializeField] private Showable showable;
         [SerializeField] private Canvas canvas;
         [SerializeField] private CanvasScaler canvasScaler;
-        [SerializeField] private GameObject content;
         [SerializeField] private bool registerForBackButtonPressed;
         [SerializeField] private BackButtonAction backButtonAction;
         [SerializeField] private UnityEvent onBackButtonPressed;
+        [SerializeField] private bool sendAnalyticEventOnShow;
 
+        private AnalyticsManager analyticsManager;
         private PanelManager panelManager;
 
         [field: NonSerialized]
@@ -41,12 +48,11 @@ namespace OGT
 
         public void OnAwake(Bootloader bootloader)
         {
+            this.analyticsManager = bootloader.FindManager<AnalyticsManager>();
+
             this.panelManager = bootloader.FindManager<PanelManager>();
             this.panelManager.ConfigureCanvasScaler(this.canvasScaler);
             this.panelManager.RegisterPanel(this);
-
-            this.showable.OnShowStart?.AddListener(this.WakeUp);
-            this.showable.OnHideEnd?.AddListener(this.Hibernate);
 
             this.showable.OnShowStart?.AddListener(this.PushPanelOnStack);
             this.showable.OnHideEnd?.AddListener(this.PopPanelFromStack);
@@ -54,6 +60,17 @@ namespace OGT
             if (this.canvas.renderMode == RenderMode.ScreenSpaceCamera)
             {
                 this.canvas.worldCamera = bootloader.FindManager<CameraManager>().CameraState.Camera;
+            }
+
+            if (this.analyticsManager != null && this.sendAnalyticEventOnShow)
+            {
+                this.showable.OnShowStart?.AddListener(() =>
+                {
+                    this.analyticsManager.Send("PanelShown", new Dictionary<string, object>
+                    {
+                        { "PanelName", this.name },
+                    });
+                });
             }
         }
 
@@ -71,29 +88,9 @@ namespace OGT
             this.EditorGetComponent(ref this.canvas);
             this.EditorGetComponent(ref this.canvasScaler);
 
-            if (this.content == null && this.transform.Find("Content") != null)
-            {
-                this.content = this.transform.Find("Content").gameObject;
-            }
-
-            // Making sure Showable hides/shows the content
-            var showable = this.GetComponent<Showable>();
-            if (showable.EnableOnShow.Contains(this.content) == false)
-            {
-                showable.EnableOnShow.Add(this.content);
-                EditorUtil.SetDirty(showable);
-            }
-
-            if (showable.DisableOnHide.Contains(this.content) == false)
-            {
-                showable.DisableOnHide.Add(this.content);
-                EditorUtil.SetDirty(showable);
-            }
-
             report.AssertNotNull(this, this.showable, nameof(this.showable));
             report.AssertNotNull(this, this.canvas, nameof(this.canvas));
             report.AssertNotNull(this, this.canvasScaler, nameof(this.canvasScaler));
-            report.AssertNotNull(this, this.content, nameof(this.content));
         }
 
         public Coroutine HideThenShow(PanelLogic panelLogic)
@@ -108,8 +105,13 @@ namespace OGT
             IEnumerator Coroutine()
             {
                 this.showable.Hide();
-                yield return WaitForUtil.Seconds(this.showable.HideClip.length);
-                panel?.Show();
+
+                if (panel != null)
+                {
+                    yield return WaitForUtil.Seconds(this.showable.HideClip?.length ?? 0);
+
+                    panel.Show();
+                }
             }
         }
 
@@ -149,7 +151,7 @@ namespace OGT
         public void PromptToExitApplication()
         {
             // TODO [bgish]: Add localization
-            this.panelManager.GetPanel<NewMessageBox>().ShowYesNo(
+            this.panelManager.GetPanel<MessageBox>().ShowYesNo(
                 "Quit?",
                 "Are you sure you want to quit?",
                 () => Platform.QuitApplication(),
@@ -165,24 +167,9 @@ namespace OGT
 
             if (this.showable)
             {
-                this.showable.OnShowStart?.RemoveListener(this.WakeUp);
-                this.showable.OnHideEnd?.RemoveListener(this.Hibernate);
-
                 this.showable.OnShowStart?.RemoveListener(this.PushPanelOnStack);
                 this.showable.OnHideEnd?.RemoveListener(this.PopPanelFromStack);
             }
-        }
-
-        private void Hibernate()
-        {
-            this.content.SetActive(false);
-            this.canvas.enabled = false;
-        }
-
-        private void WakeUp()
-        {
-            this.canvas.enabled = true;
-            this.content.SetActive(true);
         }
 
         private void PushPanelOnStack()

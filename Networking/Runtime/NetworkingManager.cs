@@ -27,8 +27,6 @@ namespace OGT.Networking
 
     public sealed class NetworkingManager : Manager
     {
-        private const string ValidMatchNameCharacters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-
         private static readonly OGTLogger Logger = OGTLogger.Networking;
 
 #pragma warning disable 0649
@@ -134,18 +132,6 @@ namespace OGT.Networking
 
         public ReadOnlyCollection<UserInfo> ConnectedUsers => this.gameClient?.ConnectedUsers ?? this.emptyConnectedUsersList;
 
-        public static string GenerateRandomRoomName()
-        {
-            System.Random random = new System.Random();
-
-            return BetterStringBuilder.New()
-                .Append(ValidMatchNameCharacters[random.Next(0, ValidMatchNameCharacters.Length)])
-                .Append(ValidMatchNameCharacters[random.Next(0, ValidMatchNameCharacters.Length)])
-                .Append(ValidMatchNameCharacters[random.Next(0, ValidMatchNameCharacters.Length)])
-                .Append(ValidMatchNameCharacters[random.Next(0, ValidMatchNameCharacters.Length)])
-                .ToString();
-        }
-
         //// public override void Initialize()
         //// {
         ////     this.StartCoroutine(Coroutine());
@@ -190,7 +176,7 @@ namespace OGT.Networking
                 rotation);
         }
 
-        public UserInfo GetUserInfo(long playerId)
+        public UserInfo GetUserInfo(string playerId)
         {
             if (this.gameClient?.UserInfo?.UserId == playerId)
             {

@@ -26,7 +26,7 @@ namespace OGT.Networking
         // User management
         private readonly Dictionary<long, UserInfo> connectionIdToUserInfoMap = new Dictionary<long, UserInfo>();
         private readonly List<UserInfo> users = new List<UserInfo>();
-        private readonly HashSet<long> knownUserIds = new HashSet<long>();
+        private readonly HashSet<string> knownUserIds = new();
         private readonly ReadOnlyCollection<UserInfo> readonlyUsersList;
 
         // Subsystem Tracking
@@ -392,7 +392,7 @@ namespace OGT.Networking
                     else
                     {
                         Logger.LogError("JoinServerRequestMessage had a null UserInfo object.");
-                        this.SendJoinServerResponse(connectionId, -1, false);
+                        this.SendJoinServerResponse(connectionId, null, false);
                     }
 
                     break;
@@ -639,11 +639,11 @@ namespace OGT.Networking
             this.successfulJoinUserInfos.Add(userInfo);
         }
 
-        private void SendJoinServerResponse(long connectionId, long userId, bool success)
+        private void SendJoinServerResponse(long connectionId, string userId, bool success)
         {
             if (this.PrintDebugOutput)
             {
-                Logger.Log($"Sending JoinServerResponseMessage to UserId {userId.ToString()} With Accepted = {success.ToString()}");
+                Logger.Log($"Sending JoinServerResponseMessage to UserId {userId} With Accepted = {success.ToString()}");
             }
 
             var joinServerResponse = (JoinServerResponseMessage)this.messageCollection.GetMessage(JoinServerResponseMessage.Id);

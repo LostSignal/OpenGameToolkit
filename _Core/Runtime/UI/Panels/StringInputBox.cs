@@ -10,10 +10,10 @@ namespace OGT
     using System.Collections;
     using TMPro;
     using UnityEngine;
-    
+
     //// TODO [bgish]: Make sure to move the Content Object up if TouchScreenKeyboard.visible is true
 
-    public class NewStringInputBox : PanelLogic
+    public class StringInputBox : PanelLogic
     {
 #pragma warning disable 0649
         [Header("StringInputBox")]
@@ -45,7 +45,7 @@ namespace OGT
             this.inputFieldWidget.InputField.text = this.startingText;
             this.modalWidget.TitleText.text = title;
             this.bodyText.text = body;
-            
+
             this.Panel.Show();
         }
 

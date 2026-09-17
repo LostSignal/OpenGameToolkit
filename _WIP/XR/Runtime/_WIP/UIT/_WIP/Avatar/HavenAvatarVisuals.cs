@@ -66,7 +66,7 @@ namespace OGT.Haven
 
             if (string.IsNullOrWhiteSpace(avatarName))
             {
-                avatarName = $"Player{userInfo.UserHexId.Substring(0, System.Math.Min(4, userInfo.UserHexId.Length))}";
+                avatarName = $"Player{userInfo.UserId.Substring(0, System.Math.Min(4, userInfo.UserId.Length))}";
             }
 
             if (this.displayName)

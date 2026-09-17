@@ -25,6 +25,7 @@ namespace OGT.Localization
             currentLanguage = null;
             CurrentLanguage = null;  // NOTE [bgish]: This does nothing but keep Project Auditor happy
         }
+
 #endif
 
         public delegate void LanguageChangedDelegate();

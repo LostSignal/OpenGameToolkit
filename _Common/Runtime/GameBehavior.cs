@@ -8,7 +8,18 @@ namespace OGT
 #endif
     {
 #if UNITY_6000_0_OR_NEWER
-        private void Awake() => ActivationManager.Register(this);
+        private void Awake()
+        {
+#if UNITY_EDITOR
+            if (UnityEngine.Application.isPlaying == false)
+            {
+                return;
+            }
+#endif
+
+            ActivationManager.Register(this);
+        }
+
 #endif
 
         public bool IsEnabled

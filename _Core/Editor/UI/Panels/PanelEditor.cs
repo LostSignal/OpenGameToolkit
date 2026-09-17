@@ -48,15 +48,6 @@ namespace OGT
                 this.DrawMember(showable, "show");
                 this.DrawMember(showable, "idle");
                 this.DrawMember(showable, "hide");
-
-                this.Space(10);
-
-                using (new IndentLevelScope(1))
-                {
-                    this.DrawMember(showable, "enableOnShow");
-                    this.DrawMember(showable, "disableOnHide");
-                }
-
                 this.Space(10);
 
                 using (new FoldoutScope(1, "Events", out bool visible))
@@ -80,6 +71,7 @@ namespace OGT
             {
                 this.Space(10);
                 this.DrawMember(panel, "registerForBackButtonPressed");
+                this.DrawMember(panel, "sendAnalyticEventOnShow");
                 this.DrawMember(panel, "backButtonAction");
                 GUILayout.Space(10);
                 this.DrawMember(panel, "onBackButtonPressed");

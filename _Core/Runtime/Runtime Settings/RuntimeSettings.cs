@@ -60,9 +60,21 @@ namespace OGT
                 return;
             }
 
-            string fileText = Application.isEditor ?
-                System.IO.File.ReadAllText(GetRuntimeSettingsEditorFilePath()) :
-                Resources.Load<TextAsset>(SettingsFileName).text;
+            string fileText = null;
+
+            if (Application.isEditor)
+            {
+                var editorFilePath = GetRuntimeSettingsEditorFilePath();
+
+                if (System.IO.File.Exists(editorFilePath))
+                {
+                    fileText = System.IO.File.ReadAllText(editorFilePath);
+                }
+            }
+            else
+            {
+                fileText = Resources.Load<TextAsset>(SettingsFileName)?.text;
+            }
 
             if (string.IsNullOrEmpty(fileText) == false)
             {
@@ -107,6 +119,11 @@ namespace OGT
             var generatedOutputDirectory = projectSettingsGeneral.Substring(startIndex, endIndex - startIndex);
             var fullPath = System.IO.Path.Combine(generatedOutputDirectory, "Resources", SettingsFileName);
             fullPath = fullPath.Replace("\\", "/");
+
+            if (System.IO.Directory.Exists(System.IO.Path.GetDirectoryName(fullPath)) == false)
+            {
+                System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(fullPath));
+            }
 
             return fullPath;
         }

@@ -46,7 +46,10 @@ namespace OGT.Haven
 
         private NetworkingManager networkingManager;
         private HavenAvatarVisuals currentAvatarVisuals;
+
+#if USING_UNITY_XR_INTERACTION_TOOLKIT
         private HavenRig havenRig;
+#endif
 
         //// public static ObjectTracker<HavenAvatar> Avatars
         //// {
@@ -55,9 +58,15 @@ namespace OGT.Haven
 
         public override void Serialize(NetworkWriter writer)
         {
+#if USING_UNITY_XR_INTERACTION_TOOLKIT
             writer.Write(this.havenRig.RigScale);
             writer.Write(this.havenRig.transform.position);
             writer.Write(this.havenRig.transform.rotation);
+#else
+            writer.Write(Vector3.one);
+            writer.Write(Vector3.zero);
+            writer.Write(Quaternion.identity);
+#endif
 
             bool hasVisuals = this.currentAvatarVisuals != null;
             writer.Write(hasVisuals);
@@ -138,12 +147,14 @@ namespace OGT.Haven
                 yield break;
             }
 
+#if USING_UNITY_XR_INTERACTION_TOOLKIT
             while (HavenRig.Instance == null)
             {
                 yield return null;
             }
 
             this.havenRig = HavenRig.Instance;
+#endif
 
             yield return this.InitializeAvatarCoroutine();
         }

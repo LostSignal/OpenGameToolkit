@@ -3,20 +3,23 @@ namespace OGT
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
+    using TMPro;
     using UnityEngine;
     using UnityEngine.Events;
+    using UnityEngine.UI;
 
     [RequireComponent(typeof(Animation))]
-    public class Showable : GameBehavior, IHasHidableComponents, IStart, IValidate
+    public class Showable : GameBehavior, IHasHidableComponents, IAwake, IStart, IValidate
     {
+        private static readonly int MaskableGraphicsBatchSize = 30;
         private static List<AnimationClip> clipsToRemoveCache = new();
 
         [HideInInspector]
         [SerializeField] private Animation simpleAnimation;
         [SerializeField] private bool showOnStart;
 
-        [SerializeField] private List<GameObject> enableOnShow;
-        [SerializeField] private List<GameObject> disableOnHide;
+        [SerializeField] private CanvasGroup canvasGroup;
 
         [Header("Animations")]
         [SerializeField] private AnimationClip show;
@@ -29,9 +32,14 @@ namespace OGT
         [SerializeField] private UnityEvent onHideStart;
         [SerializeField] private UnityEvent onHideEnd;
 
-        public List<GameObject> EnableOnShow => this.enableOnShow;
-
-        public List<GameObject> DisableOnHide => this.disableOnHide;
+        private MaskableGraphic[] maskableGraphics;
+        private LayoutGroup[] layoutGroups;
+        private ScrollRect[] scrollRects;
+        private TMP_Text[] textMeshProTexts;
+        private Graphic[] raycastTargets;
+        private RectMask2D[] rectMask2Ds;
+        private GraphicRaycaster[] graphicRaycasters;
+        private CanvasScaler canvasScaler;
 
         public AnimationClip ShowClip => this.show;
 
@@ -47,7 +55,7 @@ namespace OGT
 
         public UnityEvent OnHideEnd => this.onHideEnd;
 
-        private Coroutine idleCoroutine;
+        private Coroutine showCoroutine;
         private Coroutine hideCoroutine;
 
         [field: NonSerialized]
@@ -74,66 +82,145 @@ namespace OGT
 
         public void Show()
         {
-            this.IsShown = true;
-            this.CancelIdleCoroutine();
+            if (this.IsShown)
+            {
+                return;
+            }
+
             this.CancelHideCoroutine();
+            this.IsShown = true;
+            this.showCoroutine = CoroutineRunner.Instance.StartCoroutine(ShowCoroutine());
 
-            this.onShowStart?.Invoke();
-
-            if (this.enableOnShow != null)
+            IEnumerator ShowCoroutine()
             {
-                for (int i = 0; i < this.enableOnShow.Count; i++)
+                yield return null;
+                this.onShowStart?.Invoke();
+                yield return null;
+
+                if (this.canvasScaler)
                 {
-                    this.enableOnShow[i].SetActive(true);
+                    this.canvasScaler.enabled = true;
                 }
-            }
 
-            this.simpleAnimation.Play(this.show.name);
-            this.ExecuteDelayed(this.show.length, () =>
-            {
-                this.onShowEnd?.Invoke();
-            });
+                yield return null;
+                this.SetLayoutGroups(true);
+                yield return null;
+                yield return this.SetMaskableGraphicsCoroutine(true);
+                yield return null;
+                this.SetTextMeshProTextsScaleStatic(false);
+                yield return null;
+                this.SetRectMasks2ds(true);
+                yield return null;
 
-            if (this.idle != null)
-            {
-                this.idleCoroutine = this.StartCoroutine(PlayIdleCoroutine());
-            }
+                if (this.canvasGroup != null)
+                {
+                    this.canvasGroup.alpha = 1f;
+                }
 
-            IEnumerator PlayIdleCoroutine()
-            {
+                this.simpleAnimation.Play(this.show.name);
+
                 yield return WaitForUtil.Seconds(this.show.length);
-                this.simpleAnimation.Play(this.idle.name);
-                this.idleCoroutine = null;
+
+                if (this.canvasGroup != null)
+                {
+                    yield return null;
+                    this.canvasGroup.interactable = true;
+                    yield return null;
+                    this.canvasGroup.blocksRaycasts = true;
+                    yield return null;
+                }
+
+                this.SetGraphicRaycasters(true);
+                yield return null;
+
+                this.SetRaycastTargets(true);
+                yield return null;
+
+                this.SetScrollRects(true);
+                yield return null;
+
+                this.onShowEnd?.Invoke();
+
+                if (this.idle != null)
+                {
+                    this.simpleAnimation.Play(this.idle.name);
+                }
+
+                this.showCoroutine = null;
             }
         }
 
-        public void Hide()
+        public void Hide() => this.Hide(null);
+
+        public void Hide(Action onHideComplete)
         {
-            this.IsShown = false;
-            this.CancelIdleCoroutine();
-            this.CancelHideCoroutine();
-            this.onHideStart?.Invoke();
-
-            this.simpleAnimation.Play(this.hide.name);
-
-            this.hideCoroutine = this.StartCoroutine(PlayHideCoroutine());
-
-            IEnumerator PlayHideCoroutine()
+            if (this.IsShown == false)
             {
+                return;
+            }
+
+            this.CancelShowCoroutine();
+            this.IsShown = false;
+            this.hideCoroutine = this.StartCoroutine(HideCoroutine());
+
+            IEnumerator HideCoroutine()
+            {
+                yield return null;
+                this.onHideStart?.Invoke();
+                yield return null;
+                this.SetScrollRects(false);
+                yield return null;
+
+                this.simpleAnimation.Play(this.hide.name);
+
                 yield return WaitForUtil.Seconds(this.hide.length);
 
-                if (this.disableOnHide == null)
+                yield return this.SetMaskableGraphicsCoroutine(false);
+                this.SetTextMeshProTextsScaleStatic(true);
+                yield return null;
+
+                if (this.canvasGroup != null)
                 {
-                    yield break;
+                    this.canvasGroup.alpha = 0f;
+                    yield return null;
+                    this.canvasGroup.interactable = false;
+                    yield return null;
+                    this.canvasGroup.blocksRaycasts = false;
+                    yield return null;
                 }
 
-                for (int i = 0; i < this.disableOnHide.Count; i++)
+                this.SetLayoutGroups(false);
+                yield return null;
+
+                this.SetGraphicRaycasters(false);
+                yield return null;
+
+                this.SetRaycastTargets(false);
+                yield return null;
+
+                this.SetRectMasks2ds(false);
+                yield return null;
+
+                if (this.canvasScaler)
                 {
-                    this.disableOnHide[i].SetActive(false);
+                    this.canvasScaler.enabled = true;
                 }
 
-                this.hideCoroutine = null;
+                yield return null;
+
                 this.onHideEnd?.Invoke();
+                yield return null;
+
+                onHideComplete?.Invoke();
+                this.hideCoroutine = null;
+            }
+        }
+
+        public void HideIfShowing()
+        {
+            if (this.IsShown)
+            {
+                this.Hide();
             }
         }
 
@@ -191,6 +278,42 @@ namespace OGT
             clipsToRemoveCache.Clear();
         }
 
+        public void OnAwake(Bootloader bootloader)
+        {
+            this.layoutGroups = this.GetComponentsInChildren<LayoutGroup>(true).Where(x => x.enabled == true).ToArray();
+            this.scrollRects = this.GetComponentsInChildren<ScrollRect>(true).Where(x => x.enabled == true).ToArray();
+            this.textMeshProTexts = this.GetComponentsInChildren<TMP_Text>(true).Where(x => x.enabled == true).ToArray();
+            this.maskableGraphics = this.GetComponentsInChildren<MaskableGraphic>(true).Where(x => x.enabled == true).ToArray();
+            this.raycastTargets = this.GetComponentsInChildren<Graphic>(true).Where(x => x.raycastTarget == true).ToArray();
+            this.rectMask2Ds = this.GetComponentsInChildren<RectMask2D>(true).Where(x => x.enabled == true).ToArray();
+            this.canvasScaler = this.GetComponent<CanvasScaler>();
+            this.graphicRaycasters = this.GetComponentsInChildren<GraphicRaycaster>(true).Where(x =>
+            {
+                var canvas = x.GetComponent<Canvas>();
+                return canvas != null && canvas.overrideSorting == true;
+            }).ToArray();
+
+            if (this.canvasGroup != null)
+            {
+                this.canvasGroup.alpha = 0f;
+                this.canvasGroup.interactable = false;
+                this.canvasGroup.blocksRaycasts = false;
+            }
+
+            this.SetLayoutGroups(false);
+            this.SetScrollRects(false);
+            this.SetTextMeshProTextsScaleStatic(true);
+            this.SetMaskableGraphicsImmediate(false);
+            this.SetRaycastTargets(false);
+            this.SetRectMasks2ds(false);
+            this.SetGraphicRaycasters(false);
+
+            if (this.canvasScaler != null)
+            {
+                this.canvasScaler.enabled = false;
+            }
+        }
+
         public void OnStart()
         {
             if (this.showOnStart)
@@ -199,26 +322,21 @@ namespace OGT
             }
         }
 
-        private void OnValidate()
-        {
-            this.enableOnShow ??= new List<GameObject>();
-            this.disableOnHide ??= new List<GameObject>();
-        }
-
         public void Validate(ValidationReport report, bool isSceneObject)
         {
-            // Making sure lists are created
-            bool createLists = this.enableOnShow == null || this.disableOnHide == null;
-            this.enableOnShow ??= new List<GameObject>();
-            this.disableOnHide ??= new List<GameObject>();
-
-            if (createLists)
-            {
-                EditorUtil.SetDirty(this);
-            }
-
-            // Getting Animation component
             this.EditorGetComponent(ref this.simpleAnimation);
+
+            // If this Showable is on a Canvas, we need to make sure it has a CanvasGroup so we can fade it in and out
+            if (this.canvasGroup == null && this.GetComponent<Canvas>() != null)
+            {
+                if (this.GetComponent<CanvasGroup>() == null)
+                {
+                    this.gameObject.AddComponent<CanvasGroup>();
+                    EditorUtil.SetDirty(this);
+                }
+
+                this.EditorGetComponent(ref this.canvasGroup);
+            }
 
             // We never want this to play automatically, our OnAwake function will figure that out
             if (this.simpleAnimation.playAutomatically)
@@ -234,15 +352,6 @@ namespace OGT
             report.AssertFalse(this, this.simpleAnimation.playAutomatically, nameof(this.simpleAnimation.playAutomatically));
         }
 
-        private void CancelIdleCoroutine()
-        {
-            if (this.idleCoroutine != null)
-            {
-                this.StopCoroutine(this.idleCoroutine);
-                this.idleCoroutine = null;
-            }
-        }
-
         private void CancelHideCoroutine()
         {
             if (this.hideCoroutine != null)
@@ -252,7 +361,161 @@ namespace OGT
             }
         }
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        private static void ResetStatics() => clipsToRemoveCache.Clear();
+        private void CancelShowCoroutine()
+        {
+            if (this.showCoroutine != null)
+            {
+                this.StopCoroutine(this.showCoroutine);
+                this.showCoroutine = null;
+            }
+        }
+
+        private void SetLayoutGroups(bool enabled)
+        {
+            if (this.layoutGroups == null)
+            {
+                return;
+            }
+
+            foreach (var layoutGroup in this.layoutGroups)
+            {
+                if (layoutGroup == null)
+                {
+                    continue;
+                }
+
+                layoutGroup.enabled = enabled;
+            }
+        }
+
+        private void SetScrollRects(bool enabled)
+        {
+            if (this.scrollRects == null)
+            {
+                return;
+            }
+
+            foreach (var scrollRect in this.scrollRects)
+            {
+                scrollRect.enabled = enabled;
+            }
+        }
+
+        private void SetTextMeshProTextsScaleStatic(bool isScaleStatic)
+        {
+            if (this.textMeshProTexts == null)
+            {
+                return;
+            }
+
+            foreach (var textMeshProText in this.textMeshProTexts)
+            {
+                if (textMeshProText == null)
+                {
+                    continue;
+                }
+
+                textMeshProText.isTextObjectScaleStatic = isScaleStatic;
+            }
+        }
+
+        private IEnumerator SetMaskableGraphicsCoroutine(bool enabled)
+        {
+            if (this.maskableGraphics == null)
+            {
+                yield break;
+            }
+
+            int batchSize = Mathf.Max(1, MaskableGraphicsBatchSize);
+            int processed = 0;
+
+            foreach (var rectMask2D in this.maskableGraphics)
+            {
+                if (rectMask2D == null)
+                {
+                    continue;
+                }
+
+                rectMask2D.enabled = enabled;
+
+                processed++;
+                if (processed >= batchSize)
+                {
+                    processed = 0;
+                    yield return null;
+                }
+            }
+        }
+
+        private void SetMaskableGraphicsImmediate(bool enabled)
+        {
+            if (this.maskableGraphics == null)
+            {
+                return;
+            }
+
+            foreach (var rectMask2D in this.maskableGraphics)
+            {
+                if (rectMask2D == null)
+                {
+                    continue;
+                }
+
+                rectMask2D.enabled = enabled;
+            }
+        }
+
+        private void SetRaycastTargets(bool enabled)
+        {
+            if (this.raycastTargets == null)
+            {
+                return;
+            }
+
+            foreach (var raycastTarget in this.raycastTargets)
+            {
+                if (raycastTarget == null)
+                {
+                    continue;
+                }
+
+                raycastTarget.raycastTarget = enabled;
+            }
+        }
+
+        private void SetRectMasks2ds(bool enabled)
+        {
+            if (this.rectMask2Ds == null)
+            {
+                return;
+            }
+
+            foreach (var rectMask2D in this.rectMask2Ds)
+            {
+                if (rectMask2D == null)
+                {
+                    continue;
+                }
+
+                rectMask2D.enabled = enabled;
+            }
+        }
+
+        private void SetGraphicRaycasters(bool enabled)
+        {
+            if (this.graphicRaycasters == null)
+            {
+                return;
+            }
+
+            foreach (var graphicRaycaster in this.graphicRaycasters)
+            {
+                if (graphicRaycaster == null)
+                {
+                    continue;
+                }
+                graphicRaycaster.enabled = enabled;
+            }
+        }
     }
 }

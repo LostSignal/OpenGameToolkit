@@ -37,6 +37,7 @@ namespace OGT.Settings
         {
             downloadUrl = null;
         }
+
 #endif
     }
 }

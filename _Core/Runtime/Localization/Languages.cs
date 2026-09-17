@@ -24,6 +24,7 @@ namespace OGT.Localization
             languages = null;
             languageNames = null;
         }
+
 #endif
 
         public static ReadOnlyCollection<Language> AllLanguages
