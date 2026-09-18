@@ -18,18 +18,27 @@ namespace OGT
         [EditorEvents.OnPreprocessBuild]
         public static void OnPreprocessBuild(BuildReport report)
         {
+            Logger.Log($"PreBuildStep OnPreprocessBuild Started...");
             var buildProfile = BuildProfile.GetActiveBuildProfile();
 
             if (buildProfile == null)
             {
+                Logger.Log($"PreBuildStep OnPreprocessBuild Early Exit: No Active Build Profile Found.");
                 return;
             }
 
             var path = AssetDatabase.GetAssetPath(buildProfile);
+            var preBuildSteps = AssetDatabase.LoadAllAssetsAtPath(path).OfType<PreBuildStep>().OrderBy(x => x.Order).ToList();
 
-            foreach (var preBuildStep in AssetDatabase.LoadAllAssetsAtPath(path).OfType<PreBuildStep>().OrderBy(x => x.Order))
+            if (preBuildSteps.Count == 0)
             {
-                Logger.Log($"Running Pre-Build Step {preBuildStep.Name}...");
+                Logger.Log($"PreBuildStep OnPreprocessBuild Early Exit: No Pre-Build Steps Found.");
+                return;
+            }
+
+            foreach (var preBuildStep in preBuildSteps)
+            {
+                Logger.Log($"PreBuildStep Running Step {preBuildStep.Name}...");
 
                 var startTime = System.DateTime.UtcNow;
 
@@ -37,7 +46,7 @@ namespace OGT
 
                 var totalTime = System.DateTime.UtcNow.Subtract(startTime).TotalSeconds;
 
-                Logger.Log($"Pre-Build Step {preBuildStep.Name} took {totalTime} seconds");
+                Logger.Log($"PreBuildStep Step {preBuildStep.Name} took {totalTime} seconds");
             }
         }
 

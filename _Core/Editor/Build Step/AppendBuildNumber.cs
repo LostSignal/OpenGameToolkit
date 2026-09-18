@@ -18,12 +18,13 @@ public class AppendBuildNumber : PreBuildStep
     {
         if (IsUnityCloudBuild() == false)
         {
+            Logger.Log("[AppendBuildNumber] Unity Cloud Build not detected.");
             return;
         }
 
         if (TryGetCloudBuildNumber(out int buildNumber) == false)
         {
-            Debug.LogWarning("[AppendBuildNumber] Unity Cloud Build detected, but BUILD_NUMBER was invalid.");
+            Logger.LogWarning("[AppendBuildNumber] Unity Cloud Build detected, but BUILD_NUMBER was invalid.");
             return;
         }
 
@@ -41,29 +42,35 @@ public class AppendBuildNumber : PreBuildStep
 
         if (this.appendToBuildVersion || this.appendToPatchVersion)
         {
+            var originalVersion = PlayerSettings.bundleVersion;
             PlayerSettings.bundleVersion = versionString.GetVersionString();
+            Logger.Log($"[AppendBuildNumber] Updated version from {originalVersion} to {PlayerSettings.bundleVersion}");
         }
 
         if (this.appendToAndroidBundleVersionCode)
         {
+            var originalAndroidCode = PlayerSettings.Android.bundleVersionCode;
             PlayerSettings.Android.bundleVersionCode = buildNumber;
+            Logger.Log($"[AppendBuildNumber] Updated Android bundle version code from {originalAndroidCode} to {PlayerSettings.Android.bundleVersionCode}");
         }
 
         if (this.appendToIosBuildNumber)
         {
+            var originalIosBuildNumber = PlayerSettings.iOS.buildNumber;
             PlayerSettings.iOS.buildNumber = buildNumber.ToString();
+            Logger.Log($"[AppendBuildNumber] Updated iOS build number from {originalIosBuildNumber} to {PlayerSettings.iOS.buildNumber}");
         }
 
-        Debug.Log($"[AppendBuildNumber] Applied build #{buildNumber}. Version={PlayerSettings.bundleVersion}, AndroidCode={PlayerSettings.Android.bundleVersionCode}, iOSBuild={PlayerSettings.iOS.buildNumber}");
+        Logger.Log($"[AppendBuildNumber] Applied build #{buildNumber}. Version={PlayerSettings.bundleVersion}, AndroidCode={PlayerSettings.Android.bundleVersionCode}, iOSBuild={PlayerSettings.iOS.buildNumber}");
     }
 
     private static bool IsUnityCloudBuild()
     {
-        #if UNITY_CLOUD_BUILD
+#if UNITY_CLOUD_BUILD
         return true;
-        #else
+#else
         return false;
-        #endif
+#endif
     }
 
     private static bool TryGetCloudBuildNumber(out int buildNumber)

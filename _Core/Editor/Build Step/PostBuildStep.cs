@@ -18,18 +18,27 @@ namespace OGT
         [EditorEvents.OnPostprocessBuild]
         public static void OnPostprocessBuild(BuildReport report)
         {
+            Logger.Log($"PostBuildStep OnPostprocessBuild Started...");
             var buildProfile = BuildProfile.GetActiveBuildProfile();
 
             if (buildProfile == null)
             {
+                Logger.Log($"PostBuildStep OnPostprocessBuild Early Exit: No Active Build Profile Found.");
                 return;
             }
 
             var path = AssetDatabase.GetAssetPath(buildProfile);
+            var postBuildSteps = AssetDatabase.LoadAllAssetsAtPath(path).OfType<PostBuildStep>().OrderBy(x => x.Order).ToList();
 
-            foreach (var postBuildStep in AssetDatabase.LoadAllAssetsAtPath(path).OfType<PostBuildStep>().OrderBy(x => x.Order))
+            if (postBuildSteps.Count == 0)
             {
-                Logger.Log($"Running Post-Build Step {postBuildStep.Name}...");
+                Logger.Log($"PostBuildStep OnPostprocessBuild Early Exit: No Post-Build Steps Found.");
+                return;
+            }
+
+            foreach (var postBuildStep in postBuildSteps)
+            {
+                Logger.Log($"PostBuildStep Running Step {postBuildStep.Name}...");
 
                 var startTime = System.DateTime.UtcNow;
 
@@ -37,7 +46,7 @@ namespace OGT
 
                 var totalTime = System.DateTime.UtcNow.Subtract(startTime).TotalSeconds;
 
-                Logger.Log($"Post-Build Step {postBuildStep.Name} took {totalTime} seconds");
+                Logger.Log($"PostBuildStep Step {postBuildStep.Name} took {totalTime} seconds");
             }
         }
 
