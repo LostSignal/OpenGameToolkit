@@ -1,8 +1,8 @@
 {
   "name": "com.lostsignal.ogt",
   "displayName": "Open Game Toolkit",
-  "version": "0.2.0",
-  "unity": "6000.4",
+  "version": "0.2.1",
+  "unity": "6000.6",
   "description": "Open Game Toolkit",
   "keywords": [
     "OGT"
