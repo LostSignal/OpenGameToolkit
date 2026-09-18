@@ -267,7 +267,14 @@ namespace OGT
             {
                 if (DisableLogging == false || Application.isBatchMode || BuildPipeline.isBuildingPlayer)
                 {
-                    Debug.LogFormat(format, args);
+                    if (args == null || args.Length == 0)
+                    {
+                        Debug.Log(format);
+                    }
+                    else
+                    {
+                        Debug.LogFormat(format, args);
+                    }
                 }
             }
         }
