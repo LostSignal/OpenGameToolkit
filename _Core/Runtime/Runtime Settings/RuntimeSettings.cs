@@ -73,7 +73,8 @@ namespace OGT
             }
             else
             {
-                fileText = Resources.Load<TextAsset>(SettingsFileName)?.text;
+                var settingsFileResourcePath = System.IO.Path.GetFileNameWithoutExtension(SettingsFileName);
+                fileText = Resources.Load<TextAsset>(settingsFileResourcePath)?.text;
             }
 
             if (string.IsNullOrEmpty(fileText) == false)

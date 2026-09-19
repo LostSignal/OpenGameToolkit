@@ -92,29 +92,31 @@ namespace OGT
 #endif
         }
 
-        static Layers()
-        {
-            InitializeLayers();
-        }
-
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        private static void InitializeLayers()
-        {
-            defaultLayer = LayerMask.NameToLayer("Default");
-            teleportLayer = InitializeLayer("Teleport");
-            interactorLayer = InitializeLayer("Interactor");
-            interactableLayer = InitializeLayer("Interactable");
-            actorLayer = InitializeLayer("Actor");
-
-            SetIgnoreLayerCollision(Default, Actor, false);
-            SetIgnoreLayerCollision(Default, Interactable, false);
-            SetIgnoreLayerCollision(Default, Interactor, false);
-            SetIgnoreLayerCollision(Default, Teleport, true);
-
-            SetIgnoreLayerCollision(Interactable, Interactor, false);
-            SetIgnoreLayerCollision(Interactable, Interactable, false);
-            SetIgnoreLayerCollision(Interactor, Interactor, false);
-        }
+        //// NOTE [bgish]: If the layers don't exist this throws errors. Do better error logging before adding this back in. 
+        ////
+        //// static Layers()
+        //// {
+        ////     InitializeLayers();
+        //// }
+        //// 
+        //// [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        //// private static void InitializeLayers()
+        //// {
+        ////     defaultLayer = LayerMask.NameToLayer("Default");
+        ////     teleportLayer = InitializeLayer("Teleport");
+        ////     interactorLayer = InitializeLayer("Interactor");
+        ////     interactableLayer = InitializeLayer("Interactable");
+        ////     actorLayer = InitializeLayer("Actor");
+        //// 
+        ////     SetIgnoreLayerCollision(Default, Actor, false);
+        ////     SetIgnoreLayerCollision(Default, Interactable, false);
+        ////     SetIgnoreLayerCollision(Default, Interactor, false);
+        ////     SetIgnoreLayerCollision(Default, Teleport, true);
+        //// 
+        ////     SetIgnoreLayerCollision(Interactable, Interactor, false);
+        ////     SetIgnoreLayerCollision(Interactable, Interactable, false);
+        ////     SetIgnoreLayerCollision(Interactor, Interactor, false);
+        //// }
 
         private static int InitializeLayer(string layerName)
         {
