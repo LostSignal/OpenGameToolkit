@@ -50,7 +50,7 @@ namespace OGT.Settings
             void DisableBitCode(string buildPath)
             {
 #if UNITY_IOS
-                AppSettings.Logger.Log("Disabling BitCode...");
+                Logger.Log("Disabling BitCode...");
 
                 string projectPath = buildPath + "/Unity-iPhone.xcodeproj/project.pbxproj";
 
@@ -68,7 +68,7 @@ namespace OGT.Settings
             void EnableIOSPushNotifications(string buildPath)
             {
 #if UNITY_IOS
-                AppSettings.Logger.Log("Enabling iOS Push Notifications...");
+                Logger.Log("Enabling iOS Push Notifications...");
 
                 // Turning on push notifications (release/development)
                 var projectPath = buildPath + "/Unity-iPhone.xcodeproj/project.pbxproj";
@@ -81,6 +81,7 @@ namespace OGT.Settings
                     "Entitlements.entitlements",
                     targetGuid: project.GetUnityMainTargetGuid()
                 );
+
                 manager.AddPushNotifications(this.IosPushNotificationType == IOSPushNotificationType.Development);
                 manager.WriteToFile();
 
