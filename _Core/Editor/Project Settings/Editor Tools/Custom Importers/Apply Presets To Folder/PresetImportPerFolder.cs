@@ -65,7 +65,7 @@ namespace OGT
                 // Get the current imported asset folder.
                 var path = Path.GetDirectoryName(assetPath).Replace("\\", "/");
 
-                if (path == "ProjectSettings" || path.StartsWith("Packages/"))
+                if (path == "ProjectSettings" || path == "Packages" || path.StartsWith("Packages/"))
                 {
                     return;
                 }
