@@ -8,7 +8,6 @@ namespace OGT
 {
     using System.Linq;
     using UnityEditor;
-    using UnityEditor.Build.Profile;
     using UnityEditor.Build.Reporting;
 
     public abstract class PostBuildStep : BuildStep
@@ -19,7 +18,7 @@ namespace OGT
         public static void OnPostprocessBuild(BuildReport report)
         {
             Logger.Log($"PostBuildStep OnPostprocessBuild Started...");
-            var buildProfile = BuildProfile.GetActiveBuildProfile();
+            var buildProfile = UnityEditor.Build.Profile.BuildProfile.GetActiveBuildProfile();
 
             if (buildProfile == null)
             {
@@ -50,6 +49,6 @@ namespace OGT
             }
         }
 
-        public abstract void Run(BuildProfile buildProfile, BuildReport report);
+        public abstract void Run(UnityEditor.Build.Profile.BuildProfile buildProfile, BuildReport report);
     }
 }

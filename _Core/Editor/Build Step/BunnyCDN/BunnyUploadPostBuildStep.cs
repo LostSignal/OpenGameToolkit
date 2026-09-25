@@ -8,7 +8,6 @@ namespace OGT
 {
     using System;
     using UnityEngine;
-    using UnityEditor.Build.Profile;
     using UnityEditor.Build.Reporting;
 
     public class BunnyUploadPostBuildStep : PostBuildStep
@@ -19,7 +18,7 @@ namespace OGT
 
         public override string Name => "BunnyCDN Upload";
 
-        public override void Run(BuildProfile buildProfile, BuildReport report)
+        public override void Run(UnityEditor.Build.Profile.BuildProfile buildProfile, BuildReport report)
         {
 #if USING_BUNNY_CDN
             var outputPath = report.summary.outputPath;

@@ -8,18 +8,15 @@ namespace OGT
 {
     using System.Linq;
     using UnityEditor;
-    using UnityEditor.Build.Profile;
-    using UnityEditor.Build.Reporting;
-
     public abstract class PreBuildStep : BuildStep
     {
         public const string PreBuildStepMenuPath = BuildStepMenuPath + "Add Pre Build Step/";
 
         [EditorEvents.OnPreprocessBuild]
-        public static void OnPreprocessBuild(BuildReport report)
+        public static void OnPreprocessBuild(UnityEditor.Build.Reporting.BuildReport report)
         {
             Logger.Log($"PreBuildStep OnPreprocessBuild Started...");
-            var buildProfile = BuildProfile.GetActiveBuildProfile();
+            var buildProfile = UnityEditor.Build.Profile.BuildProfile.GetActiveBuildProfile();
 
             if (buildProfile == null)
             {
@@ -50,6 +47,6 @@ namespace OGT
             }
         }
 
-        public abstract void Run(BuildProfile buildProfile);
+        public abstract void Run(UnityEditor.Build.Profile.BuildProfile buildProfile);
     }
 }

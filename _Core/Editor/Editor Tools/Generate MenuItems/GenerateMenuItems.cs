@@ -2,6 +2,7 @@ namespace OGT
 {
     using System.Collections.Generic;
     using System.Text;
+    using UnityEditor;
 
     public static class GenerateMenuItems
     {
@@ -71,12 +72,21 @@ namespace OGT
         {
             var results = new List<MenuItemData>();
 
-            // Use reflection to find all methods with the GenerateMenuItemsAttribute
-            BuildStepMenuItemsGenerator.GenerateBuildStepMenuItems(results);
-            ProjectSettingsBootloaderEditor.GenerateMenuItems(results);
+            // Using reflection to find all methods with the GenerateMenuItemsAttribute
+            foreach (var method in TypeCache.GetMethodsWithAttribute<GenerateMenuItemsAttribute>())
+            {
+                var parameters = method.GetParameters();
 
-            //// TODO [bgish]: If a function has the GenerateMenuItemsAttribute, but doesn't accept a List<MenuItemData>, we should log an error!
-
+                if (method.IsStatic && parameters.Length == 1 && parameters[0].ParameterType == typeof(List<MenuItemData>))
+                {
+                    method.Invoke(null, new object[] { results });
+                }
+                else
+                {
+                    OGTLogger.OGTEditor.LogError($"Method {method.DeclaringType.FullName}.{method.Name} has the GenerateMenuItemsAttribute but does not have the correct signature. It must be static and accept a single parameter of type List<MenuItemData>.");
+                }
+            }
+                                    
             return results;
         }
     }

@@ -23,8 +23,10 @@ namespace OGT
         {
             0,  // Unknown
             2,  // WebPlayer
+            4,  // iPhone
             5,  // PS3
             6,  // XBOX360
+            14, // Metro
             15, // WP8
             16, // BlackBerry
             17, // Tizen
@@ -36,6 +38,9 @@ namespace OGT
             26, // Facebook
             28, // Lumin
             29, // Stadia
+            30, // CloudRendering
+            31, // GameCoreScarlett
+            38, // Kepler
         };
 
         public static void AddOrRemoveDefine(string assemblyName, string define)

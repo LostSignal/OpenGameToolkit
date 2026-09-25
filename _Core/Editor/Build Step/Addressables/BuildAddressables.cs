@@ -6,13 +6,11 @@
 
 namespace OGT
 {
-    using UnityEditor.Build.Profile;
-
     public class BuildAddressables : PreBuildStep
     {
         public override string Name => "Build Addressables";
 
-        public override void Run(BuildProfile buildProfile)
+        public override void Run(UnityEditor.Build.Profile.BuildProfile buildProfile)
         {
             // AddressableAssetSettings.BuildPlayerContent();
 

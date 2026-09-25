@@ -8,14 +8,13 @@ namespace OGT
 {
     using System.IO;
     using UnityEditor;
-    using UnityEditor.Build.Profile;
     using UnityEditor.Build.Reporting;
 
     public class CopySimpleWebServerBuildStep : PostBuildStep
     {
         public override string Name => "Copy SimpleWebServer";
 
-        public override void Run(BuildProfile buildProfile, BuildReport report)
+        public override void Run(UnityEditor.Build.Profile.BuildProfile buildProfile, BuildReport report)
         {
             var pathToBuiltProject = report.summary.outputPath;
 

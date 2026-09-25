@@ -8,7 +8,6 @@ namespace OGT
 {
     using System.Linq;
     using UnityEditor;
-    using UnityEditor.Build.Profile;
     using UnityEditor.VersionControl;
     using UnityEngine;
 
@@ -24,7 +23,7 @@ namespace OGT
 
         public int Order => this.order;
 
-        public static bool IsBuildProfileSelected() => Selection.objects.Length == 1 && Selection.objects.First() is BuildProfile;
+        public static bool IsBuildProfileSelected() => Selection.objects.Length == 1 && Selection.objects.First() is UnityEditor.Build.Profile.BuildProfile;
 
         public static void AddBuildStep<T>(string name)
             where T : BuildStep, new()

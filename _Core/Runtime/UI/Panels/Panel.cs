@@ -33,6 +33,7 @@ namespace OGT
         [SerializeField] private BackButtonAction backButtonAction;
         [SerializeField] private UnityEvent onBackButtonPressed;
         [SerializeField] private bool sendAnalyticEventOnShow;
+        [SerializeField] private bool moveToRoot;
 
         private AnalyticsManager analyticsManager;
         private PanelManager panelManager;
@@ -71,6 +72,11 @@ namespace OGT
                         { "PanelName", this.name },
                     });
                 });
+            }
+
+            if (this.moveToRoot)
+            {
+                this.transform.SetParent(null, true);
             }
         }
 

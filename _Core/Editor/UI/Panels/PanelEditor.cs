@@ -72,6 +72,7 @@ namespace OGT
                 this.Space(10);
                 this.DrawMember(panel, "registerForBackButtonPressed");
                 this.DrawMember(panel, "sendAnalyticEventOnShow");
+                this.DrawMember(panel, "moveToRoot");
                 this.DrawMember(panel, "backButtonAction");
                 GUILayout.Space(10);
                 this.DrawMember(panel, "onBackButtonPressed");

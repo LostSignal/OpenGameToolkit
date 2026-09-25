@@ -43,8 +43,8 @@ namespace OGT
             UnityEditor.Android.IPostGenerateGradleAndroidProject,
 #endif
             IPreprocessBuildWithReport,
-                                               IPostprocessBuildWithReport,
-                                               IProcessSceneWithReport
+            IPostprocessBuildWithReport,
+            IProcessSceneWithReport
         {
             private static readonly StringBuilder stringBuilderCache = new StringBuilder();
             private static List<MethodInfo> EditorEventMethods = null;
@@ -80,7 +80,7 @@ namespace OGT
                 EditorApplication.playModeStateChanged += PlayModeStateChanged;
             }
 
-            int IOrderedCallback.callbackOrder => 10;
+            int IOrderedCallback.callbackOrder => -1000;
 
             public static void ExecuteAttribute<T>(params object[] parameters)
                 where T : Attribute
