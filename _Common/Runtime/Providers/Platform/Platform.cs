@@ -28,6 +28,9 @@ namespace OGT
         public static bool IsApplicationQuitting =>
             platformProvider == null ? false : platformProvider.IsApplicationQuitting;
 
+        public static string VersionString =>
+            platformProvider == null ? null : platformProvider.VersionString;
+
         public static event EventHandler OnBackButtonPressed
         {
             add => platformProvider.OnBackButtonPressed += value;

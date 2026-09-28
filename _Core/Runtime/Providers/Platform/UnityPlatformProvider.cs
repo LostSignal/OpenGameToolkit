@@ -37,6 +37,8 @@ namespace OGT
 
         private static UnityDispatcher dispatcher;
 
+        private string versionString;
+
         public UnityPlatformProvider()
         {
             CreateDispatcher();
@@ -130,7 +132,7 @@ namespace OGT
                 _ => false,
             };
         }
-
+                
         public static EditorPlatform CurrentEditorPlatform
         {
             get => Application.platform switch
@@ -141,6 +143,8 @@ namespace OGT
                 _ => EditorPlatform.Unknown,
             };
         }
+
+        public string VersionString => this.GetVersionString();
 
         public DevicePlatform CurrentDevicePlatform
         {
@@ -586,6 +590,51 @@ namespace OGT
                 Application.wantsToQuit -= this.UnityWantsToQuit;
                 Application.Quit();
             }
+        }
+
+        private string GetVersionString()
+        {
+            if (this.versionString == null)
+            {
+                string buildNumer = GetAndroidBuildNumber() ?? GetIOSBuildNumber();
+
+                if (buildNumer != null)
+                {
+                    this.versionString = $"{Application.version} ({buildNumer})";
+                }
+                else
+                {
+                    this.versionString = Application.version;
+                }
+            }
+
+            return this.versionString;
+        }
+
+        public static string GetAndroidBuildNumber()
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            using var packageManager = UnityEngine.Android.AndroidApplication.currentContext.Call<AndroidJavaObject>("getPackageManager");
+            string packageName = UnityEngine.Android.AndroidApplication.currentContext.Call<string>("getPackageName");
+            using var packageInfo = packageManager.Call<AndroidJavaObject>("getPackageInfo", packageName, 0);
+            return packageInfo.Call<long>("getLongVersionCode").ToString();
+#else
+            return null;
+#endif
+        }
+
+#if UNITY_IOS && !UNITY_EDITOR
+        [System.Runtime.InteropServices.DllImport("__Internal")]
+        private static extern IntPtr GetBuildNumber();
+#endif
+
+        public static string GetIOSBuildNumber()
+        {
+#if UNITY_IOS && !UNITY_EDITOR
+            return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(GetBuildNumber());
+#else
+            return null;
+#endif
         }
     }
 }

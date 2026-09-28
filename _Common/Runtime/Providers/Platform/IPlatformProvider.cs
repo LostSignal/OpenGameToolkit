@@ -17,6 +17,8 @@ namespace OGT
 
         bool IsApplicationQuitting { get; }
 
+        string VersionString { get; }
+
         event EventHandler OnBackButtonPressed;
 
         event EventHandler OnUpdate;
