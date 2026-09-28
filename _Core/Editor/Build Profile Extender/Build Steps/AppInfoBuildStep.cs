@@ -75,7 +75,7 @@ namespace OGT.BuildProfile
             this.SetBundleIdentifier(target);
             this.SetVersion();
             this.SetBootloaderGuid();
-            this.AppendBuildNumberOnUnityCloudBuild();
+            this.AppendBuildNumberOnUnityCloudBuild(target);
         }
 
         public override void OnPostprocessBuild(BuildProfileExtender.Environment environment, BuildTarget target, string path)
@@ -174,7 +174,7 @@ namespace OGT.BuildProfile
             }
         }
 
-        private void AppendBuildNumberOnUnityCloudBuild()
+        private void AppendBuildNumberOnUnityCloudBuild(BuildTarget target)
         {
             if (IsUnityCloudBuild() == false)
             {
@@ -189,22 +189,27 @@ namespace OGT.BuildProfile
             }
 
             var versionString = OGTVersionString.Parse(PlayerSettings.bundleVersion);
+            var isIosOrAndroid = target == BuildTarget.iOS || target == BuildTarget.Android;
 
-            if (this.setBuildNumberToPatchVersion)
+            // Updating bundleVersion on non iOS/Android platforms
+            if (isIosOrAndroid == false)
             {
-                versionString.UpdatePatch(buildNumber);
-            }
+                if (this.setBuildNumberToPatchVersion)
+                {
+                    versionString.UpdatePatch(buildNumber);
+                }
 
-            if (this.setBuildNumberToBuildVersion)
-            {
-                versionString.UpdateBuild(buildNumber);
-            }
+                if (this.setBuildNumberToBuildVersion)
+                {
+                    versionString.UpdateBuild(buildNumber);
+                }
 
-            if (this.setBuildNumberToBuildVersion || this.setBuildNumberToPatchVersion)
-            {
-                var originalVersion = PlayerSettings.bundleVersion;
-                PlayerSettings.bundleVersion = versionString.GetVersionString();
-                Logger.Log($"[AppInfoBuildStep] Updated version from {originalVersion} to {PlayerSettings.bundleVersion}");
+                if (this.setBuildNumberToBuildVersion || this.setBuildNumberToPatchVersion)
+                {
+                    var originalVersion = PlayerSettings.bundleVersion;
+                    PlayerSettings.bundleVersion = versionString.GetVersionString();
+                    Logger.Log($"[AppInfoBuildStep] Updated version from {originalVersion} to {PlayerSettings.bundleVersion}");
+                }
             }
 
             if (this.setBuildNumberToAndroidBundleVersionCode)
