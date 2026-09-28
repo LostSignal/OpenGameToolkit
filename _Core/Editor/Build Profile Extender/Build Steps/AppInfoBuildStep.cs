@@ -166,10 +166,10 @@ namespace OGT.BuildProfile
             }
 
             var bootloaderGuid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(this.bootloader));
-            Logger.Log($"[AppInfoBuildStep] Setting Bootloader Guid to '{bootloaderGuid}'");
 
             if (RuntimeSettings.GetSetting<string>("OGT.Bootloader") != bootloaderGuid)
             {
+                Logger.Log($"[AppInfoBuildStep] Setting Bootloader Guid to '{bootloaderGuid}'");
                 RuntimeSettings.SetSetting("OGT.Bootloader", bootloaderGuid);
             }
         }

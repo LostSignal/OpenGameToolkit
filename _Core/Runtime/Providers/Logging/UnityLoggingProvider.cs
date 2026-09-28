@@ -30,7 +30,7 @@ namespace OGT
         [EditorEvents.OnExitEditor]
         public static void SaveChannels()
         {
-            RuntimeSettings.SetSetting(LoggingChannelsSettingsName, OGTLogger.GetChannels().Select(x => new Channel { Name = x.Name, Level = x.Level }).ToList());
+            RuntimeSettings.SetSetting(LoggingChannelsSettingsName, OGTLogger.GetChannels().Select(x => new Channel { Name = x.Name, Level = x.Level }).OrderBy(x => x.Name).ToList());
         }
 
         public void Log(LoggingChannel channel, LoggingLevel level, object context, string message)

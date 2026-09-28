@@ -7,7 +7,6 @@
 namespace OGT.BuildProfile
 {
     using UnityEditor;
-    using UnityEditor.Build;
     using UnityEngine;
 
     [CreateAssetMenu(fileName = "Google Play", menuName = "OGT/Build Steps/Google Play")]
@@ -16,8 +15,9 @@ namespace OGT.BuildProfile
         [ReadOnly] [SerializeField] private bool splitApplicationBinary = true;
         [ReadOnly] [SerializeField] private bool isUnityDevelopmentBuild = false;
         [SerializeField] private string keystoreLocation;
-        [SerializeField] private SecretString keyAliasPassword;
         [SerializeField] private SecretString keystorePassword;
+        [SerializeField] private string keyAlias;
+        [SerializeField] private SecretString keyAliasPassword;
         [SerializeField] private bool uploadToGooglePlay;
 
         [ShowIf(nameof(uploadToGooglePlay), true)]
@@ -45,11 +45,14 @@ namespace OGT.BuildProfile
             Logger.Log($"[GooglePlayBuildStep] Setting PlayerSettings.Android.keystoreName to {this.keystoreLocation}");
             PlayerSettings.Android.keystoreName = this.keystoreLocation;
 
-            Logger.Log($"[GooglePlayBuildStep] Setting PlayerSettings.Android.keyaliasPass");
-            PlayerSettings.Android.keyaliasPass = this.keyAliasPassword.Value;
-
-            Logger.Log($"[GooglePlayBuildStep] Setting PlayerSettings.Android.keystorePass");
+            Logger.Log($"[GooglePlayBuildStep] Setting PlayerSettings.Android.keystorePass to Secret {this.keystorePassword.SecretKey}");
             PlayerSettings.Android.keystorePass = this.keystorePassword.Value;
+
+            Logger.Log($"[GooglePlayBuildStep] Setting PlayerSettings.Android.keyaliasName to {this.keyAlias}");
+            PlayerSettings.Android.keyaliasName = this.keyAlias;
+
+            Logger.Log($"[GooglePlayBuildStep] Setting PlayerSettings.Android.keyaliasPass to Secret {this.keyAliasPassword.SecretKey}");
+            PlayerSettings.Android.keyaliasPass = this.keyAliasPassword.Value;
         }
 
         public override void OnPostprocessBuild(BuildProfileExtender.Environment environment, BuildTarget target, string path)
@@ -59,7 +62,7 @@ namespace OGT.BuildProfile
                 return;
             }
 
-            Logger.Log("[GooglePlayBuildStep] GooglePlay Upload Not Implemented Yet, but Upload Key = " + this.uploadKey.Value);
+            Logger.Log("[GooglePlayBuildStep] GooglePlay Upload Not Implemented Yet, but Upload Key = Secret " + this.uploadKey.SecretKey);
             Logger.Log("[GooglePlayBuildStep] GooglePlay Upload Not Implemented Yet, but Track = " + this.track);
         }
     }

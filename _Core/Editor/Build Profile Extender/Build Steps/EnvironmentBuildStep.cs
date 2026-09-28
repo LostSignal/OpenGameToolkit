@@ -43,6 +43,7 @@ namespace OGT.BuildProfile
         public override void OnPreprocessBuild(BuildProfileExtender.Environment environment, BuildTarget target)
         {
             this.SetBuildSettings();
+            this.DisableCustomKeyStore(target);
             this.SetWebGLSettings(target);
 
             if (this.isOgtDevelopmentBuild)
@@ -74,6 +75,17 @@ namespace OGT.BuildProfile
 
             Logger.Log($"[EnvironmentBuildStep] Setting EditorUserBuildSettings.buildWithDeepProfilingSupport to {this.allowDeepProfiler}");
             EditorUserBuildSettings.buildWithDeepProfilingSupport = this.allowDeepProfiler;
+        }
+
+        private void DisableCustomKeyStore(BuildTarget target)
+        {
+            if (target != BuildTarget.Android)
+            {
+                return;
+            }   
+
+            Logger.Log($"[EnvironmentBuildStep] Setting PlayerSettings.Android.useCustomKeystore to false");
+            PlayerSettings.Android.useCustomKeystore = false;
         }
 
         private void SetWebGLSettings(BuildTarget target)
