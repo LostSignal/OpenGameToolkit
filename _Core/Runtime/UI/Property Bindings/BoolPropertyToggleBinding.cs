@@ -22,6 +22,12 @@ namespace OGT
 
         public void OnAwake(Bootloader bootloader)
         {
+            var propertyGroupManager = bootloader.FindManager<PropertyGroupManager>();
+
+            //// // NOTE [bgish]: Is this necessary? I think it is only if there are issues with addressables
+            //// //               Perhaps we shouldn't save the reference at all and we shoudl only store the property group id?
+            //// this.boolProperty.PropertyGroup = propertyGroupManager.GetPropertyGroup(this.boolProperty.PropertyGroup.GroupId);
+
             this.boolProperty.OnChange += this.OnSettingChanged;
 
             if (this.toggle != null)

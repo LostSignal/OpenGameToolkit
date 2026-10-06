@@ -31,6 +31,7 @@ namespace OGT.Properties
     using System.Collections.Generic;
     using System.Linq;
     using UnityEngine;
+    using UnityEngine.Serialization;
 
     [CreateAssetMenu(fileName = "Property Group", menuName = "OGT/Properties/Property Group", order = 1)]
     public class PropertyGroup : Resource
@@ -42,28 +43,39 @@ namespace OGT.Properties
             Game,
         }
 
+        [ReadOnly]
+        [SerializeField] private int groupId;
         [SerializeField] private PropertyType type;
         [SerializeReference] private List<Property> properties;
 
         private Dictionary<int, Property> propertyCache = new();
 
+        public int GroupId => this.groupId;
+
         public string[] GetPropertyNames(Type type)
         {
-            type = type == typeof(bool) ? typeof(BoolProperty) :
-                type == typeof(int) ? typeof(IntProperty) :
-                type == typeof(float) ? typeof(FloatProperty) :
-                type == typeof(string) ? typeof(StringProperty) : null;
-
-            if (type == null)
-            {
-                throw new ArgumentException($"Unsupported property type: {type}");
-            }
-
-            return this.properties
-                .Where(p => p.GetType() == type)
+            return this.GetProperties(type)
                 .Select(p => p.Name)
                 .OrderBy(name => name)
                 .ToArray();
+        }
+
+        // Returns every property in this group whose value type matches (bool, int, float, string or Enum)
+        internal IEnumerable<Property> GetProperties(Type valueType)
+        {
+            var propertyType = valueType == typeof(bool) ? typeof(BoolProperty) :
+                valueType == typeof(int) ? typeof(IntProperty) :
+                valueType == typeof(float) ? typeof(FloatProperty) :
+                valueType == typeof(string) ? typeof(StringProperty) :
+                valueType == typeof(Enum) ? typeof(EnumProperty) : null;
+
+            if (propertyType == null)
+            {
+                throw new ArgumentException($"Unsupported property type: {valueType}");
+            }
+
+            return (this.properties ?? Enumerable.Empty<Property>())
+                .Where(p => p != null && p.GetType() == propertyType);
         }
 
         public void ResetProperties()
@@ -186,6 +198,30 @@ namespace OGT.Properties
             {
                 throw new KeyNotFoundException($"Int property with ID {propertyId} not found.");
             }
+        }
+
+        public int GetIntPropertyMinValue(int propertyId)
+        {
+            this.Initialize();
+
+            if (propertyCache.TryGetValue(propertyId, out var prop) && prop is IntProperty intProp)
+            {
+                return intProp.Min;
+            }
+
+            throw new KeyNotFoundException($"Int property with ID {propertyId} not found.");
+        }
+
+        public int GetIntPropertyMaxValue(int propertyId)
+        {
+            this.Initialize();
+
+            if (propertyCache.TryGetValue(propertyId, out var prop) && prop is IntProperty intProp)
+            {
+                return intProp.Max;
+            }
+
+            throw new KeyNotFoundException($"Int property with ID {propertyId} not found.");
         }
 
         public float GetFloatPropertyValue(int propertyId)
@@ -328,6 +364,8 @@ namespace OGT.Properties
 
         public void AddBoolHandler(int propertyId, Action<bool, bool> action)
         {
+            this.Initialize();
+
             if (propertyCache.TryGetValue(propertyId, out var prop) && prop is BoolProperty boolProp)
             {
                 boolProp.OnChange += action;
@@ -340,6 +378,8 @@ namespace OGT.Properties
 
         public void RemoveBoolHandler(int propertyId, Action<bool, bool> action)
         {
+            this.Initialize();
+
             if (propertyCache.TryGetValue(propertyId, out var prop) && prop is BoolProperty boolProp)
             {
                 boolProp.OnChange -= action;
@@ -352,6 +392,8 @@ namespace OGT.Properties
 
         public void AddIntHandler(int propertyId, Action<int, int> action)
         {
+            this.Initialize();
+
             if (propertyCache.TryGetValue(propertyId, out var prop) && prop is IntProperty intProp)
             {
                 intProp.OnChange += action;
@@ -364,6 +406,8 @@ namespace OGT.Properties
 
         public void RemoveIntHandler(int propertyId, Action<int, int> action)
         {
+            this.Initialize();
+
             if (propertyCache.TryGetValue(propertyId, out var prop) && prop is IntProperty intProp)
             {
                 intProp.OnChange -= action;
@@ -376,6 +420,8 @@ namespace OGT.Properties
 
         public void AddFloatHandler(int propertyId, Action<float, float> action)
         {
+            this.Initialize();
+
             if (propertyCache.TryGetValue(propertyId, out var prop) && prop is FloatProperty floatProp)
             {
                 floatProp.OnChange += action;
@@ -388,6 +434,8 @@ namespace OGT.Properties
 
         public void RemoveFloatHandler(int propertyId, Action<float, float> action)
         {
+            this.Initialize();
+
             if (propertyCache.TryGetValue(propertyId, out var prop) && prop is FloatProperty floatProp)
             {
                 floatProp.OnChange -= action;
@@ -400,6 +448,8 @@ namespace OGT.Properties
 
         public void AddStringHandler(int propertyId, Action<string, string> action)
         {
+            this.Initialize();
+
             if (propertyCache.TryGetValue(propertyId, out var prop) && prop is StringProperty stringProp)
             {
                 stringProp.OnChange += action;
@@ -412,6 +462,8 @@ namespace OGT.Properties
 
         public void RemoveStringHandler(int propertyId, Action<string, string> action)
         {
+            this.Initialize();
+
             if (propertyCache.TryGetValue(propertyId, out var prop) && prop is StringProperty stringProp)
             {
                 stringProp.OnChange -= action;
@@ -424,6 +476,8 @@ namespace OGT.Properties
 
         public void AddEnumHandler(int propertyId, Action<EnumValue, EnumValue> action)
         {
+            this.Initialize();
+
             if (propertyCache.TryGetValue(propertyId, out var prop) && prop is EnumProperty enumProp)
             {
                 enumProp.OnChange += action;
@@ -436,6 +490,8 @@ namespace OGT.Properties
 
         public void RemoveEnumHandler(int propertyId, Action<EnumValue, EnumValue> action)
         {
+            this.Initialize();
+
             if (propertyCache.TryGetValue(propertyId, out var prop) && prop is EnumProperty enumProp)
             {
                 enumProp.OnChange -= action;
@@ -549,20 +605,21 @@ namespace OGT.Properties
     [Serializable]
     public abstract class Property
     {
-        [SerializeField][JsonProperty] private PropertyGroup properties;
+        [FormerlySerializedAs("properties")]
+        [SerializeField][JsonProperty] private PropertyGroup propertyGroup;
         [SerializeField][JsonProperty] private int propertyId;
 
         [JsonIgnore]
-        public string Name => properties?.GetPropertyNameById(propertyId);
+        public string Name => propertyGroup?.GetPropertyNameById(propertyId);
 
         [JsonIgnore]
         public abstract Type Type { get; }
 
         [JsonIgnore]
-        public PropertyGroup Properties
+        public PropertyGroup PropertyGroup
         {
-            get => properties;
-            set => properties = value;
+            get => propertyGroup;
+            set => propertyGroup = value;
         }
 
         [JsonIgnore]
@@ -582,14 +639,14 @@ namespace OGT.Properties
         [JsonIgnore]
         public bool Value
         {
-            get => this.Properties.GetBoolPropertyValue(this.PropertyId);
-            set => this.Properties.SetBoolPropertyValue(this.PropertyId, value);
+            get => this.PropertyGroup.GetBoolPropertyValue(this.PropertyId);
+            set => this.PropertyGroup.SetBoolPropertyValue(this.PropertyId, value);
         }
 
         public event Action<bool, bool> OnChange
         {
-            add => this.Properties.AddBoolHandler(this.PropertyId, value);
-            remove => this.Properties.RemoveBoolHandler(this.PropertyId, value);
+            add => this.PropertyGroup.AddBoolHandler(this.PropertyId, value);
+            remove => this.PropertyGroup.RemoveBoolHandler(this.PropertyId, value);
         }
     }
 
@@ -600,14 +657,18 @@ namespace OGT.Properties
 
         public int Value
         {
-            get => this.Properties.GetIntPropertyValue(this.PropertyId);
-            set => this.Properties.SetIntPropertyValue(this.PropertyId, value);
+            get => this.PropertyGroup.GetIntPropertyValue(this.PropertyId);
+            set => this.PropertyGroup.SetIntPropertyValue(this.PropertyId, value);
         }
+
+        public int Min => this.PropertyGroup.GetIntPropertyMinValue(this.PropertyId);
+
+        public int Max => this.PropertyGroup.GetIntPropertyMaxValue(this.PropertyId);
 
         public event Action<int, int> OnChange
         {
-            add => this.Properties.AddIntHandler(this.PropertyId, value);
-            remove => this.Properties.RemoveIntHandler(this.PropertyId, value);
+            add => this.PropertyGroup.AddIntHandler(this.PropertyId, value);
+            remove => this.PropertyGroup.RemoveIntHandler(this.PropertyId, value);
         }
     }
 
@@ -618,14 +679,14 @@ namespace OGT.Properties
 
         public string Value
         {
-            get => this.Properties.GetStringPropertyValue(this.PropertyId);
-            set => this.Properties.SetStringPropertyValue(this.PropertyId, value);
+            get => this.PropertyGroup.GetStringPropertyValue(this.PropertyId);
+            set => this.PropertyGroup.SetStringPropertyValue(this.PropertyId, value);
         }
 
         public event Action<string, string> OnChange
         {
-            add => this.Properties.AddStringHandler(this.PropertyId, value);
-            remove => this.Properties.RemoveStringHandler(this.PropertyId, value);
+            add => this.PropertyGroup.AddStringHandler(this.PropertyId, value);
+            remove => this.PropertyGroup.RemoveStringHandler(this.PropertyId, value);
         }
     }
 
@@ -636,18 +697,18 @@ namespace OGT.Properties
 
         public float Value
         {
-            get => this.Properties.GetFloatPropertyValue(this.PropertyId);
-            set => this.Properties.SetFloatPropertyValue(this.PropertyId, value);
+            get => this.PropertyGroup.GetFloatPropertyValue(this.PropertyId);
+            set => this.PropertyGroup.SetFloatPropertyValue(this.PropertyId, value);
         }
 
-        public float Min => this.Properties.GetFloatPropertyMin(this.PropertyId);
+        public float Min => this.PropertyGroup.GetFloatPropertyMin(this.PropertyId);
 
-        public float Max => this.Properties.GetFloatPropertyMax(this.PropertyId);
+        public float Max => this.PropertyGroup.GetFloatPropertyMax(this.PropertyId);
 
         public event Action<float, float> OnChange
         {
-            add => this.Properties.AddFloatHandler(this.PropertyId, value);
-            remove => this.Properties.RemoveFloatHandler(this.PropertyId, value);
+            add => this.PropertyGroup.AddFloatHandler(this.PropertyId, value);
+            remove => this.PropertyGroup.RemoveFloatHandler(this.PropertyId, value);
         }
     }
 
@@ -658,19 +719,19 @@ namespace OGT.Properties
 
         public EnumValue Value
         {
-            get => this.Properties.GetEnumPropertyValue(this.PropertyId);
-            set => this.Properties.SetEnumPropertyValue(this.PropertyId, value);
+            get => this.PropertyGroup.GetEnumPropertyValue(this.PropertyId);
+            set => this.PropertyGroup.SetEnumPropertyValue(this.PropertyId, value);
         }
 
         public int CurrentValueIndex
         {
-            get => this.Properties.GetEnumPropertyIndex(this.PropertyId);
+            get => this.PropertyGroup.GetEnumPropertyIndex(this.PropertyId);
         }
 
         public event Action<EnumValue, EnumValue> OnChange
         {
-            add => this.Properties.AddEnumHandler(this.PropertyId, value);
-            remove => this.Properties.RemoveEnumHandler(this.PropertyId, value);
+            add => this.PropertyGroup.AddEnumHandler(this.PropertyId, value);
+            remove => this.PropertyGroup.RemoveEnumHandler(this.PropertyId, value);
         }
     }
 }

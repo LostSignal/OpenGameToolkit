@@ -145,7 +145,7 @@ namespace OGT
             }
 
             // Early out if we can't play or we're muted
-            if (this.CanPlay() == false || this.audioChannel.IsMuted || this.audioChannel.Volume == 0.0f)
+            if (this.CanPlay() == false || audioManager.IsMuted || this.audioChannel.Volume < 0.001f)
             {
                 return null;
             }

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 622551a7b35bd9e4a85202b3652c2ba6, type: 3}
-  m_Name: OGT Default
+  m_Name: OGT Localization Default
   m_EditorClassIdentifier: OGT.Common::OGT.LocalizationTable
   tableId: OGT_DEFAULT
   entries: []

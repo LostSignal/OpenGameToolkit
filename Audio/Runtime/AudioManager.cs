@@ -6,6 +6,7 @@
 
 namespace OGT
 {
+    using OGT.Properties;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using UnityEngine;
@@ -15,12 +16,15 @@ namespace OGT
         private static readonly OGTLogger Logger = OGTLogger.Audio;
 
 #pragma warning disable 0649
+        [SerializeField] private BoolProperty isMutedProperty;
         [SerializeField] private AudioBlockInstance audioBlockInstancePrefab;
         [SerializeField] private List<AudioChannel> audioChannels;
 #pragma warning restore 0649
 
         private CameraManager cameraManager;
         private SpawnManager spawnManager;
+
+        public bool IsMuted => this.isMutedProperty.Value;
 
         public bool ContainsAudioChannel(AudioChannel channel)
         {
@@ -47,26 +51,19 @@ namespace OGT
             }
         }
 
-        protected override Task InitializeManager(Bootloader bootloader)
+        protected override async Task InitializeManager(Bootloader bootloader)
         {
             this.cameraManager = bootloader.FindManager<CameraManager>();
             this.spawnManager = bootloader.FindManager<SpawnManager>();
 
-            // Initialize Audio Channels
-            for (int i = 0; i < this.audioChannels.Count; i++)
-            {
-                this.audioChannels[i].Load();
-            }
+            var propertyGroupManager = bootloader.FindManager<PropertyGroupManager>();
 
-            return Task.CompletedTask;
-        }
+            await propertyGroupManager.WaitForInitialization();
 
-        public void SaveAudioSettings()
-        {
-            foreach (var audioChannel in this.audioChannels)
+            this.isMutedProperty.OnChange += (oldValue, newValue) =>
             {
-                audioChannel.Save();
-            }
+                //// TODO [bgish]: Go through the whole pool of items and mute them individually. Make sure that we save off their volume so that if we unmute it we can restore it. 
+            };
         }
 
         public AudioBlockInstance GetAudioBlockInstance(Transform parent, Vector3 position, bool isPositionalAudio)

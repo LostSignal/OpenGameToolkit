@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae2c9604ef9846a43bdb05894105f7df, type: 3}
   m_Name: OGT Properties
   m_EditorClassIdentifier: OGT.Common::OGT.Properties.Properties
+  groupId: 0
   type: 0
   properties:
   - rid: 3424312549937775466
-  - rid: 3424312549937775467
-  - rid: 3424312549937775468
+  - rid: 3424312549937775583
+  - rid: 3424312549937775584
+  - rid: 3424312549937775585
   references:
     version: 2
     RefIds:
@@ -27,21 +29,30 @@ MonoBehaviour:
         name: Audio.IsMuted
         defaultValue: 0
         currentValue: 0
-    - rid: 3424312549937775467
-      type: {class: PropertyGroup/FloatProperty, ns: OGT.Properties, asm: OGT.Unity.Core}
+    - rid: 3424312549937775583
+      type: {class: PropertyGroup/IntProperty, ns: OGT.Properties, asm: OGT.Unity.Core}
       data:
         id: 2
         name: Audio.MusicVolume
-        defaultValue: 0.5
+        defaultValue: 50
         currentValue: 0
-        min: -3.4028235e+38
-        max: 3.4028235e+38
-    - rid: 3424312549937775468
-      type: {class: PropertyGroup/FloatProperty, ns: OGT.Properties, asm: OGT.Unity.Core}
+        min: 0
+        max: 100
+    - rid: 3424312549937775584
+      type: {class: PropertyGroup/IntProperty, ns: OGT.Properties, asm: OGT.Unity.Core}
       data:
         id: 3
         name: Audio.SfxVolume
-        defaultValue: 0.5
+        defaultValue: 50
         currentValue: 0
-        min: -3.4028235e+38
-        max: 3.4028235e+38
+        min: 0
+        max: 100
+    - rid: 3424312549937775585
+      type: {class: PropertyGroup/IntProperty, ns: OGT.Properties, asm: OGT.Unity.Core}
+      data:
+        id: 4
+        name: Audio.VoiceOver
+        defaultValue: 50
+        currentValue: 0
+        min: 0
+        max: 100

@@ -10,9 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 26d06108ed4a4e242b1045dea5ac318a, type: 3}
-  m_Name: SFX
+  m_Name: Music
   m_EditorClassIdentifier: 
-  volumeKey: AudioChannel.SFX.Volume
-  isMutedKey: AudioChannel.SFX.IsMuted
-  defaultVolume: 1
-  defaultIsMuted: 0
+  volumeProperty:
+    propertyGroup: {fileID: 11400000, guid: f432b518c044882468cde4d863509a7a, type: 2}
+    propertyId: 2
