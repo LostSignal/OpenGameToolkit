@@ -2326,7 +2326,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: OGT.Common::OGT.Properties.PropertyManager
   propertyGroups:
   - {fileID: 11400000, guid: f432b518c044882468cde4d863509a7a, type: 2}
-  - {fileID: 11400000, guid: 95c15c8424b1c8e448cbc930109f4405, type: 2}
 --- !u!1 &4549811178633978525
 GameObject:
   m_ObjectHideFlags: 0
