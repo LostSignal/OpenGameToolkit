@@ -117,9 +117,11 @@ namespace OGT
                     this.canvasGroup.alpha = 1f;
                 }
 
-                this.simpleAnimation.Play(this.show.name);
-
-                yield return WaitForUtil.Seconds(this.show.length);
+                if (this.show != null)
+                {
+                    this.simpleAnimation.Play(this.show.name);
+                    yield return WaitForUtil.Seconds(this.show.length);
+                }
 
                 if (this.canvasGroup != null)
                 {
@@ -171,9 +173,11 @@ namespace OGT
                 this.SetScrollRects(false);
                 yield return null;
 
-                this.simpleAnimation.Play(this.hide.name);
-
-                yield return WaitForUtil.Seconds(this.hide.length);
+                if (this.hide != null)
+                {
+                    this.simpleAnimation.Play(this.hide.name);
+                    yield return WaitForUtil.Seconds(this.hide.length);
+                }
 
                 yield return this.SetMaskableGraphicsCoroutine(false);
                 this.SetTextMeshProTextsScaleStatic(true);

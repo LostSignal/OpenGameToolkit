@@ -29,7 +29,7 @@ namespace OGT
             this.cachedIsEditor = Platform.IsEditor;
 
             //// TODO [bgish]: Move all these to the Platform class so we don't have Unity specific code in here.
-            this.cachedAppVersion = UnityEngine.Application.version;
+            this.cachedAppVersion = Platform.VersionString;
             this.cachedPlatform = UnityEngine.Application.platform.ToString();
             this.cachedDeviceModel = UnityEngine.SystemInfo.deviceModel;
             this.cachedDeviceType = UnityEngine.SystemInfo.deviceType.ToString();

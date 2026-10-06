@@ -23,11 +23,11 @@ namespace OGT
 
             // Constructing the WebResponse
             var webRequest = (HttpWebRequest)WebRequest.Create(uri);
+            webRequest.Headers.Clear();
             webRequest.Method = "POST";
             webRequest.ContentType = "application/json";
             webRequest.ContentLength = data.Length;
             webRequest.KeepAlive = true;
-            webRequest.Headers.Clear();
 
             // Adding basic auth header (if exists)
             if (string.IsNullOrEmpty(basicAuth) == false)

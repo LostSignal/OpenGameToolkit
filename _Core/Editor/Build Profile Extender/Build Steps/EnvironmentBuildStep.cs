@@ -6,10 +6,14 @@
 
 namespace OGT.BuildProfile
 {
+    using System;
     using System.IO;
+    using System.Linq;
+    using System.Reflection;
     using UnityEditor;
     using UnityEditor.Build;
     using UnityEngine;
+    using UnityEngine.Assemblies;
 
     [CreateAssetMenu(fileName = "Environment Build Step", menuName = "OGT/Build Steps/Environment Build Step")]
     public class EnvironmentBuildStep : BuildStep
@@ -45,15 +49,11 @@ namespace OGT.BuildProfile
             this.SetBuildSettings();
             this.DisableCustomKeyStore(target);
             this.SetWebGLSettings(target);
+            this.SetPipelineRuntimeInBuild(target);
 
             if (this.isOgtDevelopmentBuild)
             {
                 Logger.Log("Enable OGT Development Build is not implemented yet");
-            }
-            
-            if (this.enablePipelineRuntimeInBuild)
-            {
-                Logger.Log("Enable Pipeline Runtime in Build is not implemented yet");
             }
         }
 
@@ -82,7 +82,7 @@ namespace OGT.BuildProfile
             if (target != BuildTarget.Android)
             {
                 return;
-            }   
+            }
 
             Logger.Log($"[EnvironmentBuildStep] Setting PlayerSettings.Android.useCustomKeystore to false");
             PlayerSettings.Android.useCustomKeystore = false;
@@ -95,13 +95,13 @@ namespace OGT.BuildProfile
                 return;
             }
 
-            #if UNITY_WEBGL
+#if UNITY_WEBGL
             Logger.Log($"[EnvironmentBuildStep] Setting UnityEditor.WebGL.UserBuildSettings.codeOptimization to {this.codeOptimization}");
             if ((int)UnityEditor.WebGL.UserBuildSettings.codeOptimization != (int)this.codeOptimization)
             {
                 UnityEditor.WebGL.UserBuildSettings.codeOptimization = (UnityEditor.WebGL.WasmCodeOptimization)(int)this.codeOptimization;
             }
-            #endif
+#endif
 
             Logger.Log($"[EnvironmentBuildStep] Setting PlayerSettings.WebGL.nameFilesAsHashes to {this.fileNamesAsHashes}");
             if (PlayerSettings.WebGL.nameFilesAsHashes != this.fileNamesAsHashes)
@@ -111,7 +111,7 @@ namespace OGT.BuildProfile
 
             Logger.Log($"[EnvironmentBuildStep] Setting PlayerSettings.WebGL.dataCaching to {this.dataCaching}");
             if (PlayerSettings.WebGL.dataCaching != this.dataCaching)
-            {                
+            {
                 PlayerSettings.WebGL.dataCaching = this.dataCaching;
             }
         }
@@ -132,6 +132,61 @@ namespace OGT.BuildProfile
                 var simpleWebServerAssetPath = AssetDatabase.GUIDToAssetPath(simpleWebServerAssetGuid);
                 File.WriteAllBytes(simpleWebServerExePath, File.ReadAllBytes(simpleWebServerAssetPath));
             }
+        }
+
+        private void SetPipelineRuntimeInBuild(BuildTarget target)
+        {
+            SetPipelineRuntimeEnableInBuild(target == BuildTarget.WebGL ? false : this.enablePipelineRuntimeInBuild);
+        }
+
+        private static void SetPipelineRuntimeEnableInBuild(bool isEnabled)
+        {
+            var settingsProviderType = Type.GetType("Unity.Pipeline.Editor.RuntimePipelineSettingsProvider, Unity.Pipeline.Editor") ?? CurrentAssemblies.GetLoadedAssemblies()
+                    .Select(a => a.GetType("Unity.Pipeline.Editor.RuntimePipelineSettingsProvider"))
+                    .FirstOrDefault(t => t != null);
+
+            if (settingsProviderType == null)
+            {
+                Logger.LogWarning("[EnvironmentBuildStep] Could not find RuntimePipelineSettingsProvider type via reflection.");
+                return;
+            }
+
+            var loadOrCreateConfigMethod = settingsProviderType.GetMethod("LoadOrCreateConfig", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+
+            if (loadOrCreateConfigMethod == null)
+            {
+                Logger.LogWarning("[EnvironmentBuildStep] Could not find LoadOrCreateConfig() via reflection.");
+                return;
+            }
+
+            var config = loadOrCreateConfigMethod.Invoke(null, null);
+
+            if (config == null)
+            {
+                Logger.LogWarning("[EnvironmentBuildStep] LoadOrCreateConfig() returned null.");
+                return;
+            }
+
+            var configType = config.GetType();
+            var enableInBuildsMember = configType.GetField("enableInBuilds", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+            if (enableInBuildsMember == null)
+            {
+                Logger.LogError("[EnvironmentBuildStep] Could not find enableInBuilds field via reflection.");
+                return;
+            }
+
+            enableInBuildsMember.SetValue(config, isEnabled);
+
+            var saveMethod = configType.GetMethod("Save", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+            if (saveMethod == null)
+            {
+                Logger.LogWarning("[EnvironmentBuildStep] Could not find save/Save method via reflection.");
+                return;
+            }
+
+            saveMethod.Invoke(config, null);
         }
     }
 }

@@ -7,6 +7,7 @@
 namespace OGT.BuildProfile
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -25,7 +26,22 @@ namespace OGT.BuildProfile
         [SerializeField] private string bundleIdentifier;
         [SerializeField] private string version;
         [SerializeField] private Bootloader bootloader;
+
+        [Header("Addressables")]
         [SerializeField] private bool buildAddressables;
+        [SerializeField] private List<string> addressablesToRemoveSearchPatterns = new List<string>
+        {
+            "*_blueprint_*",
+            "*_erk_*",
+            "*_kingdomcome_*",
+            "*_pebble_*",
+            "*_tienlen_*",
+            "*_vibe_*",
+            "*_idiowords_*",
+            "*_matchfu_*",
+            "*_cdg_*",
+            "*_tinytykegames_*",
+        };
 
         [Header("Project Auditor (Editor Hang Post Build Fix)")]
         [LabelWidth(LabelWidth)]
@@ -82,6 +98,7 @@ namespace OGT.BuildProfile
         {
             this.FixWebGLRequestInstancesParameters(target, path);
             this.SetAppUsesNonExemptEncryption(target, path);
+            this.RemoveAddressables(target, path);
         }
 
         private static bool IsUnityCloudBuild()
@@ -108,6 +125,32 @@ namespace OGT.BuildProfile
 
             Logger.Log("[AppInfoBuildStep] Building Addressables...");
             AddressableAssetSettings.BuildPlayerContent();
+        }
+
+        private void RemoveAddressables(BuildTarget target, string path)
+        {
+            if (target == BuildTarget.WebGL || this.addressablesToRemoveSearchPatterns == null || this.addressablesToRemoveSearchPatterns.Count == 0)
+            {
+                return;
+            }
+
+            Logger.Log($"[AppInfoBuildStep] Removing Addressables from Build: {string.Join(", ", this.addressablesToRemoveSearchPatterns)}");
+            var buildFolder = Path.Combine(path, "StreamingAssets", "aa", target.ToString());
+
+            if (Directory.Exists(buildFolder) == false)
+            {
+                Logger.LogWarning($"[AppInfoBuildStep] Addressables Build folder not found at '{buildFolder}'");
+                return;
+            }
+
+            foreach (var addressable in this.addressablesToRemoveSearchPatterns)
+            {
+                foreach (var file in Directory.EnumerateFiles(buildFolder, $"*{addressable}*", SearchOption.AllDirectories))
+                {
+                    Logger.Log($"[AppInfoBuildStep] Removing Addressable '{file}'");
+                    File.Delete(file);
+                }
+            }
         }
 
         private void SetProductName()
@@ -339,78 +382,78 @@ namespace OGT.BuildProfile
             setMethod.Invoke(analyzeAfterBuildSetting, new object[] { false });
             Logger.Log("[AppInfoBuildStep] Set AnalyzeAfterBuild to false via reflection.");
         }
+    }
 
-        private class OGTVersionString
+    public class OGTVersionString
+    {
+        public int? Major { get; private set; }
+        public int? Minor { get; private set; }
+        public int? Patch { get; private set; }
+        public int? Build { get; private set; }
+
+        public static OGTVersionString Parse(string version)
         {
-            public int? Major { get; private set; }
-            public int? Minor { get; private set; }
-            public int? Patch { get; private set; }
-            public int? Build { get; private set; }
+            var parts = string.IsNullOrWhiteSpace(version) ? Array.Empty<string>() : version.Split('.');
 
-            public static OGTVersionString Parse(string version)
+            return new OGTVersionString
             {
-                var parts = string.IsNullOrWhiteSpace(version) ? Array.Empty<string>() : version.Split('.');
+                Major = ParsePart(parts, 0),
+                Minor = ParsePart(parts, 1),
+                Patch = ParsePart(parts, 2),
+                Build = ParsePart(parts, 3),
+            };
+        }
 
-                return new OGTVersionString
-                {
-                    Major = ParsePart(parts, 0),
-                    Minor = ParsePart(parts, 1),
-                    Patch = ParsePart(parts, 2),
-                    Build = ParsePart(parts, 3),
-                };
-            }
+        public string GetVersionString()
+        {
+            return ToVersionString(this.Major, this.Minor, this.Patch, this.Build);
 
-            public string GetVersionString()
+            string ToVersionString(params int?[] parts)
             {
-                return ToVersionString(this.Major, this.Minor, this.Patch, this.Build);
+                int lastNonNullIndex = Array.FindLastIndex(parts, p => p.HasValue);
 
-                string ToVersionString(params int?[] parts)
+                if (lastNonNullIndex < 0)
                 {
-                    int lastNonNullIndex = Array.FindLastIndex(parts, p => p.HasValue);
-
-                    if (lastNonNullIndex < 0)
-                    {
-                        return string.Empty;
-                    }
-
-                    return string.Join('.', parts
-                        .Take(lastNonNullIndex + 1)
-                        .Select(x => x?.ToString() ?? string.Empty));
-                }
-            }
-
-            public void UpdateMajor(int? value) => this.Major = SanitizePart(value);
-
-            public void UpdateMinor(int? value) => this.Minor = SanitizePart(value);
-
-            public void UpdatePatch(int? value) => this.Patch = SanitizePart(value);
-
-            public void UpdateBuild(int? value) => this.Build = SanitizePart(value);
-
-            private static int? ParsePart(string[] parts, int index)
-            {
-                if (parts.Length <= index)
-                {
-                    return null;
+                    return string.Empty;
                 }
 
-                if (string.IsNullOrWhiteSpace(parts[index]))
-                {
-                    return null;
-                }
-
-                return int.TryParse(parts[index], out int parsed) ? Math.Max(0, parsed) : null;
+                return string.Join('.', parts
+                    .Take(lastNonNullIndex + 1)
+                    .Select(x => x?.ToString() ?? string.Empty));
             }
+        }
 
-            private static int? SanitizePart(int? value)
+        public void UpdateMajor(int? value) => this.Major = SanitizePart(value);
+
+        public void UpdateMinor(int? value) => this.Minor = SanitizePart(value);
+
+        public void UpdatePatch(int? value) => this.Patch = SanitizePart(value);
+
+        public void UpdateBuild(int? value) => this.Build = SanitizePart(value);
+
+        private static int? ParsePart(string[] parts, int index)
+        {
+            if (parts.Length <= index)
             {
-                if (value.HasValue == false)
-                {
-                    return null;
-                }
-
-                return Math.Max(0, value.Value);
+                return null;
             }
+
+            if (string.IsNullOrWhiteSpace(parts[index]))
+            {
+                return null;
+            }
+
+            return int.TryParse(parts[index], out int parsed) ? Math.Max(0, parsed) : null;
+        }
+
+        private static int? SanitizePart(int? value)
+        {
+            if (value.HasValue == false)
+            {
+                return null;
+            }
+
+            return Math.Max(0, value.Value);
         }
     }
 }
