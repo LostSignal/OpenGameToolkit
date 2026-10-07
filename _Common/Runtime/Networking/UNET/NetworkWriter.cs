@@ -49,10 +49,10 @@ namespace OGT.Networking
             get { return this.netBuffer.RawBuffer; }
         }
 
-        public short Position
+        public uint Position
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return (short)this.netBuffer.Position; }
+            get { return this.netBuffer.Position; }
         }
 
         public void ResetBuffer(byte[] buffer)
@@ -416,6 +416,11 @@ namespace OGT.Networking
         public void SeekZero()
         {
             this.netBuffer.SeekZero();
+        }
+
+        public void Seek(uint pos)
+        {
+            this.netBuffer.Seek(pos);
         }
 
         public void StartMessage(short msgType)

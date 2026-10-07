@@ -41,17 +41,28 @@ namespace OGT.Properties
         Game,
     }
 
+    public enum PropertyType
+    {
+        Bool,
+        Int,
+        Float,
+        String,
+        Enum
+    }
+
     [CreateAssetMenu(fileName = "Property Group", menuName = "OGT/Properties/Property Group", order = 1)]
     public class PropertyGroup : Resource
     {
+        private static readonly OGTLogger Logger = new OGTLogger("Properties");
+
         [ReadOnly]
-        [SerializeField] private int groupId;
+        [SerializeField] private uint groupId;
         [SerializeField] private PropertyGroupType type;
         [SerializeReference] private List<Property> properties;
 
-        private Dictionary<int, Property> propertyCache = new();
+        private Dictionary<uint, Property> propertyCache = new();
 
-        public int GroupId => this.groupId;
+        public uint GroupId => this.groupId;
 
         public PropertyGroupType GroupType => this.type;
 
@@ -91,6 +102,12 @@ namespace OGT.Properties
             }
         }
 
+        public void ForceInitializeCache()
+        {
+            this.propertyCache.Clear();
+            this.Initialize();
+        }
+
         // Populate the PropertyCache for quick lookup
         public void Initialize()
         {
@@ -114,7 +131,7 @@ namespace OGT.Properties
             }
         }
 
-        public string GetPropertyNameById(int propertyId)
+        public string GetPropertyNameById(uint propertyId)
         {
             this.Initialize();
 
@@ -126,7 +143,7 @@ namespace OGT.Properties
             return null;
         }
 
-        public int GetPropertyIdByName(string propertyName)
+        public uint GetPropertyIdByName(string propertyName)
         {
             foreach (var prop in this.properties)
             {
@@ -139,10 +156,9 @@ namespace OGT.Properties
             throw new KeyNotFoundException($"Property with name {propertyName} not found.");
         }
 
-        public void Serialize(NetworkWriter networkWriter)
+        public int Serialize(NetworkWriter networkWriter)
         {
-            int nonDefaultValueCount = 0;
-            int totalBytesWritten = 0;
+            int propertiesWritten = 0;
 
             foreach (var p in this.properties)
             {
@@ -151,40 +167,55 @@ namespace OGT.Properties
                     case BoolProperty boolProp:
                         if (boolProp.CurrentValue != boolProp.DefaultValue)
                         {
-                            nonDefaultValueCount++;
-                            totalBytesWritten += 1;
+                            propertiesWritten++;
+                            networkWriter.WritePackedUInt32(this.groupId);
+                            networkWriter.WritePackedUInt32(boolProp.Id);
+                            networkWriter.Write((byte)PropertyType.Bool);
+                            networkWriter.Write(boolProp.CurrentValue);
                         }
                         break;
 
                     case IntProperty intProp:
                         if (intProp.CurrentValue != intProp.DefaultValue)
                         {
-                            nonDefaultValueCount++;
-                            totalBytesWritten += 4;
+                            propertiesWritten++;
+                            networkWriter.WritePackedUInt32(this.groupId);
+                            networkWriter.WritePackedUInt32(intProp.Id);
+                            networkWriter.Write((byte)PropertyType.Int);
+                            networkWriter.Write(intProp.CurrentValue);
                         }
                         break;
 
                     case FloatProperty floatProp:
                         if (floatProp.CurrentValue != floatProp.DefaultValue)
                         {
-                            nonDefaultValueCount++;
-                            totalBytesWritten += 4;
+                            propertiesWritten++;
+                            networkWriter.WritePackedUInt32(this.groupId);
+                            networkWriter.WritePackedUInt32(floatProp.Id);
+                            networkWriter.Write((byte)PropertyType.Float);
+                            networkWriter.Write(floatProp.CurrentValue);
                         }
                         break;
 
                     case StringProperty stringProp:
                         if (stringProp.CurrentValue != stringProp.DefaultValue)
                         {
-                            nonDefaultValueCount++;
-                            totalBytesWritten += 2 + System.Text.Encoding.UTF8.GetByteCount(stringProp.CurrentValue);
+                            propertiesWritten++;
+                            networkWriter.WritePackedUInt32(this.groupId);
+                            networkWriter.WritePackedUInt32(stringProp.Id);
+                            networkWriter.Write((byte)PropertyType.String);
+                            networkWriter.Write(stringProp.CurrentValue);
                         }
                         break;
 
                     case EnumProperty enumProp:
                         if (enumProp.CurrentIndex != enumProp.DefaultIndex)
                         {
-                            nonDefaultValueCount++;
-                            totalBytesWritten += 4;
+                            propertiesWritten++;
+                            networkWriter.WritePackedUInt32(this.groupId);
+                            networkWriter.WritePackedUInt32(enumProp.Id);
+                            networkWriter.Write((byte)PropertyType.Enum);
+                            networkWriter.Write(enumProp.CurrentIndex);
                         }
                         break;
 
@@ -193,91 +224,12 @@ namespace OGT.Properties
                 }
             }
 
-            networkWriter.Write(nonDefaultValueCount);
-            networkWriter.Write(totalBytesWritten);
-
-            foreach (var property in this.properties)
-            {
-                bool isDefaultValue = property switch
-                {
-                    BoolProperty boolProp => boolProp.CurrentValue == boolProp.DefaultValue,
-                    IntProperty intProp => intProp.CurrentValue == intProp.DefaultValue,
-                    FloatProperty floatProp => floatProp.CurrentValue == floatProp.DefaultValue,
-                    StringProperty stringProp => stringProp.CurrentValue == stringProp.DefaultValue,
-                    EnumProperty enumProp => enumProp.CurrentIndex == enumProp.DefaultIndex,
-                    _ => throw new InvalidOperationException($"Unsupported property type: {property.GetType()}")
-                };
-
-                if (isDefaultValue)
-                {
-                    continue;
-                }
-
-                networkWriter.Write(property.Id);
-
-                switch (property)
-                {
-                    case BoolProperty boolProp:
-                        networkWriter.Write(boolProp.CurrentValue);
-                        break;
-                    case IntProperty intProp:
-                        networkWriter.Write(intProp.CurrentValue);
-                        break;
-                    case FloatProperty floatProp:
-                        networkWriter.Write(floatProp.CurrentValue);
-                        break;
-                    case StringProperty stringProp:
-                        networkWriter.Write(stringProp.CurrentValue);
-                        break;
-                    case EnumProperty enumProp:
-                        networkWriter.Write(enumProp.CurrentIndex);
-                        break;
-                    default:
-                        throw new InvalidOperationException($"Unsupported property type: {property.GetType()}");
-                }
-            }
-        }
-
-        public void Deserialize(NetworkReader networkReader)
-        {
-            int propertyCount = networkReader.ReadInt32();
-            int bytesToRead = networkReader.ReadInt32();
-
-            for (int i = 0; i < propertyCount; i++)
-            {
-                int propertyId = networkReader.ReadInt32();
-
-                if (!propertyCache.TryGetValue(propertyId, out var property))
-                {
-                    throw new KeyNotFoundException($"Property with ID {propertyId} not found in PropertyGroup {this.name}.");
-                }
-
-                switch (property)
-                {
-                    case BoolProperty boolProp:
-                        boolProp.CurrentValue = networkReader.ReadBoolean();
-                        break;
-                    case IntProperty intProp:
-                        intProp.CurrentValue = networkReader.ReadInt32();
-                        break;
-                    case FloatProperty floatProp:
-                        floatProp.CurrentValue = networkReader.ReadSingle();
-                        break;
-                    case StringProperty stringProp:
-                        stringProp.CurrentValue = networkReader.ReadString();
-                        break;
-                    case EnumProperty enumProp:
-                        enumProp.CurrentIndex = networkReader.ReadInt32();
-                        break;
-                    default:
-                        throw new InvalidOperationException($"Unsupported property type: {property.GetType()}");
-                }
-            }
+            return propertiesWritten;
         }
 
         //// ---------------------- Getters and Setters for properties ----------------------
 
-        public bool GetBoolPropertyValue(int propertyId)
+        public bool GetBoolPropertyValue(uint propertyId)
         {
             this.Initialize();
 
@@ -289,7 +241,7 @@ namespace OGT.Properties
             throw new KeyNotFoundException($"Bool property with ID {propertyId} not found.");
         }
 
-        public void SetBoolPropertyValue(int propertyId, bool value)
+        public void SetBoolPropertyValue(uint propertyId, bool value)
         {
             this.Initialize();
 
@@ -301,11 +253,11 @@ namespace OGT.Properties
             }
             else
             {
-                throw new KeyNotFoundException($"Bool property with ID {propertyId} not found.");
+                Logger.LogError($"Bool property with ID {propertyId} not found.");
             }
         }
 
-        public int GetIntPropertyValue(int propertyId)
+        public int GetIntPropertyValue(uint propertyId)
         {
             this.Initialize();
 
@@ -317,7 +269,7 @@ namespace OGT.Properties
             throw new KeyNotFoundException($"Int property with ID {propertyId} not found.");
         }
 
-        public void SetIntPropertyValue(int propertyId, int value)
+        public void SetIntPropertyValue(uint propertyId, int value)
         {
             this.Initialize();
 
@@ -335,11 +287,11 @@ namespace OGT.Properties
             }
             else
             {
-                throw new KeyNotFoundException($"Int property with ID {propertyId} not found.");
+                Logger.LogError($"Int property with ID {propertyId} not found.");
             }
         }
 
-        public int GetIntPropertyMinValue(int propertyId)
+        public int GetIntPropertyMinValue(uint propertyId)
         {
             this.Initialize();
 
@@ -351,7 +303,7 @@ namespace OGT.Properties
             throw new KeyNotFoundException($"Int property with ID {propertyId} not found.");
         }
 
-        public int GetIntPropertyMaxValue(int propertyId)
+        public int GetIntPropertyMaxValue(uint propertyId)
         {
             this.Initialize();
 
@@ -363,7 +315,7 @@ namespace OGT.Properties
             throw new KeyNotFoundException($"Int property with ID {propertyId} not found.");
         }
 
-        public float GetFloatPropertyValue(int propertyId)
+        public float GetFloatPropertyValue(uint propertyId)
         {
             this.Initialize();
 
@@ -375,7 +327,7 @@ namespace OGT.Properties
             throw new KeyNotFoundException($"Float property with ID {propertyId} not found.");
         }
 
-        public float GetFloatPropertyMin(int propertyId)
+        public float GetFloatPropertyMin(uint propertyId)
         {
             this.Initialize();
 
@@ -387,7 +339,7 @@ namespace OGT.Properties
             throw new KeyNotFoundException($"Float property with ID {propertyId} not found.");
         }
 
-        public float GetFloatPropertyMax(int propertyId)
+        public float GetFloatPropertyMax(uint propertyId)
         {
             this.Initialize();
 
@@ -399,7 +351,7 @@ namespace OGT.Properties
             throw new KeyNotFoundException($"Float property with ID {propertyId} not found.");
         }
 
-        public void SetFloatPropertyValue(int propertyId, float value)
+        public void SetFloatPropertyValue(uint propertyId, float value)
         {
             this.Initialize();
 
@@ -416,11 +368,11 @@ namespace OGT.Properties
             }
             else
             {
-                throw new KeyNotFoundException($"Float property with ID {propertyId} not found.");
+                Logger.LogError($"Float property with ID {propertyId} not found.");
             }
         }
 
-        public EnumValue GetEnumPropertyValue(int propertyId)
+        public EnumValue GetEnumPropertyValue(uint propertyId)
         {
             this.Initialize();
 
@@ -432,7 +384,7 @@ namespace OGT.Properties
             throw new KeyNotFoundException($"Enum property with ID {propertyId} not found.");
         }
 
-        public int GetEnumPropertyIndex(int propertyId)
+        public int GetEnumPropertyIndex(uint propertyId)
         {
             this.Initialize();
 
@@ -444,7 +396,33 @@ namespace OGT.Properties
             throw new KeyNotFoundException($"Enum property with ID {propertyId} not found.");
         }
 
-        public void SetEnumPropertyValue(int propertyId, EnumValue value)
+        public void SetEnumPropertyValueByIndex(uint propertyId, int enumValueIndex)
+        {
+            this.Initialize();
+
+            if (propertyCache.TryGetValue(propertyId, out var prop) && prop is EnumProperty enumProp)
+            {
+                if (enumValueIndex < 0 || enumValueIndex >= enumProp.EnumType.EnumValues.Count)
+                {
+                    throw new ArgumentOutOfRangeException($"Index {enumValueIndex} is out of range for Enum {enumProp.EnumType.name}.");
+                }
+
+                int newIndex = enumValueIndex;
+                var oldIndex = enumProp.CurrentIndex;
+
+                if (newIndex != oldIndex)
+                {
+                    enumProp.CurrentIndex = newIndex;
+                    enumProp.OnChange?.Invoke(enumProp.EnumType.EnumValues[oldIndex], enumProp.EnumType.EnumValues[newIndex]);
+                }
+            }
+            else
+            {
+                Logger.LogError($"Enum property with ID {propertyId} not found.");
+            }
+        }
+
+        public void SetEnumPropertyValue(uint propertyId, EnumValue value)
         {
             this.Initialize();
 
@@ -467,11 +445,11 @@ namespace OGT.Properties
             }
             else
             {
-                throw new KeyNotFoundException($"Enum property with ID {propertyId} not found.");
+                Logger.LogError($"Enum property with ID {propertyId} not found.");
             }
         }
 
-        public string GetStringPropertyValue(int propertyId)
+        public string GetStringPropertyValue(uint propertyId)
         {
             this.Initialize();
 
@@ -483,7 +461,7 @@ namespace OGT.Properties
             throw new KeyNotFoundException($"String property with ID {propertyId} not found.");
         }
 
-        public void SetStringPropertyValue(int propertyId, string value)
+        public void SetStringPropertyValue(uint propertyId, string value)
         {
             this.Initialize();
 
@@ -495,13 +473,13 @@ namespace OGT.Properties
             }
             else
             {
-                throw new KeyNotFoundException($"String property with ID {propertyId} not found.");
+                Logger.LogError($"String property with ID {propertyId} not found.");
             }
         }
 
         //// ---------------------- Event Handlers for property changes ----------------------
 
-        public void AddBoolHandler(int propertyId, Action<bool, bool> action)
+        public void AddBoolHandler(uint propertyId, Action<bool, bool> action)
         {
             this.Initialize();
 
@@ -515,7 +493,7 @@ namespace OGT.Properties
             }
         }
 
-        public void RemoveBoolHandler(int propertyId, Action<bool, bool> action)
+        public void RemoveBoolHandler(uint propertyId, Action<bool, bool> action)
         {
             this.Initialize();
 
@@ -529,7 +507,7 @@ namespace OGT.Properties
             }
         }
 
-        public void AddIntHandler(int propertyId, Action<int, int> action)
+        public void AddIntHandler(uint propertyId, Action<int, int> action)
         {
             this.Initialize();
 
@@ -543,7 +521,7 @@ namespace OGT.Properties
             }
         }
 
-        public void RemoveIntHandler(int propertyId, Action<int, int> action)
+        public void RemoveIntHandler(uint propertyId, Action<int, int> action)
         {
             this.Initialize();
 
@@ -557,7 +535,7 @@ namespace OGT.Properties
             }
         }
 
-        public void AddFloatHandler(int propertyId, Action<float, float> action)
+        public void AddFloatHandler(uint propertyId, Action<float, float> action)
         {
             this.Initialize();
 
@@ -571,7 +549,7 @@ namespace OGT.Properties
             }
         }
 
-        public void RemoveFloatHandler(int propertyId, Action<float, float> action)
+        public void RemoveFloatHandler(uint propertyId, Action<float, float> action)
         {
             this.Initialize();
 
@@ -585,7 +563,7 @@ namespace OGT.Properties
             }
         }
 
-        public void AddStringHandler(int propertyId, Action<string, string> action)
+        public void AddStringHandler(uint propertyId, Action<string, string> action)
         {
             this.Initialize();
 
@@ -599,7 +577,7 @@ namespace OGT.Properties
             }
         }
 
-        public void RemoveStringHandler(int propertyId, Action<string, string> action)
+        public void RemoveStringHandler(uint propertyId, Action<string, string> action)
         {
             this.Initialize();
 
@@ -613,7 +591,7 @@ namespace OGT.Properties
             }
         }
 
-        public void AddEnumHandler(int propertyId, Action<EnumValue, EnumValue> action)
+        public void AddEnumHandler(uint propertyId, Action<EnumValue, EnumValue> action)
         {
             this.Initialize();
 
@@ -627,7 +605,7 @@ namespace OGT.Properties
             }
         }
 
-        public void RemoveEnumHandler(int propertyId, Action<EnumValue, EnumValue> action)
+        public void RemoveEnumHandler(uint propertyId, Action<EnumValue, EnumValue> action)
         {
             this.Initialize();
 
@@ -654,6 +632,18 @@ namespace OGT.Properties
             return this.properties.Last() as T;
         }
 
+        private Property GetPropertyById(uint propertyId)
+        {
+            this.Initialize();
+
+            if (propertyCache.TryGetValue(propertyId, out var prop))
+            {
+                return prop;
+            }
+
+            return null;
+        }
+
         //// ---------------------- Types ----------------------
 
         [Serializable]
@@ -662,7 +652,7 @@ namespace OGT.Properties
             [SerializeField] private int id;
             [SerializeField] private string name;
 
-            public int Id { get => this.id; set => this.id = value; }
+            public uint Id { get => (uint)this.id; set => this.id = (int)value; }
 
             public string Name { get => this.name; set => this.name = value; }
 
@@ -746,7 +736,7 @@ namespace OGT.Properties
     {
         [FormerlySerializedAs("properties")]
         [SerializeField][JsonProperty] private PropertyGroup propertyGroup;
-        [SerializeField][JsonProperty] private int propertyId;
+        [SerializeField][JsonProperty] private uint propertyId;
 
         [JsonIgnore]
         public string Name => propertyGroup?.GetPropertyNameById(propertyId);
@@ -762,7 +752,7 @@ namespace OGT.Properties
         }
 
         [JsonIgnore]
-        public int PropertyId
+        public uint PropertyId
         {
             get => propertyId;
             set => propertyId = value;

@@ -100,9 +100,9 @@ namespace OGT.Properties
                 {
                     EditorGUI.showMixedValue = idProperty.hasMultipleDifferentValues;
 
-                    if (PropertyDropdown(fieldRect, currentGroup, valueType, idProperty.intValue, out int newId))
+                    if (PropertyDropdown(fieldRect, currentGroup, valueType, (uint)idProperty.intValue, out uint newId))
                     {
-                        idProperty.intValue = newId;
+                        idProperty.intValue = (int)newId;
                     }
 
                     EditorGUI.showMixedValue = false;
@@ -137,7 +137,7 @@ namespace OGT.Properties
 
             propertyRect = EditorGUI.PrefixLabel(propertyRect, new GUIContent("Property"));
 
-            if (PropertyDropdown(propertyRect, property.PropertyGroup, property.Type, property.PropertyId, out int newId))
+            if (PropertyDropdown(propertyRect, property.PropertyGroup, property.Type, property.PropertyId, out uint newId))
             {
                 property.PropertyId = newId;
             }
@@ -184,13 +184,13 @@ namespace OGT.Properties
             return false;
         }
 
-        private static bool PropertyDropdown(Rect rect, PropertyGroup group, Type valueType, int currentId, out int selectedId)
+        private static bool PropertyDropdown(Rect rect, PropertyGroup group, Type valueType, uint currentId, out uint selectedId)
         {
             int controlId = GUIUtility.GetControlID(PropertyDropdownHint, FocusType.Keyboard, rect);
 
             if (TryConsumePendingValue(controlId, out object value))
             {
-                selectedId = (int)value;
+                selectedId = (uint)value;
                 return selectedId != currentId;
             }
 
@@ -233,7 +233,7 @@ namespace OGT.Properties
 
                 foreach (var entry in entries)
                 {
-                    int id = entry.Id;
+                    uint id = entry.Id;
                     string menuPath = GetDisplayName(entry).Replace('.', '/');
                     menu.AddItem(new GUIContent(menuPath), id == currentId, () => SetPendingValue(controlId, id, window));
                 }

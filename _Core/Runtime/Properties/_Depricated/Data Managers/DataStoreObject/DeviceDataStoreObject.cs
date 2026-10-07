@@ -26,8 +26,8 @@ namespace OGT
         {
             if (this.DataStore.IsDirty)
             {
-                int length = this.DataStore.Serialize(Caching.ByteBuffer);
-                Platform.SaveLocalFile(this.name, Caching.ByteBuffer, 0, length);
+                uint length = this.DataStore.Serialize(Caching.ByteBuffer);
+                Platform.SaveLocalFile(this.name, Caching.ByteBuffer, 0, (int)length);
             }
         }
     }

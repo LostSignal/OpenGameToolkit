@@ -184,6 +184,16 @@ namespace OGT.Networking
             this.position = 0;
         }
 
+        public void Seek(uint pos)
+        {
+            if (pos > this.byteBuffer.Length)
+            {
+                throw new IndexOutOfRangeException("NetworkBuffer:Seek out of range:" + this.ToString());
+            }
+
+            this.position = pos;
+        }
+
         public void Replace(byte[] buffer)
         {
             this.byteBuffer = buffer;

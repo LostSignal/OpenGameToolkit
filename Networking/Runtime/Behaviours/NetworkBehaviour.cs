@@ -64,7 +64,7 @@ namespace OGT.Networking
                 Writer.SeekZero();
                 this.Serialize(Writer);
 
-                BehaviourMessage.DataLength = Writer.Position;
+                BehaviourMessage.DataLength = (int)Writer.Position;
                 BehaviourMessage.DataBytes = Writer.RawBuffer;
 
                 this.Identity.SendNetworkMessage(BehaviourMessage, forceReliable || this.sendConfig.SendReliable);

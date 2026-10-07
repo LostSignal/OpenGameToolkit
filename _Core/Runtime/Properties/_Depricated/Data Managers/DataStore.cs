@@ -58,7 +58,7 @@ namespace OGT
             get => this.isDirty;
         }
 
-        public int Serialize(byte[] saveDataBuffer)
+        public uint Serialize(byte[] saveDataBuffer)
         {
             this.isDirty = false;
 
@@ -155,7 +155,7 @@ namespace OGT
                 }
             }
 
-            int byteCount = Writer.Position;
+            uint byteCount = Writer.Position;
             Writer.ResetBuffer(null);
             return byteCount;
         }

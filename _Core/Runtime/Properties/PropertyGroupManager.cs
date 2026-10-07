@@ -4,11 +4,13 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Threading.Tasks;
+using OGT.Networking;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using OGT.Networking;
+using System.Threading.Tasks;
 using UnityEngine;
+using static OGT.Properties.PropertyGroup;
 
 namespace OGT.Properties
 {
@@ -17,8 +19,8 @@ namespace OGT.Properties
         private const string PlayerPrefsKey = "PropertyGroupDeviceData";
 
         private static readonly OGTLogger Logger = new OGTLogger("Properties");
-        private static readonly NetworkReader reader = new();
-        private static readonly NetworkWriter writer = new();
+        private readonly NetworkReader reader = new();
+        private readonly NetworkWriter writer = new();
 
         [SerializeField] private List<PropertyGroup> propertyGroups = new();
         [SerializeField] private bool loadDeviceSettingsOnStartup = true;
@@ -26,14 +28,20 @@ namespace OGT.Properties
 
         protected override Task InitializeManager(Bootloader bootloader)
         {
+            // Making sure the cache is initialized and up to date
+            foreach (var propertyGroup in this.propertyGroups)
+            {
+                propertyGroup.ForceInitializeCache();
+            }
+
             if (this.loadDeviceSettingsOnStartup)
             {
                 var deviceSettingsString = PlayerPrefs.GetString(PlayerPrefsKey, string.Empty);
-
                 if (string.IsNullOrWhiteSpace(deviceSettingsString) == false)
                 {
-                    Logger.Log("PropertyGroupManager: Loading device settings from PlayerPrefs: " + deviceSettingsString);   
+                    Logger.Log("PropertyGroupManager: Loading device settings from PlayerPrefs: " + deviceSettingsString);
                     this.DeserializeDeviceSettingsFromString(deviceSettingsString);
+                    Logger.Log("PropertyGroupManager: Finished loading device settings from PlayerPrefs");
                 }
             }
 
@@ -46,27 +54,33 @@ namespace OGT.Properties
 
             if (this.saveDeviceSettingsOnExit)
             {
-                var deviceSettingsString = this.GetDeviceSettingsAsString();
+                var deviceSettingsString = this.GetDeviceSettingsAsBase64String();
                 Logger.Log("PropertyGroupManager: Saving device settings to PlayerPrefs: " + deviceSettingsString);
                 PlayerPrefs.SetString(PlayerPrefsKey, deviceSettingsString);
             }
         }
 
-        private string GetDeviceSettingsAsString()
+        private string GetDeviceSettingsAsBase64String()
         {
-            writer.SeekZero();
+            int propertiesWritten = 0;
 
-            int deviceTypeCount = this.propertyGroups.Count(x => x.GroupType == PropertyGroupType.Device);
-            writer.Write(deviceTypeCount);
+            // Writing the number of properties written at the beginning of the stream, we will go back and write this value after we finish writing all the properties
+            writer.SeekZero();
+            writer.Write(propertiesWritten);
 
             foreach (var propertyGroup in this.propertyGroups)
             {
                 if (propertyGroup.GroupType == PropertyGroupType.Device)
                 {
-                    writer.Write(propertyGroup.GroupId);
-                    propertyGroup.Serialize(writer);
+                    propertiesWritten += propertyGroup.Serialize(writer);
                 }
             }
+
+            // Go back and write the number of properties written at the beginning of the stream
+            uint position = writer.Position;
+            writer.SeekZero();
+            writer.Write(propertiesWritten);
+            writer.Seek(position);
 
             return writer.ToBase64String();
         }
@@ -75,36 +89,55 @@ namespace OGT.Properties
         {
             if (string.IsNullOrEmpty(base64String))
             {
-                Debug.LogError($"PropertyGroupManager: Base64 string is null or empty.");
+                Logger.LogError($"PropertyGroupManager: Base64 string is null or empty.");
                 return;
             }
 
+            Logger.Log($"PropertyGroupManager: FromBase64String");
             reader.FromBase64String(base64String);
-            reader.SeekZero();
 
-            int deviceTypeCount = reader.ReadInt32();
+            int propertyCount = reader.ReadInt32();
+            PropertyGroup propertyGroup = null;
 
-            for (int i = 0; i < deviceTypeCount; i++)
+            for (int i = 0; i < propertyCount; i++)
             {
-                int groupId = reader.ReadInt32();
-                var propertyGroup = GetPropertyGroup(groupId);
+                uint groupId = reader.ReadPackedUInt32();
+                uint propertyId = reader.ReadPackedUInt32();
+                var propertyType = (PropertyType)reader.ReadByte();
 
-                if (propertyGroup != null)
+                if (propertyGroup == null || propertyGroup.GroupId != groupId)
                 {
-                    propertyGroup.Deserialize(reader);
+                    propertyGroup = this.GetPropertyGroup((int)groupId);
+                }
+
+                if (propertyType == PropertyType.Bool)
+                {
+                    bool value = reader.ReadBoolean();
+                    propertyGroup?.SetBoolPropertyValue(propertyId, value);
+                }
+                else if (propertyType == PropertyType.Int)
+                {
+                    int value = reader.ReadInt32();
+                    propertyGroup?.SetIntPropertyValue(propertyId, value);
+                }
+                else if (propertyType == PropertyType.Float)
+                {
+                    float value = reader.ReadSingle();
+                    propertyGroup?.SetFloatPropertyValue(propertyId, value);
+                }
+                else if (propertyType == PropertyType.String)
+                {
+                    string value = reader.ReadString();
+                    propertyGroup?.SetStringPropertyValue(propertyId, value);
+                }
+                else if (propertyType == PropertyType.Enum)
+                {
+                    int value = reader.ReadInt32();
+                    propertyGroup?.SetEnumPropertyValueByIndex(propertyId, value);
                 }
                 else
                 {
-                    Debug.LogError($"Property Group with id {groupId} not found.");
-
-                    var nonDefaultValuesToRead = reader.ReadInt32();
-                    var bytesToRead = reader.ReadInt32();
-
-                    // Skip the bytes for this property group since we don't have it in our list.
-                    for (int j = 0; j < bytesToRead; j++)
-                    {
-                        reader.ReadByte();
-                    }
+                    throw new InvalidOperationException($"Unsupported property type: {propertyType}");
                 }
             }
         }

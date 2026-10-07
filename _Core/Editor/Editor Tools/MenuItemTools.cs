@@ -7,8 +7,10 @@
 namespace OGT
 {
     using System.IO;
+    using System.Linq;
     using System.Text;
     using UnityEditor;
+    using UnityEditor.SceneManagement;
     using UnityEditor.VersionControl;
     using UnityEngine;
 
@@ -55,6 +57,47 @@ namespace OGT
         public static void ForceRecompile()
         {
             UnityEditor.Compilation.CompilationPipeline.RequestScriptCompilation(UnityEditor.Compilation.RequestScriptCompilationOptions.CleanBuildCache);
+        }
+
+        [MenuItem("Tools/OGT/Utility/Get All Components In Open Prefab", priority = MenuItemPriorities.Utility + 4)]
+        public static void GetAllComponentsInOpenPrefab()
+        {
+            var prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
+
+            if (prefabStage == null || prefabStage.prefabContentsRoot == null)
+            {
+                Logger.LogError("No prefab is currently open in Prefab Mode.");
+                return;
+            }
+
+            var components = prefabStage.prefabContentsRoot
+                .GetComponentsInChildren<Component>(true)
+                .Select(t => t.GetType().FullName)
+                .Distinct()
+                .OrderBy(t => t);
+
+            Logger.Log("Found Components:\n" + string.Join("\n", components));
+        }
+
+        [MenuItem("Tools/OGT/Utility/Get All Images In Open Prefab", priority = MenuItemPriorities.Utility + 5)]
+        public static void GetAllImagesInOpenPrefab()
+        {
+            var prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
+
+            if (prefabStage == null || prefabStage.prefabContentsRoot == null)
+            {
+                Logger.LogError("No prefab is currently open in Prefab Mode.");
+                return;
+            }
+
+            var images = prefabStage.prefabContentsRoot
+                .GetComponentsInChildren<UnityEngine.UI.Image>(true)
+                .Where(image => image.sprite != null)
+                .Select(x => AssetDatabase.GetAssetPath(x.sprite))
+                .Distinct()
+                .OrderBy(t => t);
+
+            Logger.Log("Images Found:\n\n" + string.Join("\n", images) + "\n");
         }
 
         [MenuItem("Tools/OGT/Generate Menu Items", priority = MenuItemPriorities.GenerateMenuItems)]
