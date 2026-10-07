@@ -15,13 +15,16 @@ namespace OGT
     {
         [SerializeField] private IntProperty volumeProperty;
 
+        public IntProperty VolumeProperty
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => this.volumeProperty;
+        }
+
         public float Volume
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                return this.volumeProperty.Value / 100.0f;
-            }
+            get => this.volumeProperty.Value / 100.0f;
         }
     }
 }

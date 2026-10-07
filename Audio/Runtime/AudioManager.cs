@@ -9,11 +9,14 @@ namespace OGT
     using OGT.Properties;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Unity.Scripting.LifecycleManagement;
     using UnityEngine;
 
-    public sealed class AudioManager : Manager
+    [AutoStaticsCleanup]
+    public partial class AudioManager : Manager
     {
         private static readonly OGTLogger Logger = OGTLogger.Audio;
+        private static Dictionary<EntityId, AudioBlockInstance> audioBlockInstances = new();
 
 #pragma warning disable 0649
         [SerializeField] private BoolProperty isMutedProperty;
@@ -21,6 +24,7 @@ namespace OGT
         [SerializeField] private List<AudioChannel> audioChannels;
 #pragma warning restore 0649
 
+        private int lastUpdateVolumeFrameCount = -1;
         private CameraManager cameraManager;
         private SpawnManager spawnManager;
 
@@ -60,15 +64,37 @@ namespace OGT
 
             await propertyGroupManager.WaitForInitialization();
 
-            this.isMutedProperty.OnChange += (oldValue, newValue) =>
+            this.isMutedProperty.OnChange += (oldValue, newValue) => this.UpdateVolume();
+
+            foreach (var audioChannel in this.audioChannels)
             {
-                //// TODO [bgish]: Go through the whole pool of items and mute them individually. Make sure that we save off their volume so that if we unmute it we can restore it. 
-            };
+                audioChannel.VolumeProperty.OnChange += (oldValue, newValue) => this.UpdateVolume();
+            }
+        }
+
+        public void UpdateVolume()
+        {
+            if (this.lastUpdateVolumeFrameCount == Time.frameCount)
+            {
+                return;
+            }
+
+            this.lastUpdateVolumeFrameCount = Time.frameCount;
+
+            foreach (var audioBlockInstance in audioBlockInstances.Values)
+            {
+                audioBlockInstance.UpdateVolume();
+            }
         }
 
         public AudioBlockInstance GetAudioBlockInstance(Transform parent, Vector3 position, bool isPositionalAudio)
         {
             var audioBlockInstance = this.spawnManager.Spawn<AudioBlockInstance>(this.audioBlockInstancePrefab.Spawnable);
+
+            // Tracking all active audio block instances so that we can mute them all if needed. We will remove them from this list when they are stopped.
+            audioBlockInstances ??= new Dictionary<EntityId, AudioBlockInstance>();
+            audioBlockInstances.Add(audioBlockInstance.GetEntityId(), audioBlockInstance);
+            audioBlockInstance.OnStoppeed += () => audioBlockInstances.Remove(audioBlockInstance.GetEntityId());
 
             if (isPositionalAudio)
             {

@@ -13,8 +13,9 @@ namespace OGT
     using System.Collections.Generic;
     using UnityEngine;
 
+    [Unity.Scripting.LifecycleManagement.AutoStaticsCleanup]
     [CreateAssetMenu(menuName = "OGT/Audio/Audio Block")]
-    public class AudioBlock : ScriptableObject, IValidate
+    public partial class AudioBlock : ScriptableObject, IValidate
     {
         private static readonly OGTLogger Logger = OGTLogger.Audio;
         private static AudioManager audioManagerInstance = null;
@@ -76,6 +77,17 @@ namespace OGT
             this.audioBlockInstances.Clear();
         }
 
+        public void FadeOutAndStop(float fadeOutTime)
+        {
+            for (int i = 0; i < this.audioBlockInstances.Count; i++)
+            {
+                if (this.audioBlockInstances[i])
+                {
+                    this.audioBlockInstances[i].FadeOutAndStop(fadeOutTime);
+                }
+            }
+        }
+
         private AudioClip GetAudioClip()
         {
             if (this.audioClips == null || this.audioClips.Length == 0)
@@ -124,7 +136,7 @@ namespace OGT
 
         private AudioBlockInstance InternalPlay(Transform parent, Vector3 position, bool isPositionalAudio, bool isLooping, float pitchPercentageOverride = -1, float volumePercentageOverride = -1)
         {
-            var audioManager = GetAudioManager();
+            var audioManager = this.GetAudioManager();
 
             if (audioManager == null)
             {
@@ -145,26 +157,23 @@ namespace OGT
             }
 
             // Early out if we can't play or we're muted
-            if (this.CanPlay() == false || audioManager.IsMuted || this.audioChannel.Volume < 0.001f)
+            if (this.CanPlay() == false)
             {
                 return null;
             }
 
             AudioBlockInstance audioBlockInstance = audioManager.GetAudioBlockInstance(parent, position, isPositionalAudio);
-            audioBlockInstance.SetAudioBlock(this);
+            audioBlockInstance.SetAudioBlockData(this.GetAudioManager(), this.audioChannel, this, this.GetVolume(volumePercentageOverride));
 
             AudioSource audioSource = audioBlockInstance.AudioSource;
             audioSource.spatialBlend = isPositionalAudio ? 1.0f : 0.0f;
             audioSource.clip = this.GetAudioClip();
             audioSource.pitch = this.GetPitch(pitchPercentageOverride);
-            audioSource.volume = this.GetVolume(volumePercentageOverride) * this.audioChannel.Volume;
             audioSource.loop = isLooping;
 
             if (this.fadeInTime > 0.0f)
             {
-                float finalVolume = audioSource.volume;
-                audioSource.volume = 0.0f;
-                CoroutineRunner.Instance.StartCoroutine(FadeInVolume(finalVolume, audioSource));
+                audioBlockInstance.FadeInVolume(this.fadeInTime);
             }
 
             audioSource.Play();
@@ -176,19 +185,6 @@ namespace OGT
 
             return audioBlockInstance;
 
-            IEnumerator FadeInVolume(float volume, AudioSource audioSource)
-            {
-                float elapsedTime = 0.0f;
-
-                while (elapsedTime < this.fadeInTime)
-                {
-                    audioSource.volume = Mathf.Lerp(0.0f, volume, elapsedTime / this.fadeInTime);
-                    elapsedTime += Time.deltaTime;
-                    yield return null;
-                }
-
-                audioSource.volume = volume;
-            }
         }
 
         public void AddAudioBlockInstance(AudioBlockInstance instance)

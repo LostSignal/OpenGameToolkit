@@ -6,6 +6,7 @@
 
 namespace OGT
 {
+    using System.Collections;
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
     using UnityEngine;
@@ -20,9 +21,14 @@ namespace OGT
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private PositionConstraint positionConstraint;
         [SerializeField] private Spawnable spawnable;
-        private AudioBlock audioBlock;
+        
+        public System.Action OnStoppeed;
 
+        private AudioManager audioManager;
+        private AudioChannel audioChannel;
+        private AudioBlock audioBlock;
         private SpawnManager spawnManager;
+        private float instanceVolume;
 
         public AudioSource AudioSource
         {
@@ -47,11 +53,25 @@ namespace OGT
             this.spawnManager = bootloader.FindManager<SpawnManager>();
         }
 
-        public void SetAudioBlock(AudioBlock audioBlock)
+        public void SetAudioBlockData(AudioManager audioManager, AudioChannel audioChannel, AudioBlock audioBlock, float instanceVolume)
         {
             this.audioBlock = audioBlock;
             this.audioBlock.AddAudioBlockInstance(this);
+
+            this.audioManager = audioManager;
+            this.audioChannel = audioChannel;
+            this.SetInstanceVolume(instanceVolume);
         }
+
+        public float GetInstanceVolume() => this.instanceVolume;
+
+        public void SetInstanceVolume(float instanceVolume)
+        {
+            this.instanceVolume = instanceVolume;
+            AudioSource.volume = this.instanceVolume * this.audioChannel.Volume * (this.audioManager.IsMuted ? 0 : 1);
+        }
+
+        public void UpdateVolume() => this.SetInstanceVolume(this.instanceVolume);
 
         public void UpdatePitch(float newPitch)
         {
@@ -85,9 +105,51 @@ namespace OGT
             this.positionConstraint.enabled = true;
         }
 
+        public Coroutine FadeInVolume(float fadeInTime)
+        {
+            return CoroutineRunner.Instance.StartCoroutine(Coroutine());
+
+            IEnumerator Coroutine()
+            { 
+                float elapsedTime = 0.0f;
+                float volume = this.GetInstanceVolume();
+
+                while (elapsedTime < fadeInTime)
+                {
+                    this.SetInstanceVolume(Mathf.Lerp(0.0f, volume, elapsedTime / fadeInTime));
+                    elapsedTime += Time.deltaTime;
+                    yield return null;
+                }
+
+                this.SetInstanceVolume(volume);
+            }
+        }
+
+        public Coroutine FadeOutAndStop(float fadeOutTime)
+        {
+            return CoroutineRunner.Instance.StartCoroutine(Coroutine());
+
+            IEnumerator Coroutine()
+            {
+                float elapsedTime = 0.0f;
+                float volume = this.GetInstanceVolume();
+
+                while (elapsedTime < fadeOutTime)
+                {
+                    this.SetInstanceVolume(Mathf.Lerp(volume, 0.0f, elapsedTime / fadeOutTime));
+                    elapsedTime += Time.deltaTime;
+                    yield return null;
+                }
+
+                this.SetInstanceVolume(0.0f);
+                this.Stop();
+            }
+        }
+
         public void Stop()
         {
             this.spawnManager.Despawn(this.spawnable);
+            this.OnStoppeed?.Invoke();
         }
 
         public void OnSpawn()
