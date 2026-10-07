@@ -72,6 +72,8 @@ namespace OGT.Networking
             return this.AsArraySegment().Array;
         }
 
+        public string ToBase64String() => this.netBuffer.ToBase64String();
+
         // http://sqlite.org/src4/doc/trunk/www/varint.wiki
         public void WritePackedUInt32(UInt32 value)
         {

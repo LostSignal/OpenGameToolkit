@@ -161,7 +161,7 @@ namespace OGT.BoardGame.Networking.Tests
             buffer.WriteByte4(1, 2, 3, 4);
             buffer.WriteByte(5);
 
-            string base64 = buffer.ToBase64();
+            string base64 = buffer.ToBase64String();
             Assert.AreEqual(Convert.ToBase64String(new byte[] { 1, 2, 3, 4, 5 }), base64);
 
             var decoded = new NetBuffer();

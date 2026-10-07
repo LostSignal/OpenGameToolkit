@@ -2327,6 +2327,7 @@ MonoBehaviour:
   propertyGroups:
   - {fileID: 11400000, guid: f432b518c044882468cde4d863509a7a, type: 2}
   loadDeviceSettingsOnStartup: 1
+  saveDeviceSettingsOnExit: 1
 --- !u!1 &4549811178633978525
 GameObject:
   m_ObjectHideFlags: 0

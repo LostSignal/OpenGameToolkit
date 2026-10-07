@@ -198,7 +198,7 @@ namespace OGT.Networking
         /// <summary>
         /// Encodes the written portion of the buffer ([0, Position)) as base64.
         /// </summary>
-        public string ToBase64()
+        public string ToBase64String()
         {
             int charCount = 4 * (((int)this.position + 2) / 3);
 

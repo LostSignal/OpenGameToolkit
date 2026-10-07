@@ -67,6 +67,11 @@ namespace OGT.Networking
             get => this.netBuffer.Length;
         }
 
+        public void FromBase64String(string base64)
+        {
+            this.netBuffer.SetBytesFromBase64(base64);
+        }
+
         public void ResetBuffer(byte[] buffer)
         {
             this.netBuffer.ResetBuffer(buffer);

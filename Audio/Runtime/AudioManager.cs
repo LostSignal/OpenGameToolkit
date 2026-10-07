@@ -16,7 +16,7 @@ namespace OGT
     public partial class AudioManager : Manager
     {
         private static readonly OGTLogger Logger = OGTLogger.Audio;
-        private static Dictionary<EntityId, AudioBlockInstance> audioBlockInstances = new();
+        private static Dictionary<EntityId, AudioBlockInstance> audioBlockInstances = null;
 
 #pragma warning disable 0649
         [SerializeField] private BoolProperty isMutedProperty;
@@ -81,6 +81,11 @@ namespace OGT
 
             this.lastUpdateVolumeFrameCount = Time.frameCount;
 
+            if (audioBlockInstances == null)
+            {
+                return;
+            }
+
             foreach (var audioBlockInstance in audioBlockInstances.Values)
             {
                 audioBlockInstance.UpdateVolume();
@@ -113,6 +118,12 @@ namespace OGT
             }
 
             return audioBlockInstance;
+        }
+
+        [EditorEvents.OnExitPlayMode]
+        public static void OnExitPlayMode()
+        {
+            audioBlockInstances?.Clear();
         }
     }
 }

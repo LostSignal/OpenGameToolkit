@@ -27,30 +27,33 @@
 namespace OGT.Properties
 {
     using Newtonsoft.Json;
+    using OGT.Networking;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using UnityEngine;
     using UnityEngine.Serialization;
 
+    public enum PropertyGroupType
+    {
+        Device,
+        Profile,
+        Game,
+    }
+
     [CreateAssetMenu(fileName = "Property Group", menuName = "OGT/Properties/Property Group", order = 1)]
     public class PropertyGroup : Resource
     {
-        private enum PropertyType
-        {
-            Device,
-            Profile,
-            Game,
-        }
-
         [ReadOnly]
         [SerializeField] private int groupId;
-        [SerializeField] private PropertyType type;
+        [SerializeField] private PropertyGroupType type;
         [SerializeReference] private List<Property> properties;
 
         private Dictionary<int, Property> propertyCache = new();
 
         public int GroupId => this.groupId;
+
+        public PropertyGroupType GroupType => this.type;
 
         public string[] GetPropertyNames(Type type)
         {
@@ -134,6 +137,142 @@ namespace OGT.Properties
             }
 
             throw new KeyNotFoundException($"Property with name {propertyName} not found.");
+        }
+
+        public void Serialize(NetworkWriter networkWriter)
+        {
+            int nonDefaultValueCount = 0;
+            int totalBytesWritten = 0;
+
+            foreach (var p in this.properties)
+            {
+                switch (p)
+                {
+                    case BoolProperty boolProp:
+                        if (boolProp.CurrentValue != boolProp.DefaultValue)
+                        {
+                            nonDefaultValueCount++;
+                            totalBytesWritten += 1;
+                        }
+                        break;
+
+                    case IntProperty intProp:
+                        if (intProp.CurrentValue != intProp.DefaultValue)
+                        {
+                            nonDefaultValueCount++;
+                            totalBytesWritten += 4;
+                        }
+                        break;
+
+                    case FloatProperty floatProp:
+                        if (floatProp.CurrentValue != floatProp.DefaultValue)
+                        {
+                            nonDefaultValueCount++;
+                            totalBytesWritten += 4;
+                        }
+                        break;
+
+                    case StringProperty stringProp:
+                        if (stringProp.CurrentValue != stringProp.DefaultValue)
+                        {
+                            nonDefaultValueCount++;
+                            totalBytesWritten += 2 + System.Text.Encoding.UTF8.GetByteCount(stringProp.CurrentValue);
+                        }
+                        break;
+
+                    case EnumProperty enumProp:
+                        if (enumProp.CurrentIndex != enumProp.DefaultIndex)
+                        {
+                            nonDefaultValueCount++;
+                            totalBytesWritten += 4;
+                        }
+                        break;
+
+                    default:
+                        throw new InvalidOperationException($"Unsupported property type: {p.GetType()}");
+                }
+            }
+
+            networkWriter.Write(nonDefaultValueCount);
+            networkWriter.Write(totalBytesWritten);
+
+            foreach (var property in this.properties)
+            {
+                bool isDefaultValue = property switch
+                {
+                    BoolProperty boolProp => boolProp.CurrentValue == boolProp.DefaultValue,
+                    IntProperty intProp => intProp.CurrentValue == intProp.DefaultValue,
+                    FloatProperty floatProp => floatProp.CurrentValue == floatProp.DefaultValue,
+                    StringProperty stringProp => stringProp.CurrentValue == stringProp.DefaultValue,
+                    EnumProperty enumProp => enumProp.CurrentIndex == enumProp.DefaultIndex,
+                    _ => throw new InvalidOperationException($"Unsupported property type: {property.GetType()}")
+                };
+
+                if (isDefaultValue)
+                {
+                    continue;
+                }
+
+                networkWriter.Write(property.Id);
+
+                switch (property)
+                {
+                    case BoolProperty boolProp:
+                        networkWriter.Write(boolProp.CurrentValue);
+                        break;
+                    case IntProperty intProp:
+                        networkWriter.Write(intProp.CurrentValue);
+                        break;
+                    case FloatProperty floatProp:
+                        networkWriter.Write(floatProp.CurrentValue);
+                        break;
+                    case StringProperty stringProp:
+                        networkWriter.Write(stringProp.CurrentValue);
+                        break;
+                    case EnumProperty enumProp:
+                        networkWriter.Write(enumProp.CurrentIndex);
+                        break;
+                    default:
+                        throw new InvalidOperationException($"Unsupported property type: {property.GetType()}");
+                }
+            }
+        }
+
+        public void Deserialize(NetworkReader networkReader)
+        {
+            int propertyCount = networkReader.ReadInt32();
+            int bytesToRead = networkReader.ReadInt32();
+
+            for (int i = 0; i < propertyCount; i++)
+            {
+                int propertyId = networkReader.ReadInt32();
+
+                if (!propertyCache.TryGetValue(propertyId, out var property))
+                {
+                    throw new KeyNotFoundException($"Property with ID {propertyId} not found in PropertyGroup {this.name}.");
+                }
+
+                switch (property)
+                {
+                    case BoolProperty boolProp:
+                        boolProp.CurrentValue = networkReader.ReadBoolean();
+                        break;
+                    case IntProperty intProp:
+                        intProp.CurrentValue = networkReader.ReadInt32();
+                        break;
+                    case FloatProperty floatProp:
+                        floatProp.CurrentValue = networkReader.ReadSingle();
+                        break;
+                    case StringProperty stringProp:
+                        stringProp.CurrentValue = networkReader.ReadString();
+                        break;
+                    case EnumProperty enumProp:
+                        enumProp.CurrentIndex = networkReader.ReadInt32();
+                        break;
+                    default:
+                        throw new InvalidOperationException($"Unsupported property type: {property.GetType()}");
+                }
+            }
         }
 
         //// ---------------------- Getters and Setters for properties ----------------------
