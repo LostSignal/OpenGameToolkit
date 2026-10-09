@@ -6,7 +6,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-#if USING_UNITY_XR_INTERACTION_TOOLKIT
+#if USING_UNITY_XR_MANAGEMENT
 
 namespace OGT.XR
 {
