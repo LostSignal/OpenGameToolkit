@@ -176,16 +176,19 @@ namespace OGT
 
                     if (newMode == Mode.Folder)
                     {
-                        newFileContents.AppendLine($" \"file:{mapping.LocalPath}\",");
+                        newFileContents.Append($" \"file:{mapping.LocalPath}\",");
+                        newFileContents.Append("\n");
                     }
                     else
                     {
-                        newFileContents.AppendLine($" \"{mapping.GitUrl}#{GetLastestGitHash(mapping.LocalPath)}\",");
+                        newFileContents.Append($" \"{mapping.GitUrl}#{GetLastestGitHash(mapping.LocalPath)}\",");
+                        newFileContents.Append("\n");
                     }
                 }
                 else
                 {
-                    newFileContents.AppendLine(line);
+                    newFileContents.Append(line);
+                    newFileContents.Append("\n");
                 }
             }
 
