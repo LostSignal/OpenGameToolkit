@@ -12,3 +12,7 @@ insert_final_newline = true
 charset = utf-8
 end_of_line = lf
 trim_trailing_whitespace = true
+
+[*.meta]
+end_of_line = lf
+insert_final_newline = true
