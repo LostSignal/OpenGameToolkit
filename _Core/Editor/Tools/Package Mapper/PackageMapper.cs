@@ -162,6 +162,12 @@ namespace OGT
 
             foreach (var line in File.ReadAllLines(ManifestPath))
             {
+                // Stop processing the file once we reach the scopedRegistries section
+                if (line.Contains("scopedRegistries"))
+                {
+                    break;
+                }
+
                 if (line.Contains($"\"{mapping.PackageIdentifier}\""))
                 {
                     int colonIndex = line.IndexOf(":");
