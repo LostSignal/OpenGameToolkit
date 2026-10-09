@@ -159,16 +159,17 @@ namespace OGT
 
             // Updating the manifest
             var newFileContents = new StringBuilder();
+            var isInScopedRegistry = false;
 
             foreach (var line in File.ReadAllLines(ManifestPath))
             {
                 // Stop processing the file once we reach the scopedRegistries section
                 if (line.Contains("scopedRegistries"))
                 {
-                    break;
+                    isInScopedRegistry = true;
                 }
 
-                if (line.Contains($"\"{mapping.PackageIdentifier}\""))
+                if (isInScopedRegistry == false && line.Contains($"\"{mapping.PackageIdentifier}\""))
                 {
                     int colonIndex = line.IndexOf(":");
                     newFileContents.Append(line.Substring(0, colonIndex + 1));
