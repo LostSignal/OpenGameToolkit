@@ -43,7 +43,7 @@ namespace OGT.BuildProfile
         [SerializeField] private bool copySimpleWebServer = true;
         [SerializeField] private bool fileNamesAsHashes = true;
         [SerializeField] private bool dataCaching = false;
-
+                
         public override void OnPreprocessBuild(BuildProfileExtender.Environment environment, BuildTarget target)
         {
             this.SetBuildSettings();
@@ -75,6 +75,9 @@ namespace OGT.BuildProfile
 
             Logger.Log($"[EnvironmentBuildStep] Setting EditorUserBuildSettings.buildWithDeepProfilingSupport to {this.allowDeepProfiler}");
             EditorUserBuildSettings.buildWithDeepProfilingSupport = this.allowDeepProfiler;
+
+            Logger.Log($"[EnvironmentBuildStep] Setting RuntimeSettings.IsOgtDevelopmentBuild to {this.isOgtDevelopmentBuild}");
+            RuntimeSettings.IsOgtDevelopmentBuild = this.isOgtDevelopmentBuild;
         }
 
         private void DisableCustomKeyStore(BuildTarget target)

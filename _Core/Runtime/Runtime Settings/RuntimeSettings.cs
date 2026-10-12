@@ -7,6 +7,7 @@
 namespace OGT
 {
     using System.Collections.Generic;
+    using UnityEditor;
     using UnityEngine;
 
     public static class RuntimeSettings
@@ -19,6 +20,24 @@ namespace OGT
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetStatics() => Settings = null;
 #endif
+
+        public static bool IsOgtDevelopmentBuild
+        {
+            get => GetSetting("OGT.IsOgtDevelopmentBuild", false);
+            set => SetSetting("OGT.IsOgtDevelopmentBuild", value);
+        }
+
+        public static string SourceControlBranchName
+        {
+            get => GetSetting("OGT.SourceControlBranchName", string.Empty);
+            set => SetSetting("OGT.SourceControlBranchName", value);
+        }
+
+        public static string SourceControlChangeset
+        {
+            get => GetSetting("OGT.SourceControlChangeset", string.Empty);
+            set => SetSetting("OGT.SourceControlChangeset", value);
+        }
 
         public static T GetSetting<T>(string settingsName, T defaultValue = default)
         {
@@ -103,14 +122,6 @@ namespace OGT
             System.IO.File.WriteAllText(GetRuntimeSettingsEditorFilePath(), JsonUtil.Serialize(Settings, true));
         }
 
-#if UNITY_EDITOR
-        [UnityEditor.MenuItem("Test/Show Runtime Settings File Path")]
-#endif
-        private static void PrintRuntimeSettingsEditorFilePath()
-        {
-            Debug.Log(GetRuntimeSettingsEditorFilePath());
-        }
-
         private static string GetRuntimeSettingsEditorFilePath()
         {
             var projectSettingsGeneral = System.IO.File.ReadAllText("ProjectSettings/ProjectSettingsGeneral.asset");
@@ -128,5 +139,22 @@ namespace OGT
 
             return fullPath;
         }
+
+#if UNITY_EDITOR
+
+        [UnityEditor.MenuItem("Tools/OGT/Is Development Build", true)]
+        private static bool IsOgtDevelopmentBuildValidate()
+        {
+            Menu.SetChecked("Tools/OGT/Is Development Build", RuntimeSettings.IsOgtDevelopmentBuild);
+            return true;
+        }
+
+        [UnityEditor.MenuItem("Tools/OGT/Is Development Build", false)]
+        private static void IsOgtDevelopmentBuildMenuItem()
+        {
+            RuntimeSettings.IsOgtDevelopmentBuild = !RuntimeSettings.IsOgtDevelopmentBuild;
+        }
+
+#endif
     }
 }

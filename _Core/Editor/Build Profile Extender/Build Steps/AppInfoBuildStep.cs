@@ -7,7 +7,7 @@
 namespace OGT.BuildProfile
 {
     using System;
-    using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -29,19 +29,6 @@ namespace OGT.BuildProfile
 
         [Header("Addressables")]
         [SerializeField] private bool buildAddressables;
-        [SerializeField] private List<string> addressablesToRemoveSearchPatterns = new List<string>
-        {
-            "*_blueprint_*",
-            "*_erk_*",
-            "*_kingdomcome_*",
-            "*_pebble_*",
-            "*_tienlen_*",
-            "*_vibe_*",
-            "*_idiowords_*",
-            "*_matchfu_*",
-            "*_cdg_*",
-            "*_tinytykegames_*",
-        };
 
         [Header("Project Auditor (Editor Hang Post Build Fix)")]
         [LabelWidth(LabelWidth)]
@@ -82,6 +69,7 @@ namespace OGT.BuildProfile
         public override void OnPrepareForBuild(BuildPlayerContext buildPlayerContext)
         {
             this.DisableProjectAuditorPostBuild();
+            this.SetSourceControlInfo();
             this.BuildAddressables();
         }
 
@@ -98,7 +86,7 @@ namespace OGT.BuildProfile
         {
             this.FixWebGLRequestInstancesParameters(target, path);
             this.SetAppUsesNonExemptEncryption(target, path);
-            this.RemoveAddressables(target, path);
+            this.ResetSourceControlInfo();
         }
 
         private static bool IsUnityCloudBuild()
@@ -125,32 +113,6 @@ namespace OGT.BuildProfile
 
             Logger.Log("[AppInfoBuildStep] Building Addressables...");
             AddressableAssetSettings.BuildPlayerContent();
-        }
-
-        private void RemoveAddressables(BuildTarget target, string path)
-        {
-            if (target == BuildTarget.WebGL || this.addressablesToRemoveSearchPatterns == null || this.addressablesToRemoveSearchPatterns.Count == 0)
-            {
-                return;
-            }
-
-            Logger.Log($"[AppInfoBuildStep] Removing Addressables from Build: {string.Join(", ", this.addressablesToRemoveSearchPatterns)}");
-            var buildFolder = Path.Combine(path, "StreamingAssets", "aa", target.ToString());
-
-            if (Directory.Exists(buildFolder) == false)
-            {
-                Logger.LogWarning($"[AppInfoBuildStep] Addressables Build folder not found at '{buildFolder}'");
-                return;
-            }
-
-            foreach (var addressable in this.addressablesToRemoveSearchPatterns)
-            {
-                foreach (var file in Directory.EnumerateFiles(buildFolder, $"*{addressable}*", SearchOption.AllDirectories))
-                {
-                    Logger.Log($"[AppInfoBuildStep] Removing Addressable '{file}'");
-                    File.Delete(file);
-                }
-            }
         }
 
         private void SetProductName()
@@ -381,6 +343,107 @@ namespace OGT.BuildProfile
 
             setMethod.Invoke(analyzeAfterBuildSetting, new object[] { false });
             Logger.Log("[AppInfoBuildStep] Set AnalyzeAfterBuild to false via reflection.");
+        }
+
+        private void SetSourceControlInfo()
+        {
+            string branchName = System.Environment.GetEnvironmentVariable("SCM_BRANCH");
+            string changeset = System.Environment.GetEnvironmentVariable("SCM_REVISION");
+
+            if (UnityPlatformProvider.IsUnityCloudBuild)
+            {
+                branchName = System.Environment.GetEnvironmentVariable("SCM_BRANCH");
+                changeset = System.Environment.GetEnvironmentVariable("SCM_REVISION");
+            }
+            else
+            {
+                var plasticInfo = PlasticSCMInfo.GetInfo();
+
+                if (plasticInfo != null)
+                {
+                    branchName = plasticInfo.BranchName;
+                    changeset = plasticInfo.Changeset;
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(branchName) == false)
+            {
+                Logger.Log($"[AppInfoBuildStep] Set RuntimeSettings.SourceControlBranchName to '{branchName}'");
+                RuntimeSettings.SourceControlBranchName = branchName;
+            }
+
+            if (string.IsNullOrWhiteSpace(changeset) == false)
+            {
+                Logger.Log($"[AppInfoBuildStep] Set RuntimeSettings.SourceControlChangeset to '{changeset}'");
+                RuntimeSettings.SourceControlChangeset = changeset;
+            }
+        }
+
+        private void ResetSourceControlInfo()
+        {
+            RuntimeSettings.SourceControlBranchName = string.Empty;
+            RuntimeSettings.SourceControlChangeset = string.Empty;
+        }
+    }
+
+    public class PlasticSCMInfo
+    {
+        public string BranchName { get; set; }
+        public string Changeset { get; set; }
+
+        public static PlasticSCMInfo GetInfo(string workspacePath = ".")
+        {
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = "cm",
+                Arguments = "status --xml",
+                WorkingDirectory = workspacePath,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            using var process = Process.Start(startInfo);
+
+            if (process == null)
+            {
+                return null;
+            }                
+
+            string output = process.StandardOutput.ReadToEnd();
+            string error = process.StandardError.ReadToEnd();
+            process.WaitForExit();
+
+            if (process.ExitCode != 0)
+            {
+                throw new Exception($"Plastic status failed: {error}");
+            }
+
+            string changeset = Extract(output, "Changeset");
+            string branch = Extract(output, "WkConfigName");
+            int atIndex = branch.IndexOf('@');
+
+            if (atIndex >= 0)
+            { 
+                branch = branch.Substring(0, atIndex);
+            }
+
+            return new PlasticSCMInfo { Changeset = changeset, BranchName = branch };
+
+            static string Extract(string xml, string tag)
+            {
+                string startTag = $"<{tag}>";
+                string endTag = $"</{tag}>";
+
+                int start = xml.IndexOf(startTag, StringComparison.Ordinal);
+                if (start < 0) return "";
+
+                start += startTag.Length;
+                int end = xml.IndexOf(endTag, start, StringComparison.Ordinal);
+
+                return end < 0 ? "" : xml.Substring(start, end - start);
+            }
         }
     }
 
