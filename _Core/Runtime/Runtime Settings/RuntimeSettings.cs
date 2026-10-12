@@ -23,7 +23,7 @@ namespace OGT
 
         public static bool IsOgtDevelopmentBuild
         {
-            get => GetSetting("OGT.IsOgtDevelopmentBuild", false);
+            get => GetSetting("OGT.IsOgtDevelopmentBuild", true);
             set => SetSetting("OGT.IsOgtDevelopmentBuild", value);
         }
 

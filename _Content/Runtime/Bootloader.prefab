@@ -3320,11 +3320,11 @@ MonoBehaviour:
   maxScreenSize: 1920
   shouldAddEditorResolutions: 1
   editorPortraitResolutions:
-  - Name: Generic Phone
+  - Name: 1080p (Portrait)
     Width: 1080
     Height: 1920
   editorLandscapeResolutions:
-  - Name: 1080p
+  - Name: 1080p (Landscape)
     Width: 1920
     Height: 1080
   - Name: 4k

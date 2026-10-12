@@ -26,7 +26,8 @@ namespace OGT
         private OnBootedDelegate onBooted;
 
         [Header("App Settings")]
-        [SerializeField] private AppOrientation supportedOrientation;
+        [SerializeField] private AppOrientation supportedMobileOrientation;
+        [SerializeField] private AppOrientation supportedDesktopOrientation;
 
         [Header("Startup")]
         [SerializeField] private string startupSceneName;
@@ -35,7 +36,14 @@ namespace OGT
 
         private List<Manager> managers;
 
-        public AppOrientation SupportedOrientation => this.supportedOrientation;
+        public AppOrientation SupportedMobileOrientation => this.supportedMobileOrientation;
+
+        public AppOrientation SupportedDesktopOrientation => this.supportedDesktopOrientation;
+
+        public AppOrientation SupportedOrientation
+        {
+            get => Application.isMobilePlatform ? this.supportedMobileOrientation : this.supportedDesktopOrientation;
+        }
 
         public string StartupSceneName => this.startupSceneName;
 

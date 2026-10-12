@@ -79,6 +79,7 @@ namespace OGT.BuildProfile
             this.SetBundleIdentifier(target);
             this.SetVersion();
             this.SetBootloaderGuid();
+            this.SetBootloaderOrientation(target);
             this.AppendBuildNumberOnUnityCloudBuild(target);
         }
 
@@ -177,6 +178,32 @@ namespace OGT.BuildProfile
                 Logger.Log($"[AppInfoBuildStep] Setting Bootloader Guid to '{bootloaderGuid}'");
                 RuntimeSettings.SetSetting("OGT.Bootloader", bootloaderGuid);
             }
+        }
+
+        private void SetBootloaderOrientation(BuildTarget buildTarget)
+        {
+            var supportedOrientation = buildTarget == BuildTarget.iOS || buildTarget == BuildTarget.Android
+                ? this.bootloader.SupportedMobileOrientation
+                : this.bootloader.SupportedDesktopOrientation;
+
+            bool isBoth = supportedOrientation == AppOrientation.Both;
+            bool isPortrait = supportedOrientation == AppOrientation.Portrait;
+            bool isLandscape = supportedOrientation == AppOrientation.Landscape;
+
+            Logger.Log($"[AppInfoBuildStep] Setting PlayerSettings.defaultInterfaceOrientation to '{UIOrientation.AutoRotation}'");
+            PlayerSettings.defaultInterfaceOrientation = UIOrientation.AutoRotation;
+
+            Logger.Log($"[AppInfoBuildStep] Setting PlayerSettings.allowedAutorotateToPortrait to '{isBoth || isPortrait}'");
+            PlayerSettings.allowedAutorotateToPortrait = isBoth || isPortrait;
+
+            Logger.Log($"[AppInfoBuildStep] Setting PlayerSettings.allowedAutorotateToPortraitUpsideDown to '{isBoth || isPortrait}'");
+            PlayerSettings.allowedAutorotateToPortraitUpsideDown = isBoth || isPortrait;
+
+            Logger.Log($"[AppInfoBuildStep] Setting PlayerSettings.allowedAutorotateToLandscapeLeft to '{isBoth || isLandscape}'");
+            PlayerSettings.allowedAutorotateToLandscapeLeft = isBoth || isLandscape;
+
+            Logger.Log($"[AppInfoBuildStep] Setting PlayerSettings.allowedAutorotateToLandscapeRight to '{isBoth || isLandscape}'");
+            PlayerSettings.allowedAutorotateToLandscapeRight = isBoth || isLandscape;
         }
 
         private void AppendBuildNumberOnUnityCloudBuild(BuildTarget target)
