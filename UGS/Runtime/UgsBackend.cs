@@ -22,6 +22,8 @@ namespace OGT.Backend
 
     public sealed class UgsBackend : Manager, IBackend
     {
+        private static readonly OGTLogger logger = new OGTLogger("Backend");
+
         [SerializeField] private List<string> userDataKeys;
         [SerializeField] private List<string> titleDataKeys;
 
@@ -41,30 +43,36 @@ namespace OGT.Backend
 
         public string UserId => IsLoggedIn ? AuthenticationService.Instance.PlayerId : null;
 
-        protected override Task InitializeManager(Bootloader bootloader)
+        protected override async Task InitializeManager(Bootloader bootloader)
         {
-            return Task.CompletedTask;
+            await this.AnonymousLogin(new LoginInfo
+            {
+                UserDataKeys = this.userDataKeys,
+                TitleDataKeys = this.titleDataKeys
+            });
         }
 
         public async Task<LoginResult> AnonymousLogin(LoginInfo loginInfo)
         {
+            logger.Log("EnsureInitialized()");
             await EnsureInitialized();
 
-            if (!AuthenticationService.Instance.IsSignedIn)
+            if (AuthenticationService.Instance.IsSignedIn == false)
             {
                 AuthenticationService.Instance.Expired += HandleSessionExpired;
                 AuthenticationService.Instance.SignedOut += HandleSignedOut;
 
+                logger.Log("SignInAnonymouslyAsync()");
                 await AuthenticationService.Instance.SignInAnonymouslyAsync();
             }
 
-            await SyncConfiguration();
-            await RefreshVirtualCurrency();
+            // await this.SyncConfiguration(); 
+            // await this.RefreshVirtualCurrency();
 
             // Preload user data keys if provided
             if (loginInfo?.UserDataKeys != null && loginInfo.UserDataKeys.Count > 0)
             {
-                await PreloadUserData(loginInfo.UserDataKeys);
+                await this.PreloadUserData(loginInfo.UserDataKeys);
             }
 
             OnLogIn?.Invoke();
@@ -242,11 +250,9 @@ namespace OGT.Backend
                 : 0;
         }
 
-        public async Task<CloudScriptResult> ExecuteCloudScript(
-            string functionName,
-            object functionParameter = null)
+        public async Task<CloudScriptResult> ExecuteCloudScript(string functionName, object functionParameter = null)
         {
-            await EnsureLoggedIn();
+            await this.EnsureLoggedIn();
 
             try
             {

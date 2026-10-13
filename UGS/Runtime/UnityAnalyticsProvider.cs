@@ -6,6 +6,7 @@
 
 namespace OGT
 {
+    using OGT.Backend;
 #if !USING_UGS_ANALYTICS
 
     // TODO [bgis]: Have a giant warning info box here that says "You are using the Unity Analytics Provider without the UGS Analytics package. Please install the UGS Analytics package to use this provider."
@@ -31,6 +32,7 @@ namespace OGT
 
     public class UnityAnalyticsProvider : GameBehavior, IAnalyticsProvider
     {
+        [SerializeField] private UgsBackend ugsBackend;
         [SerializeField] private bool dontSendEventsInEditor = true;
 
         private static readonly OGTLogger logger = new OGTLogger("Analytics");
@@ -47,18 +49,18 @@ namespace OGT
                 return;
             }
 
+            if (this.ugsBackend == null)
+            {
+                logger.LogError("UGS Backend is not assigned. Unity Analytics Provider cannot be initialized.");
+                return;
+            }
+
             try
             {
-                if (UnityServices.State != ServicesInitializationState.Initialized)
-                {
-                    await UnityServices.InitializeAsync();
-                }
+                logger.Log("Waiting for Unity Gaming Services to initialize...");
+                await this.ugsBackend.WaitForInitialization();
 
-                if (AuthenticationService.Instance.IsSignedIn == false)
-                {
-                    await AuthenticationService.Instance.SignInAnonymouslyAsync();
-                }
-
+                logger.Log("Settings Consent");
                 EndUserConsent.SetConsentState(new ConsentState
                 {
                     AnalyticsIntent = ConsentStatus.Granted,
