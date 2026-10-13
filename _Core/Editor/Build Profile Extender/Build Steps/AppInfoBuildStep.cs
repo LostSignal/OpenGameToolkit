@@ -14,6 +14,7 @@ namespace OGT.BuildProfile
     using UnityEditor;
     using UnityEditor.AddressableAssets.Settings;
     using UnityEditor.Build;
+    using UnityEditor.Build.Profile;
     using UnityEngine;
     using UnityEngine.Assemblies;
 
@@ -367,7 +368,8 @@ namespace OGT.BuildProfile
 
         private void SetBuildProfileInfo()
         {
-            RuntimeSettings.BuildProfileName = this.name;
+            BuildProfile profile = BuildProfile.GetActiveBuildProfile();
+            RuntimeSettings.BuildProfileName = profile?.name;
         }
 
         private void SetSourceControlInfo()
@@ -450,6 +452,7 @@ namespace OGT.BuildProfile
                 throw new Exception($"Plastic status failed: {error}");
             }
 
+            string workspaceConfigType = Extract(output, "WkConfigType");
             string changeset = Extract(output, "Changeset");
             string branch = Extract(output, "WkConfigName");
             int atIndex = branch.IndexOf('@');
@@ -457,6 +460,11 @@ namespace OGT.BuildProfile
             if (atIndex >= 0)
             { 
                 branch = branch.Substring(0, atIndex);
+            }
+
+            if (workspaceConfigType == "Changeset")
+            {
+                branch = "/main";
             }
 
             return new PlasticSCMInfo { Changeset = changeset, BranchName = branch };
