@@ -9,7 +9,6 @@ namespace OGT
     using OGT.Backend;
     using TMPro;
     using UnityEngine;
-    using UnityPipeline.Microsoft.CodeAnalysis.CSharp.Syntax;
 
     public enum DebugLocation
     {
