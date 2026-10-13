@@ -49,7 +49,7 @@ namespace OGT
             private static readonly StringBuilder stringBuilderCache = new StringBuilder();
             private static List<MethodInfo> EditorEventMethods = null;
 
-            private static bool DisableLogging
+            public static bool DisableLogging
             {
                 get => EditorPrefs.GetBool("OGT.DisableEditorEventsLogging", false);
                 set => EditorPrefs.SetBool("OGT.DisableEditorEventsLogging", value);

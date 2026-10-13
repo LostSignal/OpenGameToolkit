@@ -18,7 +18,7 @@ namespace OGT
         private static readonly OGTLogger Logger = OGTLogger.OGTEditor;
 
         [MenuItem("Tools/OGT/References/Find All Outside References (Selected Directory)", priority = MenuItemPriorities.References + 0)]
-        private static void FindAllOutsideReferences()
+        public static void FindAllOutsideReferences()
         {
             string path = AssetDatabase.GetAssetPath(Selection.activeObject);
 
@@ -54,7 +54,7 @@ namespace OGT
         }
 
         [MenuItem("Tools/OGT/References/Find All References Outside Selected Directories", priority = MenuItemPriorities.References + 1)]
-        private static void FindAllReferencesInAssets()
+        public static void FindAllReferencesInAssets()
         {
             var selectedDirecoryGuids = GetSelectedDirectoryGuids();
 

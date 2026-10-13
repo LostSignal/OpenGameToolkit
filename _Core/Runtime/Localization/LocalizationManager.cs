@@ -15,7 +15,34 @@ namespace OGT
     {
         [SerializeField] private List<LocalizationTable> localizationTables;
 
+        [Tooltip("ISO Language Names (ex. English, Vietnamese). If empty, all languages in Localization.GetSupportedLanguages() are supported.")]
+        [SerializeField] private List<string> supportedLanguages = new();
+
         private Dictionary<string, LocalizationTable> localizationTablesById;
+
+        public IEnumerable<Language> SupportedLanguages
+        {
+            get
+            {
+                if (this.supportedLanguages == null || this.supportedLanguages.Count == 0)
+                {
+                    foreach (var language in Localization.Localization.GetSupportedLanguages())
+                    {
+                        yield return language;
+                    }
+
+                    yield break;
+                }
+
+                foreach (var language in Languages.AllLanguages)
+                {
+                    if (this.supportedLanguages.Contains(language.IsoLanguageName))
+                    {
+                        yield return language;
+                    }
+                }
+            }
+        }
 
         public string GetLocalizedString(LocalizedString localizedString)
         {
