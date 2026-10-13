@@ -69,6 +69,7 @@ namespace OGT.BuildProfile
         public override void OnPrepareForBuild(BuildPlayerContext buildPlayerContext)
         {
             this.DisableProjectAuditorPostBuild();
+            this.SetBuildProfileInfo();
             this.SetSourceControlInfo();
             this.BuildAddressables();
         }
@@ -88,15 +89,7 @@ namespace OGT.BuildProfile
             this.FixWebGLRequestInstancesParameters(target, path);
             this.SetAppUsesNonExemptEncryption(target, path);
             this.ResetSourceControlInfo();
-        }
-
-        private static bool IsUnityCloudBuild()
-        {
-#if UNITY_CLOUD_BUILD
-            return true;
-#else
-            return false;
-#endif
+            this.ResetBuildProfileInfo();
         }
 
         private static bool TryGetCloudBuildNumber(out int buildNumber)
@@ -208,7 +201,7 @@ namespace OGT.BuildProfile
 
         private void AppendBuildNumberOnUnityCloudBuild(BuildTarget target)
         {
-            if (IsUnityCloudBuild() == false)
+            if (UnityPlatformProvider.IsUnityCloudBuild == false)
             {
                 Logger.Log("[AppInfoBuildStep] Unity Cloud Build not detected.");
                 return;
@@ -372,6 +365,11 @@ namespace OGT.BuildProfile
             Logger.Log("[AppInfoBuildStep] Set AnalyzeAfterBuild to false via reflection.");
         }
 
+        private void SetBuildProfileInfo()
+        {
+            RuntimeSettings.BuildProfileName = this.name;
+        }
+
         private void SetSourceControlInfo()
         {
             string branchName = System.Environment.GetEnvironmentVariable("SCM_BRANCH");
@@ -410,6 +408,11 @@ namespace OGT.BuildProfile
         {
             RuntimeSettings.SourceControlBranchName = string.Empty;
             RuntimeSettings.SourceControlChangeset = string.Empty;
+        }
+
+        private void ResetBuildProfileInfo()
+        {
+            RuntimeSettings.BuildProfileName = string.Empty;
         }
     }
 

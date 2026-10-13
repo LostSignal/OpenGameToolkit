@@ -39,6 +39,12 @@ namespace OGT
             set => SetSetting("OGT.SourceControlChangeset", value);
         }
 
+        public static string BuildProfileName
+        {
+            get => GetSetting("OGT.BuildProfileName", string.Empty);
+            set => SetSetting("OGT.BuildProfileName", value);
+        }
+
         public static T GetSetting<T>(string settingsName, T defaultValue = default)
         {
             LoadSettings();
