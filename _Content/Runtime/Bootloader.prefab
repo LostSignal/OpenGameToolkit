@@ -2354,6 +2354,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localizationTables:
   - {fileID: 11400000, guid: 0896ad8a841bfef45b56b8c31ec59e38, type: 2}
+  supportedLanguages: []
 --- !u!1 &3639693956350208632
 GameObject:
   m_ObjectHideFlags: 0
@@ -3226,7 +3227,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21cadb08dd66f4044ac8447c1aa6d3aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  supportedOrientation: 0
+  supportedEditorOrientation: 2
+  supportedMobileOrientation: 0
+  supportedDesktopOrientation: 0
   startupSceneName: 
   initialSceneGuid: 
   unloadStartupOnBooted: 0
@@ -3699,9 +3702,9 @@ MonoBehaviour:
   bottomLeftText: {fileID: 8602019556814502431}
   bottomCenterText: {fileID: 2584416631522891387}
   bottomRightText: {fileID: 3743019256844244341}
-  versionString: 5
-  fps: 0
-  userId: 0
+  versionString: 4
+  fps: 3
+  userId: 6
 --- !u!1 &6699997877501635935
 GameObject:
   m_ObjectHideFlags: 0

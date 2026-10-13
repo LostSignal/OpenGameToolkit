@@ -22,6 +22,9 @@ namespace OGT.Backend
 
     public sealed class UgsBackend : Manager, IBackend
     {
+        [SerializeField] private List<string> userDataKeys;
+        [SerializeField] private List<string> titleDataKeys;
+
         public event Action OnLogIn;
         public event Action OnReLogInRequired;
         public event Action<string, int> OnCurrencyChanged;
@@ -35,6 +38,8 @@ namespace OGT.Backend
             initialized &&
             AuthenticationService.Instance != null &&
             AuthenticationService.Instance.IsSignedIn;
+
+        public string UserId => IsLoggedIn ? AuthenticationService.Instance.PlayerId : null;
 
         protected override Task InitializeManager(Bootloader bootloader)
         {

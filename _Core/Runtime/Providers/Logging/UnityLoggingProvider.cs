@@ -33,6 +33,31 @@ namespace OGT
             RuntimeSettings.SetSetting(LoggingChannelsSettingsName, OGTLogger.GetChannels().Select(x => new Channel { Name = x.Name, Level = x.Level }).OrderBy(x => x.Name).ToList());
         }
 
+        public static List<Channel> GetSavedChannels()
+        {
+            return RuntimeSettings.GetSetting<List<Channel>>(LoggingChannelsSettingsName) ?? new List<Channel>();
+        }
+
+        public static void SetSavedChannelLevel(string channelName, LoggingLevel level)
+        {
+            OGTLogger.SetLoggingLevel(channelName, level);
+
+            var channels = GetSavedChannels();
+            var channel = channels.FirstOrDefault(x => x.Name == channelName);
+
+            if (channel == null)
+            {
+                channels.Add(new Channel { Name = channelName, Level = level });
+                channels = channels.OrderBy(x => x.Name).ToList();
+            }
+            else
+            {
+                channel.Level = level;
+            }
+
+            RuntimeSettings.SetSetting(LoggingChannelsSettingsName, channels);
+        }
+
         public void Log(LoggingChannel channel, LoggingLevel level, object context, string message)
         {
             switch (level)
@@ -72,7 +97,7 @@ namespace OGT
             Debug.LogException(exception, context as UnityEngine.Object);
         }
 
-        private class Channel
+        public class Channel
         {
             public string Name { get; set; }
 

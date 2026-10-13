@@ -112,8 +112,8 @@ namespace OGT
             sb.AppendLine($"  url: {Application.absoluteURL}");
 
             AppendHeader(sb, "Screen");
-            sb.AppendLine($"  Screen.orientation: <b>{reported}</b>");
-            sb.AppendLine($"  By size (w vs h): <b>{(sizePortrait ? "Portrait" : "Landscape")}</b>{mismatch}");
+            sb.AppendLine($"  screen.orientation: <b>{reported}</b>");
+            sb.AppendLine($"  by size (w vs h): <b>{(sizePortrait ? "Portrait" : "Landscape")}</b>{mismatch}");
             sb.AppendLine($"  aspect ratio: <b>{GetAspectString(width, height)}</b>");
             sb.AppendLine($"  width x height: {width} x {height}");
             sb.AppendLine($"  currentResolution: {currentResolution.width} x {currentResolution.height} @ {currentResolution.refreshRateRatio.value:F1}Hz");

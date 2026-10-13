@@ -18,6 +18,7 @@ namespace OGT.Backend
 
         // Log in
         bool IsLoggedIn { get; }
+        string UserId { get; }
         Task<LoginResult> AnonymousLogin(LoginInfo loginInfo);
 
         // UserData
