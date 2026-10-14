@@ -2,7 +2,10 @@
     "name": "OGT.BoardGame",
     "rootNamespace": "",
     "references": [
-        "GUID:07eef6138bd086b4a8b900f81c87383a"
+        "GUID:07eef6138bd086b4a8b900f81c87383a",
+        "GUID:1491147abca9d7d4bb7105af628b223e",
+        "GUID:e0cd26848372d4e5c891c569017e11f1",
+        "GUID:5540e30183c82e84b954c033c388e06c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -11,6 +14,17 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.netcode.gameobjects",
+            "expression": "2.0.0",
+            "define": "USING_NETCODE_GAMEOBJECTS"
+        },
+        {
+            "name": "com.unity.services.authentication",
+            "expression": "0.0.0",
+            "define": "USING_UGS_AUTH"
+        }
+    ],
     "noEngineReferences": false
 }
