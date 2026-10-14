@@ -601,6 +601,7 @@ namespace OGT
             }
 
             var ogtVersion = OGTVersionString.Parse(Application.version);
+            var isAndroidPlatform = Application.platform == RuntimePlatform.Android;
             var isIosPlatform = Application.platform == RuntimePlatform.IPhonePlayer;
 
 #if UNITY_EDITOR
