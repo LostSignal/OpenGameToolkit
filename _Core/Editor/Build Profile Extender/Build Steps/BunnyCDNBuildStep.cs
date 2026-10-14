@@ -33,6 +33,8 @@ namespace OGT.BuildProfile
         {
 #if USING_BUNNY_CDN
 
+            Logger.Log($"[BunnyCDNBuildStep] OnPostprocessBuild({environment}, {target}, '{path}')");
+
             // Remove trailing slash from storagePullZoneUrl if it exists
             if (this.storagePullZoneUrl.EndsWith("/"))
             {
@@ -61,6 +63,7 @@ namespace OGT.BuildProfile
             }
 
             Logger.Log($"[BunnyCDNBuildStep] Uploading '{path}' Build to `{this.storageZoneName}`");
+            Logger.Log($"[BunnyCDNBuildStep] fileName = '{fileName}'");
 
             if (this.apiAccessKey.HasKey == false)
             {
@@ -84,8 +87,12 @@ namespace OGT.BuildProfile
                 var storage = new BunnyCDN.Net.Storage.BunnyCDNStorage(this.storageZoneName, this.apiAccessKey.Value, this.mainReplicationRegion);
 
                 // NOTE: Must happen on a separate thread in the Unity Editor or else it will hang
-                var uploadTaask = System.Threading.Tasks.Task.Factory.StartNew(() => storage.UploadLocalDirectory(path, uploadPath).Wait());
-                uploadTaask.Wait();
+
+                Logger.Log($"[BunnyCDNBuildStep] UploadLocalDirectory('{path}', '{uploadPath}')");
+                var uploadTask = System.Threading.Tasks.Task.Factory.StartNew(() => storage.UploadLocalDirectory(path, uploadPath).Wait());
+                uploadTask.Wait();
+
+                Logger.Log($"[BunnyCDNBuildStep] UploadLocalDirectory Task Complete");
 
                 if (this.discordWebhookUrl.HasKey)
                 {
@@ -98,13 +105,28 @@ namespace OGT.BuildProfile
                         $"**Version:** {Platform.VersionString}\n";
 
                     string url = $"{this.storagePullZoneUrl}/{uploadPath}/{fileName}";
+                    
+                    Logger.Log($"[BunnyCDNBuildStep] Posting to Discord webhook '{title}', '{description}', '{url}'");
 
                     // NOTE: Must happen on a separate thread in the Unity Editor or else it will hang
-                    var discordTask = Task.Factory.StartNew(() => DiscordWebhook.PostAsync(Logger, this.discordWebhookUrl.Value, title, description, url).Wait());
+                    var discordTask = Task.Factory.StartNew(() =>
+                    {
+                        try
+                        {
+                            DiscordWebhook.PostAsync(Logger, this.discordWebhookUrl.Value, title, description, url).Wait();
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Log($"[BunnyCDNBuildStep] Discord Webhook Post Failed: {ex.Message}");
+                        }
+                    });
+
                     discordTask.Wait();
+
+                    Logger.Log($"[BunnyCDNBuildStep] Posting to Discord Complete");
                 }
 
-                Logger.Log($"[BunnyCDNBuildStep] Upload Complete");
+                Logger.Log($"[BunnyCDNBuildStep] Build Step Complete");
             }
             catch (Exception ex)
             {
