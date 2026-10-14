@@ -39,10 +39,25 @@ namespace OGT.BuildProfile
                 this.storagePullZoneUrl = this.storagePullZoneUrl.Substring(0, this.storagePullZoneUrl.Length - 1);
             }
 
-            // If the build path is an executable or APK, we want to upload the directory containing it, not the file itself
-            if (path.ToLower().EndsWith(".exe") || path.ToLower().EndsWith(".apk"))
+            string fileName = string.Empty;
+
+            if (target == BuildTarget.WebGL)
             {
+                fileName = "index.html";
+            }
+            else if (target == BuildTarget.Android)
+            {
+                fileName = System.IO.Path.GetFileName(path);
                 path = System.IO.Path.GetDirectoryName(path);
+            }
+            else if (target == BuildTarget.StandaloneWindows || target == BuildTarget.StandaloneWindows64)
+            {
+                fileName = System.IO.Path.GetFileName(path);
+                path = System.IO.Path.GetDirectoryName(path);
+            }
+            else
+            {
+                throw new UnityEditor.Build.BuildFailedException($"[BunnyCDNBuildStep] Unsupported BuildTarget {target}");
             }
 
             Logger.Log($"[BunnyCDNBuildStep] Uploading '{path}' Build to `{this.storageZoneName}`");
@@ -77,20 +92,13 @@ namespace OGT.BuildProfile
                     var title = $"Build Uploaded to BunnyCDN";
 
                     var description =
-                                  $"**Game ID:** {this.gameId}\n" +
-                                  $"**Channel:** {this.channel}\n" +
-                                  $"**Platform:** {this.platform}\n" +
-                                  $"**Version:** {Platform.VersionString}\n";
+                        $"**Game ID:** {this.gameId}\n" +
+                        $"**Channel:** {this.channel}\n" +
+                        $"**Platform:** {this.platform}\n" +
+                        $"**Version:** {Platform.VersionString}\n";
 
-                    bool isWebGL = target == BuildTarget.WebGL;
-                    bool isAndroid = target == BuildTarget.Android;
-                    bool isWindows = target == BuildTarget.StandaloneWindows || target == BuildTarget.StandaloneWindows64;
+                    string url = $"{this.storagePullZoneUrl}/{uploadPath}/{fileName}";
 
-                    string url = isWebGL ? $"{this.storagePullZoneUrl}/{uploadPath}/index.html" :
-                                 isAndroid ? $"{this.storagePullZoneUrl}/{uploadPath}/{System.IO.Path.GetFileName(path)}" :
-                                 isWindows ? $"{this.storagePullZoneUrl}/{uploadPath}/{System.IO.Path.GetFileName(path)}" :
-                                 throw new UnityEditor.Build.BuildFailedException($"[BunnyCDNBuildStep] Failed to construct Discord url for BuildTarget {target}");
-                    
                     // NOTE: Must happen on a separate thread in the Unity Editor or else it will hang
                     var discordTask = Task.Factory.StartNew(() => DiscordWebhook.PostAsync(Logger, this.discordWebhookUrl.Value, title, description, url).Wait());
                     discordTask.Wait();
