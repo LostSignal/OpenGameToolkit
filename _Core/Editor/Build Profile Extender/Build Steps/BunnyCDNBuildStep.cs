@@ -104,8 +104,13 @@ namespace OGT.BuildProfile
                         $"**Platform:** {this.platform}\n" +
                         $"**Version:** {Platform.VersionString}\n";
 
-                    string url = $"{this.storagePullZoneUrl}/{uploadPath}/{fileName}";
-                    
+                    // Escape each path segment so spaces and other special characters produce a valid url
+                    var escapedSegments = Array.ConvertAll(
+                        $"{uploadPath}/{fileName}".Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries),
+                        Uri.EscapeDataString);
+
+                    string url = $"{this.storagePullZoneUrl}/{string.Join("/", escapedSegments)}";
+
                     Logger.Log($"[BunnyCDNBuildStep] Posting to Discord webhook '{title}', '{description}', '{url}'");
 
                     // NOTE: Must happen on a separate thread in the Unity Editor or else it will hang
