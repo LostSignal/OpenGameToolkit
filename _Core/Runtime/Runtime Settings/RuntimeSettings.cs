@@ -7,7 +7,6 @@
 namespace OGT
 {
     using System.Collections.Generic;
-    using UnityEditor;
     using UnityEngine;
 
     public static class RuntimeSettings
@@ -151,7 +150,7 @@ namespace OGT
         [UnityEditor.MenuItem("Tools/OGT/Is Development Build", true)]
         private static bool IsOgtDevelopmentBuildValidate()
         {
-            Menu.SetChecked("Tools/OGT/Is Development Build", RuntimeSettings.IsOgtDevelopmentBuild);
+            UnityEditor.Menu.SetChecked("Tools/OGT/Is Development Build", RuntimeSettings.IsOgtDevelopmentBuild);
             return true;
         }
 

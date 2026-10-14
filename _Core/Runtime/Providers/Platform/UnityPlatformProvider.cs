@@ -37,7 +37,7 @@ namespace OGT
 
         private static UnityDispatcher dispatcher;
 
-        private string versionString;
+        private string versionStringCache;
 
         public UnityPlatformProvider()
         {
@@ -594,26 +594,47 @@ namespace OGT
 
         private string GetVersionString()
         {
-            if (this.versionString == null)
+            // Only cache the version string when not in the editor, since the build number can change in the editor.
+            if (this.versionStringCache != null && Application.isEditor == false)
             {
-                string buildNumer = GetAndroidBuildNumber() ?? GetIOSBuildNumber();
+                return this.versionStringCache;
+            }
 
-                if (buildNumer != null)
+            var ogtVersion = OGTVersionString.Parse(Application.version);
+            var isIosPlatform = Application.platform == RuntimePlatform.IPhonePlayer;
+
+#if UNITY_EDITOR
+            isAndroidPlatform = UnityEditor.EditorUserBuildSettings.activeBuildTarget == UnityEditor.BuildTarget.Android;
+            isIosPlatform = UnityEditor.EditorUserBuildSettings.activeBuildTarget == UnityEditor.BuildTarget.iOS;
+#endif
+
+            if (isAndroidPlatform)
+            {
+                string buildNumber = GetAndroidBuildNumber();
+
+                if (buildNumber != null && int.TryParse(buildNumber, out int buildNumberInt))
                 {
-                    this.versionString = $"{Application.version} ({buildNumer})";
+                    ogtVersion.UpdateBuild(buildNumberInt);
                 }
-                else
+            }
+            else if (isIosPlatform)
+            {
+                string buildNumber = GetIOSBuildNumber();
+                if (buildNumber != null && int.TryParse(buildNumber, out int buildNumberInt))
                 {
-                    this.versionString = Application.version;
+                    ogtVersion.UpdateBuild(buildNumberInt);
                 }
             }
 
-            return this.versionString;
+            this.versionStringCache = ogtVersion.GetVersionString();
+            return this.versionStringCache;
         }
 
         public static string GetAndroidBuildNumber()
         {
-#if UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_EDITOR
+            return UnityEditor.PlayerSettings.Android.bundleVersionCode.ToString();
+#elif UNITY_ANDROID
             using var packageManager = UnityEngine.Android.AndroidApplication.currentContext.Call<AndroidJavaObject>("getPackageManager");
             string packageName = UnityEngine.Android.AndroidApplication.currentContext.Call<string>("getPackageName");
             using var packageInfo = packageManager.Call<AndroidJavaObject>("getPackageInfo", packageName, 0);
@@ -630,7 +651,9 @@ namespace OGT
 
         public static string GetIOSBuildNumber()
         {
-#if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_EDITOR
+            return UnityEditor.PlayerSettings.iOS.buildNumber?.ToString();
+#elif UNITY_IOS
             return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(GetBuildNumber());
 #else
             return null;

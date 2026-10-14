@@ -49,38 +49,6 @@ namespace OGT
             }
         }
 
-        /*
-        private void TrackScreenChanges()
-        {
-            int width = Screen.width;
-            int height = Screen.height;
-            ScreenOrientation orientation = Screen.orientation;
-            Rect safeArea = Screen.safeArea;
-            bool fullScreen = Screen.fullScreen;
-
-            if (width == this.lastWidth &&
-                height == this.lastHeight &&
-                orientation == this.lastOrientation &&
-                safeArea == this.lastSafeArea &&
-                fullScreen == this.lastFullScreen)
-            {
-                return;
-            }
-
-            string verb = this.lastWidth < 0 ? "Started at" : "Changed to";
-            this.AddLog($"{verb} {width}x{height}, {orientation}, fullscreen={fullScreen}, safe={FormatRect(safeArea)}");
-
-            this.lastWidth = width;
-            this.lastHeight = height;
-            this.lastOrientation = orientation;
-            this.lastSafeArea = safeArea;
-            this.lastFullScreen = fullScreen;
-
-            // Make sure the change shows up right away if the debug info is open
-            this.nextDebugInfoRefresh = 0.0f;
-        }
-        */
-
         private void SetDebugInfo()
         {
             StringBuilder sb = this.builder;
@@ -102,14 +70,28 @@ namespace OGT
 
             AppendHeader(sb, "Build");
             sb.AppendLine($"  version: {Platform.VersionString}");
+            sb.AppendLine($"  unity app version: {Application.version}");
+
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                sb.AppendLine($"  android build number: {UnityPlatformProvider.GetAndroidBuildNumber()}");
+            }
+            else if (Application.platform == RuntimePlatform.IPhonePlayer)
+            {
+                sb.AppendLine($"  ios build number: {UnityPlatformProvider.GetIOSBuildNumber()}");
+            }
+
             sb.AppendLine($"  development build: {Debug.isDebugBuild}");
             sb.AppendLine($"  ogt development build: {RuntimeSettings.IsOgtDevelopmentBuild}");
             sb.AppendLine($"  build profile: {RuntimeSettings.BuildProfileName}");
             sb.AppendLine($"  branch: {RuntimeSettings.SourceControlBranchName}");
             sb.AppendLine($"  changeset: {RuntimeSettings.SourceControlChangeset}");
-            sb.AppendLine($"  app: {Application.version}");
             sb.AppendLine($"  unity: {Application.unityVersion}");
-            sb.AppendLine($"  url: {Application.absoluteURL}");
+
+            if (Application.platform == RuntimePlatform.WebGLPlayer)
+            {
+                sb.AppendLine($"  url: {Application.absoluteURL}");
+            }            
 
             AppendHeader(sb, "Screen");
             sb.AppendLine($"  screen.orientation: <b>{reported}</b>");
