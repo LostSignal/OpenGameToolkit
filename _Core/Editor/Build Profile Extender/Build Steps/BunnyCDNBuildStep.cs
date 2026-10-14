@@ -32,6 +32,19 @@ namespace OGT.BuildProfile
         public override void OnPostprocessBuild(BuildProfileExtender.Environment environment, BuildTarget target, string path)
         {
 #if USING_BUNNY_CDN
+
+            // Remove trailing slash from storagePullZoneUrl if it exists
+            if (this.storagePullZoneUrl.EndsWith("/"))
+            {
+                this.storagePullZoneUrl = this.storagePullZoneUrl.Substring(0, this.storagePullZoneUrl.Length - 1);
+            }
+
+            // If the build path is an executable or APK, we want to upload the directory containing it, not the file itself
+            if (path.ToLower().EndsWith(".exe") || path.ToLower().EndsWith(".apk"))
+            {
+                path = System.IO.Path.GetDirectoryName(path);
+            }
+
             Logger.Log($"[BunnyCDNBuildStep] Uploading '{path}' Build to `{this.storageZoneName}`");
 
             if (this.apiAccessKey.HasKey == false)
@@ -69,10 +82,15 @@ namespace OGT.BuildProfile
                                   $"**Platform:** {this.platform}\n" +
                                   $"**Version:** {Platform.VersionString}\n";
 
-                    string url = this.storagePullZoneUrl.EndsWith("/") ?
-                        $"{this.storagePullZoneUrl}{uploadPath}/index.html" :
-                        $"{this.storagePullZoneUrl}/{uploadPath}/index.html";
+                    bool isWebGL = target == BuildTarget.WebGL;
+                    bool isAndroid = target == BuildTarget.Android;
+                    bool isWindows = target == BuildTarget.StandaloneWindows || target == BuildTarget.StandaloneWindows64;
 
+                    string url = isWebGL ? $"{this.storagePullZoneUrl}/{uploadPath}/index.html" :
+                                 isAndroid ? $"{this.storagePullZoneUrl}/{uploadPath}/{System.IO.Path.GetFileName(path)}" :
+                                 isWindows ? $"{this.storagePullZoneUrl}/{uploadPath}/{System.IO.Path.GetFileName(path)}" :
+                                 throw new UnityEditor.Build.BuildFailedException($"[BunnyCDNBuildStep] Failed to construct Discord url for BuildTarget {target}");
+                    
                     // NOTE: Must happen on a separate thread in the Unity Editor or else it will hang
                     var discordTask = Task.Factory.StartNew(() => DiscordWebhook.PostAsync(Logger, this.discordWebhookUrl.Value, title, description, url).Wait());
                     discordTask.Wait();
