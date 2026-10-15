@@ -8,11 +8,8 @@ namespace OGT.BuildProfile
 {
     using System;
     using System.Net;
-    using System.Security.Policy;
-    using System.Threading.Tasks;
     using UnityEditor;
     using UnityEngine;
-    using static UnityEngine.Shaders.VariantsUploadedToGpuLastFrame;
 
     [CreateAssetMenu(fileName = "Bunny CDN Upload", menuName = "OGT/Build Steps/Upload to BunnyCDN")]
     public class BunnyCDNBuildStep : BuildStep
@@ -101,8 +98,7 @@ namespace OGT.BuildProfile
             {
                 var storage = new BunnyCDN.Net.Storage.BunnyCDNStorage(this.storageZoneName, this.apiAccessKey.Value, this.mainReplicationRegion);
 
-                // NOTE: Must happen on a separate thread in the Unity Editor or else it will hang
-
+                //// NOTE: Must happen on a separate thread in the Unity Editor or else it will hang
                 Logger.Log($"[BunnyCDNBuildStep] UploadLocalDirectory('{path}', '{uploadPath}')");
                 var uploadTask = System.Threading.Tasks.Task.Factory.StartNew(() => storage.UploadLocalDirectory(path, uploadPath).Wait());
                 uploadTask.Wait();
@@ -124,7 +120,7 @@ namespace OGT.BuildProfile
                     Logger.Log($"[BunnyCDNBuildStep] Posting to Discord webhook '{title}', '{description}', '{url}'");
 
                     // NOTE: Must happen on a separate thread in the Unity Editor or else it will hang
-                    var discordTask = Task.Factory.StartNew(() =>
+                    var discordTask = System.Threading.Tasks.Task.Factory.StartNew(() =>
                     {
                         try
                         {
@@ -207,7 +203,7 @@ namespace OGT.BuildProfile
             public string url;
         }
 
-        public static async Task PostAsync(OGTLogger logger, string webhookUrl, string title, string description, string url)
+        public static async System.Threading.Tasks.Task PostAsync(OGTLogger logger, string webhookUrl, string title, string description, string url)
         {
             var payload = new Payload
             {
