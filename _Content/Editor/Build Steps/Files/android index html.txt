@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>{appName} — Android Build</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --card: #181b22;
+      --border: #262a33;
+      --text: #e6e8ee;
+      --muted: #8b92a5;
+      --accent: #3ddc84;
+      --accent-dark: #22b86a;
+      --accent-text: #06120b;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      background:
+        radial-gradient(60% 50% at 50% 0%, rgba(61, 220, 132, 0.10), transparent 70%),
+        var(--bg);
+    }
+
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 28px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+    }
+
+    .icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 20px;
+      border-radius: 16px;
+      background: rgba(61, 220, 132, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon svg { width: 36px; height: 36px; fill: var(--accent); }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .version {
+      display: inline-block;
+      margin-bottom: 18px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    p {
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 15px 20px;
+      border-radius: 12px;
+      background: var(--accent);
+      color: var(--accent-text);
+      font-size: 1.05rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .btn:hover { background: var(--accent-dark); }
+    .btn:active { transform: scale(0.98); }
+    .btn svg { width: 20px; height: 20px; fill: currentColor; }
+
+    .hint {
+      margin: 16px 0 0;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .hint a { color: var(--accent); text-decoration: none; }
+    .hint a:hover { text-decoration: underline; }
+
+    .footer {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 0.75rem;
+      color: var(--muted);
+      word-break: break-all;
+    }
+
+    .footer code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      color: #aab1c3;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="icon">
+      <!-- Android robot head -->
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85a.637.637 0 0 0-.83.22l-1.88 3.24a11.43 11.43 0 0 0-8.94 0L5.65 5.67a.643.643 0 0 0-.87-.2c-.28.18-.37.54-.22.83L6.4 9.48A10.81 10.81 0 0 0 1 18h22a10.81 10.81 0 0 0-5.4-8.52zM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z"/>
+      </svg>
+    </div>
+
+    <h1>{appName}</h1>
+    <div class="version">{channel} · {version} · Android</div>
+
+    <p id="blurb">Preparing your download…</p>
+
+    <a id="download" class="btn" href="#">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M5 20h14v-2H5v2zm7-18L5.33 9h4.17v6h5V9h4.17L12 2z" transform="rotate(180 12 11)"/>
+      </svg>
+      <span id="label">Download APK</span>
+    </a>
+
+    <p class="hint" id="hint"></p>
+
+    <div class="footer">
+      <code id="filename"></code>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      // The only thing you should need to change between builds.
+      var APK_URL = "{apkUrl}";
+
+      var isAndroid = /android/i.test(navigator.userAgent);
+
+      var btn   = document.getElementById("download");
+      var label = document.getElementById("label");
+      var blurb = document.getElementById("blurb");
+      var hint  = document.getElementById("hint");
+
+      var fileName = decodeURIComponent(APK_URL.split("/").pop());
+      document.getElementById("filename").textContent = fileName;
+
+      if (isAndroid) {
+        // Chrome Intent URL: launches real Chrome (not an in-app browser) on the APK,
+        // which then downloads it and offers to install.
+        var withoutScheme = APK_URL.replace(/^https?:\/\//, "");
+        btn.href = "intent://" + withoutScheme + "#Intent;scheme=https;package=com.android.chrome;end";
+        label.textContent = "Download in Chrome";
+        blurb.textContent = "Tap below to open this build in Chrome and install it on your device.";
+        hint.innerHTML = 'Chrome not installed? <a href="' + APK_URL + '">Download directly</a>.';
+      } else {
+        // Desktop / everything else: plain download straight to the Downloads folder.
+        btn.href = APK_URL;
+        btn.setAttribute("download", fileName);
+        label.textContent = "Download APK";
+        blurb.textContent = "Download the Android build to your computer, then copy it to your device to install.";
+        hint.textContent = "";
+      }
+    })();
+  </script>
+</body>
+</html>

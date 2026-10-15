@@ -8,9 +8,11 @@ namespace OGT.BuildProfile
 {
     using System;
     using System.Net;
+    using System.Security.Policy;
     using System.Threading.Tasks;
     using UnityEditor;
     using UnityEngine;
+    using static UnityEngine.Shaders.VariantsUploadedToGpuLastFrame;
 
     [CreateAssetMenu(fileName = "Bunny CDN Upload", menuName = "OGT/Build Steps/Upload to BunnyCDN")]
     public class BunnyCDNBuildStep : BuildStep
@@ -29,6 +31,9 @@ namespace OGT.BuildProfile
         [Header("Discord Info")]
         [SerializeField] private SecretString discordWebhookUrl;
 
+        [Header("File Templates")]
+        [SerializeField] private TextAsset androidIndexHtml;
+
         public override void OnPostprocessBuild(BuildProfileExtender.Environment environment, BuildTarget target, string path)
         {
 #if USING_BUNNY_CDN
@@ -41,6 +46,20 @@ namespace OGT.BuildProfile
                 this.storagePullZoneUrl = this.storagePullZoneUrl.Substring(0, this.storagePullZoneUrl.Length - 1);
             }
 
+            // Generating the Upload Path
+            var uploadPath = this.uploadPathFormat
+                .Replace("{gameId}", this.gameId)
+                .Replace("{channel}", this.channel)
+                .Replace("{platform}", this.platform)
+                .Replace("{version}", Platform.VersionString);
+
+            // Removing any double forward slashes from the buildPath string
+            while (uploadPath.Contains("//"))
+            {
+                uploadPath = uploadPath.Replace("//", "/");
+            }
+
+            // Determining the file name to upload based on the build target
             string fileName = string.Empty;
 
             if (target == BuildTarget.WebGL)
@@ -49,8 +68,16 @@ namespace OGT.BuildProfile
             }
             else if (target == BuildTarget.Android)
             {
-                fileName = System.IO.Path.GetFileName(path);
+                string apkName = System.IO.Path.GetFileName(path);
+                Logger.Log($"[BunnyCDNBuildStep] apkName = '{apkName}'");
+
                 path = System.IO.Path.GetDirectoryName(path);
+                Logger.Log($"[BunnyCDNBuildStep] path = '{path}'");
+
+                Logger.Log($"[BunnyCDNBuildStep] Writing index.html");
+                this.WriteIndexHtmlFile(this.androidIndexHtml, path, uploadPath, apkName);
+
+                fileName = "index.html";
             }
             else if (target == BuildTarget.StandaloneWindows || target == BuildTarget.StandaloneWindows64)
             {
@@ -62,8 +89,8 @@ namespace OGT.BuildProfile
                 throw new UnityEditor.Build.BuildFailedException($"[BunnyCDNBuildStep] Unsupported BuildTarget {target}");
             }
 
-            Logger.Log($"[BunnyCDNBuildStep] Uploading '{path}' Build to `{this.storageZoneName}`");
             Logger.Log($"[BunnyCDNBuildStep] fileName = '{fileName}'");
+            Logger.Log($"[BunnyCDNBuildStep] Uploading '{path}' Build to `{this.storageZoneName}`");
 
             if (this.apiAccessKey.HasKey == false)
             {
@@ -72,18 +99,6 @@ namespace OGT.BuildProfile
 
             try
             {
-                var uploadPath = this.uploadPathFormat
-                    .Replace("{gameId}", this.gameId)
-                    .Replace("{channel}", this.channel)
-                    .Replace("{platform}", this.platform)
-                    .Replace("{version}", Platform.VersionString);
-
-                // Removing any double forward slashes from the buildPath string
-                while (uploadPath.Contains("//"))
-                {
-                    uploadPath = uploadPath.Replace("//", "/");
-                }
-
                 var storage = new BunnyCDN.Net.Storage.BunnyCDNStorage(this.storageZoneName, this.apiAccessKey.Value, this.mainReplicationRegion);
 
                 // NOTE: Must happen on a separate thread in the Unity Editor or else it will hang
@@ -104,12 +119,7 @@ namespace OGT.BuildProfile
                         $"**Platform:** {this.platform}\n" +
                         $"**Version:** {Platform.VersionString}\n";
 
-                    // Escape each path segment so spaces and other special characters produce a valid url
-                    var escapedSegments = Array.ConvertAll(
-                        $"{uploadPath}/{fileName}".Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries),
-                        Uri.EscapeDataString);
-
-                    string url = $"{this.storagePullZoneUrl}/{string.Join("/", escapedSegments)}";
+                    string url = $"{this.storagePullZoneUrl}/{EscapeUrl(uploadPath)}/{EscapeUrl(fileName)}";
 
                     Logger.Log($"[BunnyCDNBuildStep] Posting to Discord webhook '{title}', '{description}', '{url}'");
 
@@ -142,6 +152,42 @@ namespace OGT.BuildProfile
 #else
             throw new UnityEditor.Build.BuildFailedException("Trying to use BunnyCDN Storage when package is missing!");
 #endif
+        }
+
+        private void WriteIndexHtmlFile(TextAsset indexHtmlAsset, string outputDirectoryPath, string uploadPath, string apkName)
+        {
+            if (indexHtmlAsset == null)
+            {
+                throw new UnityEditor.Build.BuildFailedException("BunnyCDNBuildStep: index.html TextAsset is not set!");
+            }
+
+            var indexHtmlPath = System.IO.Path.Combine(outputDirectoryPath, "index.html");
+            var apkUrl = $"{this.storagePullZoneUrl}/{EscapeUrl(uploadPath)}/{EscapeUrl(apkName)}";
+
+            var html = indexHtmlAsset.text
+                .Replace("{gameId}", this.gameId)
+                .Replace("{channel}", this.channel)
+                .Replace("{platform}", this.platform)
+                .Replace("{version}", Platform.VersionString)
+                .Replace("{appName}", System.IO.Path.GetFileNameWithoutExtension(apkName))
+                .Replace("{apkUrl}", apkUrl);
+
+            System.IO.File.WriteAllText(indexHtmlPath, html);
+        }
+
+        private static string EscapeUrl(string url)
+        {
+            var escapedSegments = Array.ConvertAll(url.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries), Uri.EscapeDataString);
+            return string.Join("/", escapedSegments);
+        }
+
+        private void OnValidate()
+        {
+            if (androidIndexHtml == null)
+            {
+                androidIndexHtml = AssetDatabase.LoadAssetAtPath<TextAsset>(AssetDatabase.GUIDToAssetPath("61a3e6b998b5d3247a395d42e259e4e2"));
+                EditorUtil.SetDirty(this);
+            }
         }
     }
 
