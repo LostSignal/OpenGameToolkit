@@ -43,6 +43,7 @@ namespace OGT.BoardGame
         private bool isApplyingActions;
         private bool isResyncing;
         private bool isCleanupPending;
+        private BoardGame finishedGame;
 
         private bool IsNetworked => this.IsSpawned && this.NetworkManager != null && this.NetworkManager.IsListening;
 
@@ -89,6 +90,14 @@ namespace OGT.BoardGame
             base.OnNetworkDespawn();
         }
 
+        public override void OnGainedOwnership()
+        {
+            base.OnGainedOwnership();
+
+            // The session owner migrated to us (e.g. the host left), so take over publishing the game we're already playing
+            this.SyncWithNetworkGame();
+        }
+
         public override void OnDestroy()
         {
             if (this.boardGameManager != null)
@@ -115,14 +124,9 @@ namespace OGT.BoardGame
 
         private void HandleGameCreated(BoardGame game)
         {
-            if (this.IsNetworked == false)
-            {
-                return;
-            }
-
-            // Hooked before StartBoardGame runs so nothing the game raises is missed
-            game.OnActionPerformed += this.HandleActionPerformed;
-            game.OnGameOver += this.HandleGameOver;
+            // Hooked before StartBoardGame runs so nothing the game raises is missed. The handlers check whether we're
+            // networked when they fire, so a game created before this object spawned is still picked up later.
+            this.HookGame(game);
         }
 
         private void HandleGameStarted(BoardGame game)
@@ -135,11 +139,7 @@ namespace OGT.BoardGame
             if (this.HasAuthority)
             {
                 // Host started a game, publish it and start a fresh action list
-                int gameNumber = (this.networkConfig.Value?.GameNumber ?? 0) + 1;
-                this.networkActions.Clear();
-                this.networkConfig.Value = new NetworkedConfig { GameNumber = gameNumber, Json = SerializeConfig(game.Config) };
-                this.AttachGame(game, gameNumber);
-                this.isCleanupPending = false;
+                this.PublishGame(game);
             }
             else if (this.HasNetworkConfig() && this.CanAdoptGame(game, this.networkConfig.Value))
             {
@@ -155,8 +155,12 @@ namespace OGT.BoardGame
 
         private void HandleGameDestroyed(BoardGame game)
         {
-            game.OnActionPerformed -= this.HandleActionPerformed;
-            game.OnGameOver -= this.HandleGameOver;
+            this.UnhookGame(game);
+
+            if (game == this.finishedGame)
+            {
+                this.finishedGame = null;
+            }
 
             if (game != this.syncedGame)
             {
@@ -193,6 +197,9 @@ namespace OGT.BoardGame
 
         private void HandleGameOver(Team winningTeam)
         {
+            // Remembered so a finished game is never (re)published if we become the authority later
+            this.finishedGame = this.boardGameManager?.CurrentBoardGame;
+
             if (this.IsNetworked && this.HasAuthority && this.syncedGame != null)
             {
                 this.isCleanupPending = true;
@@ -264,8 +271,14 @@ namespace OGT.BoardGame
 
         private void SyncWithNetworkGame()
         {
-            if (this.boardGameManager == null || this.IsNetworked == false || this.HasAuthority)
+            if (this.boardGameManager == null || this.IsNetworked == false)
             {
+                return;
+            }
+
+            if (this.HasAuthority)
+            {
+                this.PublishCurrentGameIfNeeded();
                 return;
             }
 
@@ -482,10 +495,65 @@ namespace OGT.BoardGame
             this.DetachGame();
         }
 
+        /// <summary>The authority started a game: publish its config and a fresh action list (plus any actions it already played).</summary>
+        private void PublishGame(BoardGame game)
+        {
+            int gameNumber = (this.networkConfig.Value?.GameNumber ?? 0) + 1;
+            this.networkActions.Clear();
+            this.networkConfig.Value = new NetworkedConfig { GameNumber = gameNumber, Json = SerializeConfig(game.Config) };
+            this.AttachGame(game, gameNumber);
+            this.isCleanupPending = false;
+
+            // Normally empty, but the game may have been running before this object spawned or before OnAwake hooked us up
+            for (int actionId = 0; actionId < game.ActionHistory.Count; actionId++)
+            {
+                byte[] bytes = this.SerializeAction(game.ActionHistory[actionId]);
+
+                if (bytes.Length > NetworkedAction.MaxBytes)
+                {
+                    Logger.LogError($"BoardGameDistributedAuthoritySync: Action {actionId} is {bytes.Length} bytes, more than the {NetworkedAction.MaxBytes} byte limit, it can not be synced");
+                    break;
+                }
+
+                this.networkActions.Add(new NetworkedAction(gameNumber, bytes));
+            }
+        }
+
+        // The authority may have started its game before this object spawned, or before the bootloader activated this
+        // component (OnAwake runs a frame or so after spawning), so publish whatever is running that isn't published yet
+        private void PublishCurrentGameIfNeeded()
+        {
+            BoardGame current = this.boardGameManager.CurrentBoardGame;
+
+            if (current == null || current == this.syncedGame || current == this.finishedGame)
+            {
+                return;
+            }
+
+            this.HookGame(current);
+            this.PublishGame(current);
+        }
+
         private void AttachGame(BoardGame game, int gameNumber)
         {
+            // Adopted games may have been created before this object spawned, so make sure they're hooked up
+            this.HookGame(game);
             this.syncedGame = game;
             this.syncedGameNumber = gameNumber;
+        }
+
+        private void HookGame(BoardGame game)
+        {
+            // Unsubscribing first keeps this idempotent
+            this.UnhookGame(game);
+            game.OnActionPerformed += this.HandleActionPerformed;
+            game.OnGameOver += this.HandleGameOver;
+        }
+
+        private void UnhookGame(BoardGame game)
+        {
+            game.OnActionPerformed -= this.HandleActionPerformed;
+            game.OnGameOver -= this.HandleGameOver;
         }
 
         private void DetachGame()
