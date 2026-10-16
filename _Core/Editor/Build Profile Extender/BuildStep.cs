@@ -6,8 +6,8 @@
 
 namespace OGT.BuildProfile
 {
-    using UnityEditor;
     using UnityEditor.Build;
+    using UnityEditor.Build.Reporting;
     using UnityEngine;
         
     public abstract class BuildStep : ScriptableObject
@@ -22,11 +22,11 @@ namespace OGT.BuildProfile
         {
         }
 
-        public virtual void OnPreprocessBuild(BuildProfileExtender.Environment environment, BuildTarget target)
+        public virtual void OnPreprocessBuild(BuildProfileExtender.Environment environment, BuildReport report)
         {
         }
 
-        public virtual void OnPostprocessBuild(BuildProfileExtender.Environment environment, BuildTarget target, string path)
+        public virtual void OnPostprocessBuild(BuildProfileExtender.Environment environment, BuildReport report)
         {
         }
     }

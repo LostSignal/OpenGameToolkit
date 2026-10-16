@@ -12,6 +12,7 @@ namespace OGT.BuildProfile
     using System.Reflection;
     using UnityEditor;
     using UnityEditor.Build;
+    using UnityEditor.Build.Reporting;
     using UnityEngine;
     using UnityEngine.Assemblies;
 
@@ -44,12 +45,12 @@ namespace OGT.BuildProfile
         [SerializeField] private bool fileNamesAsHashes = true;
         [SerializeField] private bool dataCaching = false;
                 
-        public override void OnPreprocessBuild(BuildProfileExtender.Environment environment, BuildTarget target)
+        public override void OnPreprocessBuild(BuildProfileExtender.Environment environment, BuildReport report)
         {
             this.SetBuildSettings();
-            this.DisableCustomKeyStore(target);
-            this.SetWebGLSettings(target);
-            this.SetPipelineRuntimeInBuild(target);
+            this.DisableCustomKeyStore(report.summary.platform);
+            this.SetWebGLSettings(report.summary.platform);
+            this.SetPipelineRuntimeInBuild(report.summary.platform);
 
             if (this.isOgtDevelopmentBuild)
             {
@@ -57,9 +58,9 @@ namespace OGT.BuildProfile
             }
         }
 
-        public override void OnPostprocessBuild(BuildProfileExtender.Environment environment, BuildTarget target, string path)
+        public override void OnPostprocessBuild(BuildProfileExtender.Environment environment, BuildReport report)
         {
-            this.CopySimpleWebServer(target, path);
+            this.CopySimpleWebServer(report.summary.platform, report.summary.outputPath);
         }
 
         private void SetBuildSettings()

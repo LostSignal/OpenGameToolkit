@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>{appName}</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --card: #181b22;
+      --border: #262a33;
+      --text: #e6e8ee;
+      --muted: #8b92a5;
+      --code: #aab1c3;
+      --accent: #8b92a5;
+      --accent-dark: #6f7689;
+      --accent-text: #0f1115;
+      --accent-glow: rgba(139, 146, 165, 0.10);
+    }
+
+    body[data-target="Android"] { --accent: #3ddc84; --accent-dark: #22b86a; --accent-text: #06120b; --accent-glow: rgba(61, 220, 132, 0.10); }
+    body[data-target="Windows"] { --accent: #4cc2ff; --accent-dark: #2aa5e6; --accent-text: #04121a; --accent-glow: rgba(76, 194, 255, 0.10); }
+    body[data-target="WebGL"]   { --accent: #ffb547; --accent-dark: #e89a24; --accent-text: #1a1004; --accent-glow: rgba(255, 181, 71, 0.10); }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 48px 16px;
+      min-height: 100vh;
+      background:
+        radial-gradient(60% 50% at 50% 0%, var(--accent-glow), transparent 70%),
+        var(--bg);
+    }
+
+    .card {
+      width: 100%;
+      max-width: 460px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 28px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+    }
+
+    .icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 20px;
+      border-radius: 20px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon img { width: 100%; height: 100%; object-fit: cover; }
+    .icon svg { width: 40px; height: 40px; fill: var(--accent); }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .version {
+      display: inline-block;
+      margin-bottom: 18px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    p {
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 15px 20px;
+      border-radius: 12px;
+      background: var(--accent);
+      color: var(--accent-text);
+      font-size: 1.05rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .btn:hover { background: var(--accent-dark); }
+    .btn:active { transform: scale(0.98); }
+    .btn svg { width: 20px; height: 20px; fill: currentColor; }
+    .btn[hidden] { display: none; }
+
+    .hint {
+      margin: 16px 0 0;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .hint a, .more a { color: var(--accent); text-decoration: none; }
+    .hint a:hover, .more a:hover { text-decoration: underline; }
+
+    .more {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      text-align: left;
+      font-size: 0.85rem;
+    }
+
+    .more > summary {
+      cursor: pointer;
+      color: var(--muted);
+      text-align: center;
+      list-style: none;
+      user-select: none;
+    }
+
+    .more > summary::-webkit-details-marker { display: none; }
+    .more > summary::after { content: " ▾"; }
+    .more[open] > summary::after { content: " ▴"; }
+
+    h2 {
+      margin: 20px 0 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+
+    td {
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    td:first-child { color: var(--muted); padding-right: 12px; white-space: nowrap; }
+    td:last-child { text-align: right; word-break: break-all; }
+
+    .mono, td code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.8rem;
+      color: var(--code);
+    }
+
+    .files { list-style: none; margin: 0; padding: 0; }
+
+    .files li {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .files li a { word-break: break-all; }
+    .files li span { color: var(--muted); white-space: nowrap; }
+
+    details.output > summary { cursor: pointer; color: var(--muted); padding: 6px 0; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="icon" id="icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M21 6H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1zm-11 7H8v2H6v-2H4v-2h2V9h2v2h2v2zm5.5 1a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-3a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+      </svg>
+    </div>
+
+    <h1 id="title"></h1>
+    <div class="version" id="version"></div>
+
+    <p id="blurb"></p>
+
+    <a id="primary" class="btn" href="#" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path id="primary-icon" d=""/></svg>
+      <span id="label"></span>
+    </a>
+
+    <p class="hint" id="hint"></p>
+
+    <details class="more">
+      <summary>More</summary>
+
+      <h2>Build</h2>
+      <table id="info"></table>
+
+      <h2>Artifacts</h2>
+      <ul class="files" id="artifacts"></ul>
+
+      <h2>Output</h2>
+      <details class="output">
+        <summary id="output-summary"></summary>
+        <ul class="files" id="output"></ul>
+      </details>
+    </details>
+  </main>
+
+  <script>
+    (function () {
+      var BUILD = {buildInfoJson};
+
+      var ICON_DOWNLOAD = "M5 20h14v-2H5v2zm7-18L5.33 9h4.17v6h5V9h4.17L12 2z";
+      var ICON_PLAY = "M8 5v14l11-7z";
+
+      var target = BUILD.buildTarget || "";
+      var kind = target === "Android" ? "Android"
+               : target.indexOf("StandaloneWindows") === 0 ? "Windows"
+               : target === "WebGL" ? "WebGL"
+               : "";
+
+      document.body.setAttribute("data-target", kind);
+
+      var el = function (id) { return document.getElementById(id); };
+      var btn = el("primary");
+
+      // ------------------------------------------------------------------
+      // Header
+      // ------------------------------------------------------------------
+
+      el("title").textContent = BUILD.gameName;
+      el("version").textContent = [BUILD.channel, BUILD.version, BUILD.platform || kind || target]
+        .filter(function (x) { return !!x; })
+        .join(" · ");
+
+      if (BUILD.iconUrl) {
+        var img = document.createElement("img");
+        img.src = BUILD.iconUrl;
+        img.alt = "";
+        img.onload = function () { el("icon").replaceChildren(img); };
+      }
+
+      // ------------------------------------------------------------------
+      // Primary action
+      // ------------------------------------------------------------------
+
+      function setPrimary(label, href, iconPath, isDownload) {
+        btn.hidden = false;
+        btn.href = href;
+        el("label").textContent = label;
+        el("primary-icon").setAttribute("d", iconPath);
+
+        if (isDownload) {
+          el("primary-icon").setAttribute("transform", "rotate(180 12 11)");
+          btn.setAttribute("download", decodeURIComponent(href.split("/").pop()));
+        }
+      }
+
+      if (!BUILD.primaryUrl) {
+        el("blurb").textContent = "There's no direct download for this platform. Open More below for the build files.";
+      } else if (kind === "Android") {
+        var isAndroid = /android/i.test(navigator.userAgent);
+
+        if (isAndroid) {
+          // Chrome Intent URL: launches real Chrome (not an in-app browser) on the APK,
+          // which then downloads it and offers to install.
+          var withoutScheme = BUILD.primaryUrl.replace(/^https?:\/\//, "");
+          setPrimary("Download now with Chrome", "intent://" + withoutScheme + "#Intent;scheme=https;package=com.android.chrome;end", ICON_DOWNLOAD, false);
+          el("blurb").textContent = "Tap below to open this build in Chrome and install it on your device.";
+
+          var direct = document.createElement("a");
+          direct.href = BUILD.primaryUrl;
+          direct.textContent = "Download directly";
+          el("hint").append("Chrome not installed? ", direct, ".");
+        } else {
+          setPrimary("Download APK", BUILD.primaryUrl, ICON_DOWNLOAD, true);
+          el("blurb").textContent = "Download the Android build to your computer, then copy it to your device to install.";
+        }
+      } else if (kind === "Windows") {
+        setPrimary("Download for Windows", BUILD.primaryUrl, ICON_DOWNLOAD, true);
+        el("blurb").textContent = "Download the zip, extract it, and run the game.";
+      } else if (kind === "WebGL") {
+        setPrimary("Play now", BUILD.primaryUrl, ICON_PLAY, false);
+        el("blurb").textContent = "Runs right in your browser.";
+      } else {
+        setPrimary("Download", BUILD.primaryUrl, ICON_DOWNLOAD, true);
+      }
+
+      // ------------------------------------------------------------------
+      // More
+      // ------------------------------------------------------------------
+
+      function formatDate(value) {
+        var date = new Date(value);
+        return isNaN(date.getTime()) || date.getFullYear() < 2000 ? "—" : date.toLocaleString();
+      }
+
+      function formatDuration(seconds) {
+        if (!(seconds > 0)) return "—";
+        var h = Math.floor(seconds / 3600);
+        var m = Math.floor((seconds % 3600) / 60);
+        var s = Math.round(seconds % 60);
+        return (h ? h + "h " : "") + (h || m ? m + "m " : "") + s + "s";
+      }
+
+      function formatSize(bytes) {
+        if (!(bytes > 0)) return "";
+        var units = ["B", "KB", "MB", "GB"];
+        var i = Math.min(units.length - 1, Math.floor(Math.log(bytes) / Math.log(1024)));
+        return (bytes / Math.pow(1024, i)).toFixed(i ? 1 : 0) + " " + units[i];
+      }
+
+      var rows = [
+        ["Game", BUILD.gameName],
+        ["Game ID", BUILD.gameId],
+        ["Channel", BUILD.channel],
+        ["Platform", BUILD.platform],
+        ["Build Target", BUILD.buildTarget],
+        ["Environment", BUILD.environment],
+        ["Version", BUILD.version],
+        ["Unity", BUILD.unityVersion],
+        ["Started", formatDate(BUILD.buildStartTime)],
+        ["Finished", formatDate(BUILD.buildEndTime)],
+        ["Duration", formatDuration(BUILD.totalTimeSeconds)],
+        ["Size", formatSize(BUILD.totalSize) || "—"],
+        ["Warnings", String(BUILD.totalWarnings)],
+        ["Errors", String(BUILD.totalErrors)],
+        ["Build ID", BUILD.guid, true]
+      ];
+
+      rows.forEach(function (row) {
+        if (!row[1]) return;
+        var tr = document.createElement("tr");
+        var name = document.createElement("td");
+        var value = document.createElement("td");
+        name.textContent = row[0];
+
+        if (row[2]) {
+          var code = document.createElement("code");
+          code.textContent = row[1];
+          value.appendChild(code);
+        } else {
+          value.textContent = row[1];
+        }
+
+        tr.append(name, value);
+        el("info").appendChild(tr);
+      });
+
+      function addFiles(list, files) {
+        (files || []).forEach(function (file) {
+          var li = document.createElement("li");
+          var a = document.createElement("a");
+          var size = document.createElement("span");
+          a.href = file.url;
+          a.textContent = file.path;
+          size.textContent = formatSize(file.size);
+          li.append(a, size);
+          list.appendChild(li);
+        });
+      }
+
+      addFiles(el("artifacts"), BUILD.artifacts);
+      addFiles(el("output"), BUILD.outputFiles);
+
+      var outputCount = (BUILD.outputFiles || []).length;
+      el("output-summary").textContent = outputCount + (outputCount === 1 ? " file" : " files");
+    })();
+  </script>
+</body>
+</html>

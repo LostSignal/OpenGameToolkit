@@ -61,7 +61,7 @@ namespace OGT.BuildProfile
             {
                 Logger.Log($"BuildStepExecutor Running Step {buildStep.name}...");
                 var startTime = System.DateTime.UtcNow;
-                buildStep.OnPreprocessBuild(buildProfileExtender.CurrentEnvironment, report.summary.platform);
+                buildStep.OnPreprocessBuild(buildProfileExtender.CurrentEnvironment, report);
                 var totalTime = System.DateTime.UtcNow.Subtract(startTime).TotalSeconds;
                 Logger.Log($"BuildStepExecutor Step {buildStep.name} took {totalTime} seconds");
             }
@@ -82,7 +82,7 @@ namespace OGT.BuildProfile
             {
                 Logger.Log($"BuildStepExecutor Running Step {buildStep.name}...");
                 var startTime = System.DateTime.UtcNow;
-                buildStep.OnPostprocessBuild(buildProfileExtender.CurrentEnvironment, report.summary.platform, report.summary.outputPath);
+                buildStep.OnPostprocessBuild(buildProfileExtender.CurrentEnvironment, report);
                 var totalTime = System.DateTime.UtcNow.Subtract(startTime).TotalSeconds;
                 Logger.Log($"BuildStepExecutor Step {buildStep.name} took {totalTime} seconds");
             }

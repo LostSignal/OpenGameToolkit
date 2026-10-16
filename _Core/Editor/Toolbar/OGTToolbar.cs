@@ -204,6 +204,9 @@ namespace OGT
 
             menu.AddSeparator(string.Empty);
 
+            // Bunny Delivery
+            menu.AddItem(new GUIContent("Bunny Delivery"), false, BunnyDeliveryEditorWindow.Open);
+
             // Edit Secrets
             menu.AddItem(new GUIContent("Edit Secrets"), false, SecretsEditorWindow.Open);
         }

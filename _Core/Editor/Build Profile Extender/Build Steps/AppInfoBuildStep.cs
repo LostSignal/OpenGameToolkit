@@ -15,6 +15,7 @@ namespace OGT.BuildProfile
     using UnityEditor.AddressableAssets.Settings;
     using UnityEditor.Build;
     using UnityEditor.Build.Profile;
+    using UnityEditor.Build.Reporting;
     using UnityEngine;
     using UnityEngine.Assemblies;
 
@@ -75,20 +76,20 @@ namespace OGT.BuildProfile
             this.BuildAddressables();
         }
 
-        public override void OnPreprocessBuild(BuildProfileExtender.Environment environment, BuildTarget target)
+        public override void OnPreprocessBuild(BuildProfileExtender.Environment environment, BuildReport report)
         {
             this.SetProductName();
-            this.SetBundleIdentifier(target);
+            this.SetBundleIdentifier(report.summary.platform);
             this.SetVersion();
             this.SetBootloaderGuid();
-            this.SetBootloaderOrientation(target);
-            this.AppendBuildNumberOnUnityCloudBuild(target);
+            this.SetBootloaderOrientation(report.summary.platform);
+            this.AppendBuildNumberOnUnityCloudBuild(report.summary.platform);
         }
 
-        public override void OnPostprocessBuild(BuildProfileExtender.Environment environment, BuildTarget target, string path)
+        public override void OnPostprocessBuild(BuildProfileExtender.Environment environment, BuildReport report)
         {
-            this.FixWebGLRequestInstancesParameters(target, path);
-            this.SetAppUsesNonExemptEncryption(target, path);
+            this.FixWebGLRequestInstancesParameters(report.summary.platform, report.summary.outputPath);
+            this.SetAppUsesNonExemptEncryption(report.summary.platform, report.summary.outputPath);
             this.ResetSourceControlInfo();
             this.ResetBuildProfileInfo();
         }

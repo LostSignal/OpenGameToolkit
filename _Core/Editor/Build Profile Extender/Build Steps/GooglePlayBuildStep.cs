@@ -7,6 +7,7 @@
 namespace OGT.BuildProfile
 {
     using UnityEditor;
+    using UnityEditor.Build.Reporting;
     using UnityEngine;
 
     [CreateAssetMenu(fileName = "Google Play", menuName = "OGT/Build Steps/Google Play")]
@@ -26,9 +27,9 @@ namespace OGT.BuildProfile
         [ShowIf(nameof(uploadToGooglePlay), true)]
         [SerializeField] private string track = "internal";
 
-        public override void OnPreprocessBuild(BuildProfileExtender.Environment environment, BuildTarget target)
+        public override void OnPreprocessBuild(BuildProfileExtender.Environment environment, BuildReport report)
         {
-            if (target != BuildTarget.Android)
+            if (report.summary.platform != BuildTarget.Android)
             {
                 return;
             }
@@ -55,9 +56,9 @@ namespace OGT.BuildProfile
             PlayerSettings.Android.keyaliasPass = this.keyAliasPassword.Value;
         }
 
-        public override void OnPostprocessBuild(BuildProfileExtender.Environment environment, BuildTarget target, string path)
+        public override void OnPostprocessBuild(BuildProfileExtender.Environment environment, BuildReport report)
         {
-            if (target != BuildTarget.Android || this.uploadToGooglePlay == false)
+            if (report.summary.platform != BuildTarget.Android || this.uploadToGooglePlay == false)
             {
                 return;
             }
