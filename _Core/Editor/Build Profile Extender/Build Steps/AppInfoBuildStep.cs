@@ -62,6 +62,8 @@ namespace OGT.BuildProfile
         [LabelWidth(LabelWidth)]
         [SerializeField]
         private bool fixRequestInstancesParameters = true;
+        [SerializeField]
+        private bool addLidbfsFlag = true;
 
         public override void OnBuildProfileSelected()
         {
@@ -84,6 +86,7 @@ namespace OGT.BuildProfile
             this.SetBootloaderGuid();
             this.SetBootloaderOrientation(report.summary.platform);
             this.AppendBuildNumberOnUnityCloudBuild(report.summary.platform);
+            this.AddLidbfsFlag(report.summary.platform);
         }
 
         public override void OnPostprocessBuild(BuildProfileExtender.Environment environment, BuildReport report)
@@ -416,6 +419,17 @@ namespace OGT.BuildProfile
         private void ResetBuildProfileInfo()
         {
             RuntimeSettings.BuildProfileName = string.Empty;
+        }
+
+        private void AddLidbfsFlag(BuildTarget target)
+        {
+            if (this.addLidbfsFlag &&
+                target == BuildTarget.WebGL &&                
+                PlayerSettings.WebGL.emscriptenArgs.Contains("-lidbfs.js") == false)
+            {
+                PlayerSettings.WebGL.emscriptenArgs += " -lidbfs.js";
+                Logger.Log("[AppInfoBuildStep] Added -lidbfs.js to PlayerSettings.WebGL.emscriptenArgs");
+            }
         }
     }
 
