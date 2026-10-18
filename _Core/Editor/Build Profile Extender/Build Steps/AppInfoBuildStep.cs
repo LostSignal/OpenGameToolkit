@@ -62,7 +62,9 @@ namespace OGT.BuildProfile
         [LabelWidth(LabelWidth)]
         [SerializeField]
         private bool fixRequestInstancesParameters = true;
+
         [SerializeField]
+        [LabelWidth(LabelWidth)]
         private bool addLidbfsFlag = true;
 
         public override void OnBuildProfileSelected()
@@ -423,12 +425,17 @@ namespace OGT.BuildProfile
 
         private void AddLidbfsFlag(BuildTarget target)
         {
-            if (this.addLidbfsFlag &&
-                target == BuildTarget.WebGL &&                
-                PlayerSettings.WebGL.emscriptenArgs.Contains("-lidbfs.js") == false)
+            if (this.addLidbfsFlag && target == BuildTarget.WebGL)
             {
-                PlayerSettings.WebGL.emscriptenArgs += " -lidbfs.js";
-                Logger.Log("[AppInfoBuildStep] Added -lidbfs.js to PlayerSettings.WebGL.emscriptenArgs");
+                if (PlayerSettings.WebGL.emscriptenArgs.Contains("-lidbfs.js") == false)
+                {
+                    PlayerSettings.WebGL.emscriptenArgs += " -lidbfs.js";
+                    Logger.Log("[AppInfoBuildStep] Added -lidbfs.js to PlayerSettings.WebGL.emscriptenArgs");
+                }
+                else
+                {
+                    Logger.Log("[AppInfoBuildStep] -lidbfs.js already present in PlayerSettings.WebGL.emscriptenArgs");
+                }
             }
         }
     }

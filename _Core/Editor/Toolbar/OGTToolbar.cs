@@ -178,6 +178,7 @@ namespace OGT
 
             // Tools
             menu.AddItem(new GUIContent(ToolsMenu + "APK Install Tool"), false, ApkInstallTool.ShowWindow);
+            menu.AddItem(new GUIContent(ToolsMenu + "Bad GUID Fixer"), false, BadGuidFixerEditorWindow.ShowWindow);
             menu.AddItem(new GUIContent(ToolsMenu + "Export Scene NavMesh"), false, ExportNavMeshToObj.ExportNavMeshForCurrentScene);
 
             // Utility
