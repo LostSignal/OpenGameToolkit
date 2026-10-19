@@ -67,44 +67,5 @@ namespace OGT
         {
             GameViewUtils.SetResolutionByName(resolutionName);
         }
-
-        [MenuItem("CONTEXT/RectTransform/Add to Parent ResponsiveLayout")]
-        private static void AddToParentResponsiveLayout(MenuCommand command)
-        {
-            RectTransform rectTransform = command.context as RectTransform;
-            if (rectTransform == null)
-                return;
-
-            // Search for ResponsiveLayout in parent hierarchy
-            ResponsiveLayout responsiveLayout = rectTransform.GetComponentInParent<ResponsiveLayout>();
-
-            if (responsiveLayout == null)
-            {
-                Debug.LogWarning($"No ResponsiveLayout found in parent hierarchy of '{rectTransform.name}'");
-                return;
-            }
-
-            Undo.RecordObject(responsiveLayout, "Add to ResponsiveLayout");
-
-            if (responsiveLayout.AddTarget(rectTransform))
-            {
-                EditorUtility.SetDirty(responsiveLayout);
-                Debug.Log($"Added '{rectTransform.name}' to ResponsiveLayout on '{responsiveLayout.name}'");
-            }
-            else
-            {
-                Debug.LogWarning($"'{rectTransform.name}' is already in the ResponsiveLayout targets or is null");
-            }
-        }
-
-        [MenuItem("CONTEXT/RectTransform/Add to Parent ResponsiveLayout", true)]
-        private static bool ValidateAddToParentResponsiveLayout(MenuCommand command)
-        {
-            RectTransform rectTransform = command.context as RectTransform;
-            if (rectTransform == null)
-                return false;
-
-            return rectTransform.GetComponentInParent<ResponsiveLayout>() != null;
-        }
     }
 }

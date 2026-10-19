@@ -28,9 +28,13 @@ namespace OGT
             public Vector3 localEulerAngles;
             public Vector3 localScale;
 
+            // Defaults to true so layouts saved before this was tracked don't read as "disabled"
+            public bool isActive = true;
+
             public void Record(RectTransform rectTransform)
             {
                 target = rectTransform;
+                isActive = rectTransform.gameObject.activeSelf;
 
                 anchorMin = rectTransform.anchorMin;
                 anchorMax = rectTransform.anchorMax;
@@ -57,16 +61,15 @@ namespace OGT
 
                 target.localEulerAngles = localEulerAngles;
                 target.localScale = localScale;
+
+                // Applying active state
+                target.gameObject.SetActive(isActive);
             }
         }
 
         [ReadOnly]
         [SerializeField]
         private Showable showable;
-
-        [Header("Objects")]
-        [SerializeField]
-        private List<RectTransform> targets = new();
 
         [Header("Recorded Layouts")]
         [SerializeField]
@@ -77,29 +80,45 @@ namespace OGT
 
         private OrientationManager orientationManager;
 
-        public bool AddTarget(RectTransform rectTransform)
-        {
-            if (rectTransform == null || this.targets.Contains(rectTransform))
-            {
-                return false;
-            }
-
-            this.targets.Add(rectTransform);
-            return true;
-        }
-
-        private OrientationManager.Orientation lastAppliedOrientation;
-
 #if UNITY_EDITOR
 
         private OrientationManager.Orientation currentEditorOrientation;
 
-        private void Update()
+        // In Edit mode Unity only calls Update when the scene changes, and resizing the Game View doesn't count, so the
+        // orientation is polled from the editor loop instead
+        private void OnEnable()
         {
-            if (Application.isPlaying == false && this.currentEditorOrientation != OrientationManager.GetCurrentOrientation())
+            if (Application.isPlaying)
             {
-                this.currentEditorOrientation = OrientationManager.GetCurrentOrientation();
-                this.ApplyLayout(this.currentEditorOrientation);
+                return;
+            }
+
+            UnityEditor.EditorApplication.update -= this.EditorUpdate;
+            UnityEditor.EditorApplication.update += this.EditorUpdate;
+            this.EditorUpdate();
+        }
+
+        private void OnDisable()
+        {
+            UnityEditor.EditorApplication.update -= this.EditorUpdate;
+        }
+
+        private void EditorUpdate()
+        {
+            if (this == null || Application.isPlaying)
+            {
+                UnityEditor.EditorApplication.update -= this.EditorUpdate;
+                return;
+            }
+
+            var orientation = OrientationManager.GetCurrentOrientation();
+
+            if (this.currentEditorOrientation != orientation)
+            {
+                this.currentEditorOrientation = orientation;
+                this.ApplyLayout(orientation);
+                UnityEditor.SceneView.RepaintAll();
+                UnityEditor.EditorApplication.QueuePlayerLoopUpdate();
             }
         }
 
@@ -113,17 +132,16 @@ namespace OGT
 
             layout.Clear();
 
-            foreach (RectTransform target in targets)
+            foreach (RectTransform target in this.transform.GetComponentsInChildren<RectTransform>(true))
             {
-                if (target == null)
-                {
-                    continue;
-                }
-
                 RectTransformSnapshot snapshot = new();
                 snapshot.Record(target);
                 layout.Add(snapshot);
             }
+
+            // The other orientation may still hold objects that have since been deleted
+            this.portraitLayout.RemoveAll(snapshot => snapshot == null || snapshot.target == null);
+            this.landscapeLayout.RemoveAll(snapshot => snapshot == null || snapshot.target == null);
 
             EditorUtil.SetDirty(this);
 
@@ -134,15 +152,6 @@ namespace OGT
 
         public void ApplyLayout(OrientationManager.Orientation orientation)
         {
-            #if UNITY_EDITOR
-            if (this.lastAppliedOrientation == orientation)
-            {
-                return;
-            }
-            #endif
-
-            this.lastAppliedOrientation = orientation;
-
             List<RectTransformSnapshot> layout = orientation == OrientationManager.Orientation.Portrait
                 ? this.portraitLayout
                 : this.landscapeLayout;
