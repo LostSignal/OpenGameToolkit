@@ -998,6 +998,7 @@ GameObject:
   - component: {fileID: 7784315544282021529}
   - component: {fileID: 4982908384640802342}
   - component: {fileID: 7568898209211196902}
+  - component: {fileID: 317883544190802928}
   m_Layer: 0
   m_Name: Spinner Box
   m_TagString: Untagged
@@ -1188,7 +1189,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: OGT.UI::OGT.ResponsiveLayout
   showable: {fileID: 3807382895730383778}
-  targets: []
   portraitLayout: []
   landscapeLayout: []
 --- !u!225 &7568898209211196902
@@ -1203,6 +1203,24 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &317883544190802928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1270562818568744499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4f477006744a0a4ca0dabad708ea99c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: OGT.XR::OGT.XR.XRPanel
+  panelCanvas: {fileID: 4144191340561808228}
+  panel: {fileID: 947873915286624129}
+  settings: {fileID: 11400000, guid: b94163a381853194897edb2eabf51730, type: 2}
+  isGrabable: 0
+  disableObjectsInXrMode:
+  - {fileID: 7715709062204383140}
 --- !u!1 &1411115297776314262
 GameObject:
   m_ObjectHideFlags: 0
@@ -1428,6 +1446,7 @@ GameObject:
   - component: {fileID: 6933013196421621043}
   - component: {fileID: 8519277044079609754}
   - component: {fileID: 7944345500835075216}
+  - component: {fileID: 6505724604398541421}
   m_Layer: 0
   m_Name: 2FA - Send Code
   m_TagString: Untagged
@@ -1602,7 +1621,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: OGT.UI::OGT.ResponsiveLayout
   showable: {fileID: 5785132600332091542}
-  targets: []
   portraitLayout: []
   landscapeLayout: []
 --- !u!225 &7944345500835075216
@@ -1617,6 +1635,23 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &6505724604398541421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2017334161773616059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4f477006744a0a4ca0dabad708ea99c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: OGT.XR::OGT.XR.XRPanel
+  panelCanvas: {fileID: 8737044403445833736}
+  panel: {fileID: 599013824623350014}
+  settings: {fileID: 11400000, guid: b94163a381853194897edb2eabf51730, type: 2}
+  isGrabable: 0
+  disableObjectsInXrMode: []
 --- !u!1 &2068175490127059203
 GameObject:
   m_ObjectHideFlags: 0
@@ -1802,6 +1837,7 @@ GameObject:
   - component: {fileID: 1451399946566367183}
   - component: {fileID: 8790779537559328488}
   - component: {fileID: 1925449305345998728}
+  - component: {fileID: 3550785504625283381}
   m_Layer: 0
   m_Name: 2FA - Login With Code
   m_TagString: Untagged
@@ -1976,7 +2012,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: OGT.UI::OGT.ResponsiveLayout
   showable: {fileID: 7702282549694339150}
-  targets: []
   portraitLayout: []
   landscapeLayout: []
 --- !u!225 &1925449305345998728
@@ -1991,6 +2026,23 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &3550785504625283381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140319250144795260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4f477006744a0a4ca0dabad708ea99c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: OGT.XR::OGT.XR.XRPanel
+  panelCanvas: {fileID: 8793840724795426507}
+  panel: {fileID: 6666811617264983551}
+  settings: {fileID: 11400000, guid: b94163a381853194897edb2eabf51730, type: 2}
+  isGrabable: 0
+  disableObjectsInXrMode: []
 --- !u!1 &2368432128661332236
 GameObject:
   m_ObjectHideFlags: 0
@@ -2556,6 +2608,7 @@ GameObject:
   - component: {fileID: 1489474037105332233}
   - component: {fileID: 1201292899418163228}
   - component: {fileID: 1447174150366049455}
+  - component: {fileID: 3852585435429385171}
   m_Layer: 0
   m_Name: Email and Password - Forgot Password
   m_TagString: Untagged
@@ -2730,7 +2783,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: OGT.UI::OGT.ResponsiveLayout
   showable: {fileID: 4127413846841448546}
-  targets: []
   portraitLayout: []
   landscapeLayout: []
 --- !u!225 &1447174150366049455
@@ -2745,6 +2797,23 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &3852585435429385171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4497590240610716953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4f477006744a0a4ca0dabad708ea99c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: OGT.XR::OGT.XR.XRPanel
+  panelCanvas: {fileID: 7397547006948581702}
+  panel: {fileID: 5685022841153616407}
+  settings: {fileID: 11400000, guid: b94163a381853194897edb2eabf51730, type: 2}
+  isGrabable: 0
+  disableObjectsInXrMode: []
 --- !u!1 &4501337106833224367
 GameObject:
   m_ObjectHideFlags: 0
@@ -2967,6 +3036,86 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &5320245060591698418
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5409804241104023901}
+  - component: {fileID: 8940787748848387793}
+  - component: {fileID: 5382841827960951582}
+  m_Layer: 0
+  m_Name: XR
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5409804241104023901
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5320245060591698418}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1909699455590917859}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8940787748848387793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5320245060591698418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb4d4231e9711204bb42f58c45f1bdbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: OGT.XR::OGT.XRManager
+  xrUtilManager: {fileID: 5382841827960951582}
+  initializeOnStartup: 1
+  flatInputSystem: {fileID: 0}
+  xrInputSystem: {fileID: 0}
+--- !u!114 &5382841827960951582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5320245060591698418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4475224ada587224886ef91603960430, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: OGT.XR::OGT.XR.XRUtilManager
+  flatMode: {fileID: 11400000, guid: 8d3f2f802f9cb8847b0bd5cb924559e1, type: 2}
+  devices:
+  - {fileID: 11400000, guid: be0804b100bc786458ff89d91df339c5, type: 2}
+  - {fileID: 11400000, guid: 119576cddaaa8c042bdf2ea4d447df86, type: 2}
+  - {fileID: 11400000, guid: c133f8ca1232e6e489319effd7087f2c, type: 2}
+  - {fileID: 11400000, guid: 209b30a553eca2846910f75ec1e2355e, type: 2}
+  - {fileID: 11400000, guid: 0d9f02d8a0006f2458f79b4b0a008f58, type: 2}
+  - {fileID: 11400000, guid: 696688d106551344cbf55ef6d7639b50, type: 2}
+  - {fileID: 11400000, guid: 4d1e96dd709821f4eb1f1d8e6eed1e1b, type: 2}
+  - {fileID: 11400000, guid: 39ec68936fcb95d4985925451e779a08, type: 2}
+  - {fileID: 11400000, guid: 574118f13abab3b468f42929f3e27cdb, type: 2}
+  - {fileID: 11400000, guid: b73440d4434012e4fbf412a29becd934, type: 2}
+  - {fileID: 11400000, guid: c4d7f125f54986e40b1123fe5baea69e, type: 2}
+  - {fileID: 11400000, guid: 728fd93faf076044387ba0f3017e332e, type: 2}
+  - {fileID: 11400000, guid: 834186b0fee049747ae23938e386f6cf, type: 2}
+  headsetSearchOrder: 04000000060000000700000008000000i
+  headsetSearchPlatforms: 02000000010000000d000000070000000000000010000000i
+  setTargetFramerateOnMobileAR: 1
+  mobileArTargetFramerate: 30
 --- !u!1 &5709847377842740657
 GameObject:
   m_ObjectHideFlags: 0
@@ -3541,6 +3690,7 @@ GameObject:
   - component: {fileID: 9141463637439059557}
   - component: {fileID: 7595467491208136375}
   - component: {fileID: 3296260786637437481}
+  - component: {fileID: 5549047951538265414}
   m_Layer: 0
   m_Name: Debug Menu
   m_TagString: Untagged
@@ -3715,7 +3865,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: OGT.UI::OGT.ResponsiveLayout
   showable: {fileID: 9194679706724143728}
-  targets: []
   portraitLayout: []
   landscapeLayout: []
 --- !u!225 &7595467491208136375
@@ -3752,6 +3901,23 @@ MonoBehaviour:
   versionString: 4
   fps: 3
   userId: 6
+--- !u!114 &5549047951538265414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6551018627513790815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4f477006744a0a4ca0dabad708ea99c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: OGT.XR::OGT.XR.XRPanel
+  panelCanvas: {fileID: 1687985583454110090}
+  panel: {fileID: 1464079334732143785}
+  settings: {fileID: 11400000, guid: b94163a381853194897edb2eabf51730, type: 2}
+  isGrabable: 0
+  disableObjectsInXrMode: []
 --- !u!1 &6699997877501635935
 GameObject:
   m_ObjectHideFlags: 0
@@ -3951,6 +4117,7 @@ GameObject:
   - component: {fileID: 7173401248503641764}
   - component: {fileID: 3012318235401907454}
   - component: {fileID: 9057524583605665119}
+  - component: {fileID: 42580683093147065}
   m_Layer: 5
   m_Name: Email and Password - Sign Up
   m_TagString: Untagged
@@ -4125,7 +4292,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: OGT.UI::OGT.ResponsiveLayout
   showable: {fileID: 6279489816125118695}
-  targets: []
   portraitLayout: []
   landscapeLayout: []
 --- !u!225 &9057524583605665119
@@ -4140,6 +4306,23 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &42580683093147065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6886544634951804110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4f477006744a0a4ca0dabad708ea99c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: OGT.XR::OGT.XR.XRPanel
+  panelCanvas: {fileID: 7816584820288243183}
+  panel: {fileID: 4853012844793108912}
+  settings: {fileID: 11400000, guid: b94163a381853194897edb2eabf51730, type: 2}
+  isGrabable: 0
+  disableObjectsInXrMode: []
 --- !u!1 &6908997619051104326
 GameObject:
   m_ObjectHideFlags: 0
@@ -4157,6 +4340,7 @@ GameObject:
   - component: {fileID: 2012664984551562004}
   - component: {fileID: 389225188468240718}
   - component: {fileID: 532761440639770653}
+  - component: {fileID: 1823635834024450199}
   m_Layer: 5
   m_Name: Email and Password - Login
   m_TagString: Untagged
@@ -4331,7 +4515,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: OGT.UI::OGT.ResponsiveLayout
   showable: {fileID: 2712284446246605037}
-  targets: []
   portraitLayout: []
   landscapeLayout: []
 --- !u!225 &532761440639770653
@@ -4346,6 +4529,23 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &1823635834024450199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6908997619051104326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4f477006744a0a4ca0dabad708ea99c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: OGT.XR::OGT.XR.XRPanel
+  panelCanvas: {fileID: 3650002873694226924}
+  panel: {fileID: 5281229848541160088}
+  settings: {fileID: 11400000, guid: b94163a381853194897edb2eabf51730, type: 2}
+  isGrabable: 0
+  disableObjectsInXrMode: []
 --- !u!1 &7242861363616404570
 GameObject:
   m_ObjectHideFlags: 0
@@ -4416,6 +4616,7 @@ GameObject:
   - component: {fileID: 8116961091991150809}
   - component: {fileID: 3258774312022231211}
   - component: {fileID: 5464567900086138110}
+  - component: {fileID: 585339335836975470}
   m_Layer: 0
   m_Name: String Input Box
   m_TagString: Untagged
@@ -4611,7 +4812,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: OGT.UI::OGT.ResponsiveLayout
   showable: {fileID: 7487681673191852103}
-  targets: []
   portraitLayout: []
   landscapeLayout: []
 --- !u!225 &5464567900086138110
@@ -4626,6 +4826,24 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &585339335836975470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7337071186044335211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4f477006744a0a4ca0dabad708ea99c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: OGT.XR::OGT.XR.XRPanel
+  panelCanvas: {fileID: 51831837904344792}
+  panel: {fileID: 6444457576855883974}
+  settings: {fileID: 11400000, guid: b94163a381853194897edb2eabf51730, type: 2}
+  isGrabable: 0
+  disableObjectsInXrMode:
+  - {fileID: 1031121430663860444}
 --- !u!1 &7448900854494800902
 GameObject:
   m_ObjectHideFlags: 0
@@ -4920,6 +5138,7 @@ GameObject:
   - component: {fileID: 2955442566370793037}
   - component: {fileID: 5232737234279136948}
   - component: {fileID: 3922166519857631900}
+  - component: {fileID: 5178190832865649540}
   m_Layer: 0
   m_Name: Logging In...
   m_TagString: Untagged
@@ -5094,7 +5313,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: OGT.UI::OGT.ResponsiveLayout
   showable: {fileID: 6425546797689623404}
-  targets: []
   portraitLayout: []
   landscapeLayout: []
 --- !u!225 &3922166519857631900
@@ -5109,6 +5327,23 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &5178190832865649540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7745453690220659003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4f477006744a0a4ca0dabad708ea99c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: OGT.XR::OGT.XR.XRPanel
+  panelCanvas: {fileID: 3407908695130636460}
+  panel: {fileID: 6992864665570930626}
+  settings: {fileID: 11400000, guid: b94163a381853194897edb2eabf51730, type: 2}
+  isGrabable: 0
+  disableObjectsInXrMode: []
 --- !u!1 &7872204594347032317
 GameObject:
   m_ObjectHideFlags: 0
@@ -5126,6 +5361,7 @@ GameObject:
   - component: {fileID: 1975071278275141890}
   - component: {fileID: 4266051149087440238}
   - component: {fileID: 234175211660518432}
+  - component: {fileID: 1406944397685501189}
   m_Layer: 0
   m_Name: Change Display Name
   m_TagString: Untagged
@@ -5300,7 +5536,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: OGT.UI::OGT.ResponsiveLayout
   showable: {fileID: 5294485724504297604}
-  targets: []
   portraitLayout: []
   landscapeLayout: []
 --- !u!225 &234175211660518432
@@ -5315,6 +5550,23 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &1406944397685501189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7872204594347032317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4f477006744a0a4ca0dabad708ea99c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: OGT.XR::OGT.XR.XRPanel
+  panelCanvas: {fileID: 3513243354741500804}
+  panel: {fileID: 1274608885250332368}
+  settings: {fileID: 11400000, guid: b94163a381853194897edb2eabf51730, type: 2}
+  isGrabable: 0
+  disableObjectsInXrMode: []
 --- !u!1 &8093339235640236113
 GameObject:
   m_ObjectHideFlags: 0
@@ -5378,6 +5630,7 @@ GameObject:
   - component: {fileID: 3924476653458799835}
   - component: {fileID: 4476713101796927265}
   - component: {fileID: 5581908724957487}
+  - component: {fileID: 4174166370795938744}
   m_Layer: 5
   m_Name: Message Box
   m_TagString: Untagged
@@ -5571,7 +5824,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: OGT.UI::OGT.ResponsiveLayout
   showable: {fileID: 959514366291246151}
-  targets: []
   portraitLayout: []
   landscapeLayout: []
 --- !u!225 &5581908724957487
@@ -5586,6 +5838,24 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &4174166370795938744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8252246696585136151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4f477006744a0a4ca0dabad708ea99c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: OGT.XR::OGT.XR.XRPanel
+  panelCanvas: {fileID: 8217719917708706655}
+  panel: {fileID: 888646336794058239}
+  settings: {fileID: 11400000, guid: b94163a381853194897edb2eabf51730, type: 2}
+  isGrabable: 0
+  disableObjectsInXrMode:
+  - {fileID: 1411115297776314262}
 --- !u!1 &8774838501055764484
 GameObject:
   m_ObjectHideFlags: 0
@@ -5819,6 +6089,7 @@ Transform:
   - {fileID: 1821921709359994579}
   - {fileID: 7226533950535222070}
   - {fileID: 1397794039933558267}
+  - {fileID: 5409804241104023901}
   - {fileID: 4415792879011871799}
   m_Father: {fileID: 4629642153797569352}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

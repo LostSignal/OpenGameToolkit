@@ -29,6 +29,21 @@ namespace OGT
 #endif
         }
 
+        public static T EditorGetAssetByGuid<T>(this Object obj, string guid) where T : UnityEngine.Object
+        {
+#if UNITY_EDITOR
+            var assetPath = UnityEditor.AssetDatabase.GUIDToAssetPath(guid);
+            if (string.IsNullOrEmpty(assetPath))
+            {
+                return null;
+            }
+
+            return UnityEditor.AssetDatabase.LoadAssetAtPath<T>(assetPath);
+#else
+            throw new System.Exception("ObjectExtension.GetAssetByGuid called in payer build!");
+#endif
+        }
+
         public static string EditorGetAssetPath(this Object obj)
         {
 #if UNITY_EDITOR

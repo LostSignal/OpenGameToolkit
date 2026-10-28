@@ -6,6 +6,7 @@
 
 namespace OGT
 {
+    using OGT.XR;
     using System;
     using System.Linq;
     using UnityEditor;
@@ -30,7 +31,6 @@ namespace OGT
         private const string UtilityMenu = "Utility/";
         private const string FoldersMenu = "Folders/";
         private const string FastPlatformSwitchMenu = "Fast Platform Switch (Beta)/";
-        private const string AssetsMenu = "Assets/";
 
         private static readonly LoggingLevel[] LoggingLevels = (LoggingLevel[])Enum.GetValues(typeof(LoggingLevel));
 
@@ -47,6 +47,7 @@ namespace OGT
 
             // Misc
             menu.AddItem(new GUIContent("Is Development Build"), RuntimeSettings.IsOgtDevelopmentBuild, () => RuntimeSettings.IsOgtDevelopmentBuild = !RuntimeSettings.IsOgtDevelopmentBuild);
+            menu.AddItem(new GUIContent("Force Pancake Mode (XR)"), ForceFlatModeInEditorUtil.ForceFlatModeInEditor, () => ForceFlatModeInEditorUtil.ForceFlatModeInEditor = !ForceFlatModeInEditorUtil.ForceFlatModeInEditor);
 
             menu.AddSeparator(string.Empty);
 

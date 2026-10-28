@@ -85,11 +85,11 @@ namespace OGT.Settings
 
                 if (existingFiles.Contains(blobName))
                 {
-                    Logger.LogFormat("Skipping AssetBundle {0}, it already exists", blobName, azureConfig.StorageAccountName);
+                    Logger.LogFormat(this, "Skipping AssetBundle {0} to {1}, it already exists", blobName, azureConfig.StorageAccountName);
                     continue;
                 }
 
-                Logger.LogFormat("Uploading AssetBundle {0}", blobName, azureConfig.StorageAccountName);
+                Logger.LogFormat(this, "Uploading AssetBundle {0} to {1}", blobName, azureConfig.StorageAccountName);
 
                 try
                 {

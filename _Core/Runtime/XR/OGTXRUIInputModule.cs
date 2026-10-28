@@ -1,7 +1,5 @@
-#pragma warning disable
-
 //-----------------------------------------------------------------------
-// <copyright file="HavenXRUIInputModule.cs" company="Lost Signal LLC">
+// <copyright file="OGTXRUIInputModule.cs" company="Lost Signal LLC">
 //     Copyright (c) Lost Signal LLC. All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
@@ -10,9 +8,9 @@ namespace OGT.XR
 {
     [UnityEngine.AddComponentMenu("")]
 #if USING_UNITY_XR_INTERACTION_TOOLKIT
-    public class LostXRUIInputModule : UnityEngine.XR.Interaction.Toolkit.UI.XRUIInputModule
+    public class OGTXRUIInputModule : UnityEngine.XR.Interaction.Toolkit.UI.XRUIInputModule
 #else
-    public class LostXRUIInputModule : UnityEngine.MonoBehaviour
+    public class OGTXRUIInputModule : UnityEngine.MonoBehaviour
 #endif
     {
     }

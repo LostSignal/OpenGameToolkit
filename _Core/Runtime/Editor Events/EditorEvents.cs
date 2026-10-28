@@ -32,8 +32,9 @@ namespace OGT
         public sealed class OnProcessSceneBuildAttribute : EditorEvent {}
         public sealed class OnExitingPlayModeAttribute : EditorEvent {}
         public sealed class OnExitPlayModeAttribute : EditorEvent {}
-        public sealed class OnEnterPlayModeAttribute : EditorEvent {}
-        public sealed class OnExitEditor : EditorEvent {}
+        public sealed class OnEnterPlayModeAttribute : EditorEvent { }
+        public sealed class OnExitEditor : EditorEvent { }
+        public sealed class OnEditorUpdate : EditorEvent { }
 
 #if UNITY_EDITOR
 
@@ -76,6 +77,7 @@ namespace OGT
 
                 EditorApplication.delayCall += () => ExecuteAttribute<EditorEvents.InitializeOnLoad>();
                 EditorApplication.quitting += () => ExecuteAttribute<EditorEvents.OnExitEditor>();
+                EditorApplication.update += () => ExecuteAttribute<EditorEvents.OnEditorUpdate>();
 
                 EditorApplication.playModeStateChanged += PlayModeStateChanged;
             }

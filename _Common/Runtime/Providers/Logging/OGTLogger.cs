@@ -23,6 +23,7 @@ namespace OGT
         public static readonly OGTLogger Validation = new("Validation");
         public static readonly OGTLogger EditorEvents = new("Editor Events");
         public static readonly OGTLogger Networking = new("Networking");
+        public static readonly OGTLogger XR = new("XR");
 
         private string channelName;
         private int channelHash;
@@ -163,6 +164,21 @@ namespace OGT
         public void LogFormat(object context, string message, object arg1, object arg2, object arg3, object arg4)
         {
             this.Log(this.channelHash, LoggingLevel.Info, context, message, arg1, arg2, arg3, arg4);
+        }
+
+        public void LogFormat(object context, string message, object arg1, object arg2, object arg3)
+        {
+            this.Log(this.channelHash, LoggingLevel.Info, context, message, arg1, arg2, arg3);
+        }
+
+        public void LogFormat(object context, string message, object arg1, object arg2)
+        {
+            this.Log(this.channelHash, LoggingLevel.Info, context, message, arg1, arg2);
+        }
+
+        public void LogFormat(object context, string message, object arg1)
+        {
+            this.Log(this.channelHash, LoggingLevel.Info, context, message, arg1);
         }
 
         public void LogWarningFormat(string message, object arg1)

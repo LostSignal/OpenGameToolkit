@@ -13,8 +13,12 @@ MonoBehaviour:
   m_Name: Development Build Step
   m_EditorClassIdentifier: OGT.Unity.Core.Editor::OGT.BuildProfile.EnvironmentBuildStep
   isUnityDevelopmentBuild: 1
+  allowConnectProfiler: 1
+  allowDebugging: 1
+  allowDeepProfiler: 0
   isOgtDevelopmentBuild: 1
   enablePipelineRuntimeInBuild: 1
+  codeOptimization: 4
   copySimpleWebServer: 1
   fileNamesAsHashes: 1
-  dataCachine: 0
+  dataCaching: 0

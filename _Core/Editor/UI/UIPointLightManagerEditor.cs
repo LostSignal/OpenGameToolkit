@@ -19,7 +19,7 @@ namespace OGT
 
             if (EditorGUI.EndChangeCheck())
             {
-                ((UIPointLightManager)this.target).UpdateLightingAndShadows();
+                ((UIPointLightManager)this.target).EditorUpdateLightingAndShadows();
             }
         }
     }

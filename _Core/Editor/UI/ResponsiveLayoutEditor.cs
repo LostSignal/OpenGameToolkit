@@ -6,8 +6,6 @@
 
 namespace OGT
 {
-    using System;
-    using System.Reflection;
     using UnityEditor;
     using UnityEngine;
 
@@ -15,8 +13,8 @@ namespace OGT
     public class ResponsiveLayoutEditor : UnityEditor.Editor
     {
         // Game View resolution names
-        private const string PortraitResolution = "Generic Phone";
-        private const string LandscapeResolution = "1080p";
+        private const string PortraitResolution = "1080p (Portrait)";
+        private const string LandscapeResolution = "1080p (Landscape)";
 
         public override void OnInspectorGUI()
         {
@@ -39,7 +37,7 @@ namespace OGT
             if (GUILayout.Button($"Save {orientation} Layout", GUILayout.Height(32)))
             {
                 Undo.RecordObject(layout, $"Save {orientation} Layout");
-                layout.RecordCurrentLayout();
+                layout.EditorRecordCurrentLayout();
                 EditorUtility.SetDirty(layout);
             }
 
@@ -50,13 +48,13 @@ namespace OGT
 
             if (GUILayout.Button("Switch to Portrait", GUILayout.Height(28)))
             {
-                layout.RecordCurrentLayout();
+                layout.EditorRecordCurrentLayout();
                 SetGameViewResolution(PortraitResolution);
             }
 
             if (GUILayout.Button("Switch to Landscape", GUILayout.Height(28)))
             {
-                layout.RecordCurrentLayout();
+                layout.EditorRecordCurrentLayout();
                 SetGameViewResolution(LandscapeResolution);
             }
 

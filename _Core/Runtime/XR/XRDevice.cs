@@ -1,5 +1,3 @@
-#pragma warning disable
-
 //-----------------------------------------------------------------------
 // <copyright file="XRDevice.cs" company="Lost Signal LLC">
 //     Copyright (c) Lost Signal LLC. All rights reserved.
@@ -35,7 +33,7 @@ namespace OGT.XR
         Playstation,
     }
 
-    [CreateAssetMenu(menuName = "Lost/XR Device")]
+    [CreateAssetMenu(menuName = "OGT/XR/XR Device")]
     public class XRDevice : ScriptableObject
     {
 #pragma warning disable 0649

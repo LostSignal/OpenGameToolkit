@@ -73,6 +73,9 @@ namespace OGT.BoardGame
         public Stats Stats { get; set; }
         public int TileId { get; set; } = -1;
 
+        /// <summary>Gets or sets a value indicating whether this character is played by the computer instead of its owning user.</summary>
+        public bool IsAI { get; set; }
+
         public BoardGameCharacter Copy()
         {
             return new BoardGameCharacter
@@ -81,6 +84,7 @@ namespace OGT.BoardGame
                 CharacterStatsId = this.CharacterStatsId,
                 CharacterName = this.CharacterName,
                 OwningUserId = this.OwningUserId,
+                IsAI = this.IsAI,
                 Team = this.Team,
                 Position = this.Position,
                 Stats = this.Stats != null ? new Stats(this.Stats) : new Stats(),

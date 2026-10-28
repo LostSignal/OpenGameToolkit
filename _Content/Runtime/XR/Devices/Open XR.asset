@@ -9,11 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6dc0d1e5b2f45ec41b44ee5f54ef9c6c, type: 3}
-  m_Name: XR Dialog Settings
+  m_Script: {fileID: 11500000, guid: 3615101b6c5415e4ebd8f299dfc83098, type: 3}
+  m_Name: Open XR
   m_EditorClassIdentifier: 
-  settings:
-  - canvasDistanceForwards: 2
-    canvasDistanceUpwards: 0
-    positionLerpSpeed: 2
-    rotationLerpSpeed: 10
+  xrType: 3
+  primaryXRLoader: 8
+  secondaryXRLoader: 0
+  deviceNames: []
+  hmdDeviceNames:
+  - Head Tracking - OpenXR
+  platforms: 07000000000000001000000002000000010000000d0000000b000000i
