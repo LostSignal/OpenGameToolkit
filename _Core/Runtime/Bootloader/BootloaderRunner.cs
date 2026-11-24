@@ -69,7 +69,10 @@ namespace OGT
 
             if (string.IsNullOrWhiteSpace(bootloader.StartupSceneName) == false && SceneManager.GetActiveScene().name == bootloader.StartupSceneName)
             {
-                var initialSceneAssetReference = new AssetReference(bootloader.InitialSceneGuid);
+                var xrApp = bootloaderGameObject.GetComponent<IXRApp>();
+                var initialSceneGuid = xrApp?.IsXRApp == true ? bootloader.InitialXRSceneGuid : bootloader.InitialSceneGuid;
+
+                var initialSceneAssetReference = new AssetReference(initialSceneGuid);
 
                 var initialSceneLoadStopwatch = Stopwatch.StartNew();
                 var loadSceneHandle = initialSceneAssetReference.LoadSceneAsync(LoadSceneMode.Additive, false);
@@ -115,7 +118,7 @@ namespace OGT
                 }
                 else
                 {
-                    Logger.LogError($"Failed to load initial scene {bootloader.InitialSceneGuid}");
+                    Logger.LogError($"Failed to load initial scene {initialSceneGuid}");
                 }
             }
 

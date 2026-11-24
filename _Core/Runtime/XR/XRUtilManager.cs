@@ -55,18 +55,18 @@ namespace OGT.XR
             get => this.currentDevice;
         }
 
-        public void Initialize()
+        public async Task Initialize()
         {
 #if USING_UNITY_XR_MANAGEMENT
-            this.Initialize(Application.isEditor && Application.isPlaying && ForceFlatModeInEditorUtil.ForceFlatModeInEditor);
+            await this.Initialize(Application.isEditor && Application.isPlaying && ForceFlatModeInEditorUtil.ForceFlatModeInEditor);
 #else
-            this.Initialize(true);
+            await this.Initialize(true);
 #endif
         }
 
         public void ToggleVR()
         {
-            this.Initialize(!this.IsFlatMode);
+            _ = this.Initialize(!this.IsFlatMode);
         }
 
         [EditorEvents.OnExitingPlayMode]
@@ -150,7 +150,7 @@ namespace OGT.XR
         }
 #endif
 
-        private async void Initialize(bool forceFlatMode)
+        private async Task Initialize(bool forceFlatMode)
         {
 #if !USING_UNITY_XR_MANAGEMENT
             await Task.Yield();
@@ -185,6 +185,10 @@ namespace OGT.XR
             if (activeDevice != null)
             {
                 this.SetCurrentDevice(activeDevice);
+            }
+            else
+            {
+                this.SetCurrentDevice(this.flatMode);
             }
 
             PrintDebugOutput();

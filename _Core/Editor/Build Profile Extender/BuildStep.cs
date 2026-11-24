@@ -14,19 +14,19 @@ namespace OGT.BuildProfile
     {
         public static readonly OGTLogger Logger = new OGTLogger("Build Step");
 
-        public virtual void OnBuildProfileSelected()
+        public virtual void OnBuildProfileSelected(UnityEditor.Build.Profile.BuildProfile buildProfile)
         {
         }
 
-        public virtual void OnPrepareForBuild(BuildPlayerContext buildPlayerContext)
+        public virtual void OnPrepareForBuild(UnityEditor.Build.Profile.BuildProfile buildProfile, BuildPlayerContext buildPlayerContext)
         {
         }
 
-        public virtual void OnPreprocessBuild(BuildProfileExtender.Environment environment, BuildReport report)
+        public virtual void OnPreprocessBuild(UnityEditor.Build.Profile.BuildProfile buildProfile, BuildProfileExtender.Environment environment, BuildReport report)
         {
         }
 
-        public virtual void OnPostprocessBuild(BuildProfileExtender.Environment environment, BuildReport report)
+        public virtual void OnPostprocessBuild(UnityEditor.Build.Profile.BuildProfile buildProfile, BuildProfileExtender.Environment environment, BuildReport report)
         {
         }
     }

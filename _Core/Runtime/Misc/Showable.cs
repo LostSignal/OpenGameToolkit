@@ -55,6 +55,10 @@ namespace OGT
 
         public UnityEvent OnHideEnd => this.onHideEnd;
 
+        // Raised while showing, once the canvas has been scaled and laid out but is still invisible. Anything that changes how it's
+        // presented (like XRPanel putting it in world space) needs to happen here, or the player sees it change.
+        public event Action OnBeforeReveal;
+
         private Coroutine showCoroutine;
         private Coroutine hideCoroutine;
 
@@ -112,6 +116,14 @@ namespace OGT
                 this.SetRectMasks2ds(true);
                 yield return null;
 
+                if (this.OnBeforeReveal != null)
+                {
+                    // A couple of frames for those changes to settle, since a canvas changing render modes takes that long to resize
+                    this.OnBeforeReveal.Invoke();
+                    yield return null;
+                    yield return null;
+                }
+
                 if (this.canvasGroup != null)
                 {
                     this.canvasGroup.alpha = 1f;
@@ -163,7 +175,9 @@ namespace OGT
 
             this.CancelShowCoroutine();
             this.IsShown = false;
-            this.hideCoroutine = this.StartCoroutine(HideCoroutine());
+
+            // On the runner, same as Show, since a Showable that isn't active (like the Game panel's action bars in XR) can't run its own
+            this.hideCoroutine = CoroutineRunner.Instance.StartCoroutine(HideCoroutine());
 
             IEnumerator HideCoroutine()
             {
@@ -360,7 +374,7 @@ namespace OGT
         {
             if (this.hideCoroutine != null)
             {
-                this.StopCoroutine(this.hideCoroutine);
+                CoroutineRunner.Instance.StopCoroutine(this.hideCoroutine);
                 this.hideCoroutine = null;
             }
         }
@@ -369,7 +383,7 @@ namespace OGT
         {
             if (this.showCoroutine != null)
             {
-                this.StopCoroutine(this.showCoroutine);
+                CoroutineRunner.Instance.StopCoroutine(this.showCoroutine);
                 this.showCoroutine = null;
             }
         }

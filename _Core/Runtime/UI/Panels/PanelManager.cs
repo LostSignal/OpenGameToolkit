@@ -31,6 +31,10 @@ namespace OGT
         private List<Panel> panelStack = new();
         private AppOrientation appOrientation;
 
+        public event Action<Panel> OnPanelRegistered;
+
+        public IEnumerable<Panel> Panels => this.panels.Values;
+
         public void ConfigureCanvasScaler(CanvasScaler canvasScaler)
         {
             canvasScaler.uiScaleMode = this.uiScaleMode;
@@ -71,6 +75,7 @@ namespace OGT
             }
 
             this.panels.Add(panel.name, panel);
+            this.OnPanelRegistered?.Invoke(panel);
         }
 
         public void UnregisterPanel(Panel panel)

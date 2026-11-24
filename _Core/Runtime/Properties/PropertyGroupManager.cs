@@ -26,6 +26,9 @@ namespace OGT.Properties
         [SerializeField] private bool loadDeviceSettingsOnStartup = true;
         [SerializeField] private bool saveDeviceSettingsOnExit = true;
 
+        private bool hasLoadedDeviceSettings;
+        private string lastSavedDeviceSettings;
+
         protected override Task InitializeManager(Bootloader bootloader)
         {
             // Making sure the cache is initialized and up to date
@@ -40,10 +43,24 @@ namespace OGT.Properties
                 if (string.IsNullOrWhiteSpace(deviceSettingsString) == false)
                 {
                     Logger.Log("PropertyGroupManager: Loading device settings from PlayerPrefs: " + deviceSettingsString);
-                    this.DeserializeDeviceSettingsFromString(deviceSettingsString);
-                    Logger.Log("PropertyGroupManager: Finished loading device settings from PlayerPrefs");
+
+                    try
+                    {
+                        this.DeserializeDeviceSettingsFromString(deviceSettingsString);
+                        this.lastSavedDeviceSettings = deviceSettingsString;
+                        Logger.Log("PropertyGroupManager: Finished loading device settings from PlayerPrefs");
+                    }
+                    catch (Exception e)
+                    {
+                        // Bad or out of date data must never stop the manager (and so the whole app) from starting up.
+                        // Whatever was read before the failure is kept, and everything else stays on its default.
+                        Logger.LogError($"PropertyGroupManager: Failed to load device settings from PlayerPrefs: {e}");
+                    }
                 }
             }
+
+            // Nothing is saved before this point, so a save can never write defaults over settings that haven't been read yet
+            this.hasLoadedDeviceSettings = true;
 
             return Task.CompletedTask;
         }
@@ -51,12 +68,48 @@ namespace OGT.Properties
         public override void OnManagerDestroyed()
         {
             base.OnManagerDestroyed();
+            this.SaveDeviceSettings();
+        }
 
-            if (this.saveDeviceSettingsOnExit)
+        // Writes the device settings to disk now. Call this after changing settings that must survive the app being killed.
+        public void SaveDeviceSettings()
+        {
+            if (this.saveDeviceSettingsOnExit == false || this.hasLoadedDeviceSettings == false)
             {
-                var deviceSettingsString = this.GetDeviceSettingsAsBase64String();
-                Logger.Log("PropertyGroupManager: Saving device settings to PlayerPrefs: " + deviceSettingsString);
-                PlayerPrefs.SetString(PlayerPrefsKey, deviceSettingsString);
+                return;
+            }
+
+            var deviceSettingsString = this.GetDeviceSettingsAsBase64String();
+
+            if (deviceSettingsString == this.lastSavedDeviceSettings)
+            {
+                return;
+            }
+
+            Logger.Log("PropertyGroupManager: Saving device settings to PlayerPrefs: " + deviceSettingsString);
+            PlayerPrefs.SetString(PlayerPrefsKey, deviceSettingsString);
+
+            // On Android / Quest the app is normally killed by the OS rather than quit, so PlayerPrefs never gets its
+            // automatic write on exit and has to be flushed by hand
+            PlayerPrefs.Save();
+            this.lastSavedDeviceSettings = deviceSettingsString;
+        }
+
+        // Taking the headset off, opening the system menu or going back to Home pauses / unfocuses the app, and on Quest
+        // that is usually the last thing that runs before the process is killed, so it's the reliable place to save
+        private void OnApplicationPause(bool isPaused)
+        {
+            if (isPaused)
+            {
+                this.SaveDeviceSettings();
+            }
+        }
+
+        private void OnApplicationFocus(bool hasFocus)
+        {
+            if (hasFocus == false)
+            {
+                this.SaveDeviceSettings();
             }
         }
 

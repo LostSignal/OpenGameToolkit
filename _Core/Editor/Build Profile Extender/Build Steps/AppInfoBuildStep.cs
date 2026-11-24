@@ -22,6 +22,8 @@ namespace OGT.BuildProfile
     [CreateAssetMenu(fileName = "App Info", menuName = "OGT/Build Steps/App Info")]
     public class AppInfoBuildStep : BuildStep
     {
+        public const string MetaQuestPlatformId = "80657fe557de4d17822398b3a01b8c9e";
+
         private const int LabelWidth = 300;
 
         [SerializeField] private string productName;
@@ -67,12 +69,12 @@ namespace OGT.BuildProfile
         [LabelWidth(LabelWidth)]
         private bool addLidbfsFlag = true;
 
-        public override void OnBuildProfileSelected()
+        public override void OnBuildProfileSelected(UnityEditor.Build.Profile.BuildProfile buildProfile)
         {
             this.SetBootloaderGuid();
         }
 
-        public override void OnPrepareForBuild(BuildPlayerContext buildPlayerContext)
+        public override void OnPrepareForBuild(UnityEditor.Build.Profile.BuildProfile buildProfile, BuildPlayerContext buildPlayerContext)
         {
             this.DisableProjectAuditorPostBuild();
             this.SetBuildProfileInfo();
@@ -80,18 +82,18 @@ namespace OGT.BuildProfile
             this.BuildAddressables();
         }
 
-        public override void OnPreprocessBuild(BuildProfileExtender.Environment environment, BuildReport report)
+        public override void OnPreprocessBuild(UnityEditor.Build.Profile.BuildProfile buildProfile, BuildProfileExtender.Environment environment, BuildReport report)
         {
             this.SetProductName();
             this.SetBundleIdentifier(report.summary.platform);
             this.SetVersion();
             this.SetBootloaderGuid();
-            this.SetBootloaderOrientation(report.summary.platform);
+            this.SetBootloaderOrientation(buildProfile, report.summary.platform);
             this.AppendBuildNumberOnUnityCloudBuild(report.summary.platform);
             this.AddLidbfsFlag(report.summary.platform);
         }
 
-        public override void OnPostprocessBuild(BuildProfileExtender.Environment environment, BuildReport report)
+        public override void OnPostprocessBuild(UnityEditor.Build.Profile.BuildProfile buildProfile, BuildProfileExtender.Environment environment, BuildReport report)
         {
             this.FixWebGLRequestInstancesParameters(report.summary.platform, report.summary.outputPath);
             this.SetAppUsesNonExemptEncryption(report.summary.platform, report.summary.outputPath);
@@ -180,11 +182,32 @@ namespace OGT.BuildProfile
             }
         }
 
-        private void SetBootloaderOrientation(BuildTarget buildTarget)
+        private void SetBootloaderOrientation(BuildProfile buildProfile, BuildTarget buildTarget)
         {
             var supportedOrientation = buildTarget == BuildTarget.iOS || buildTarget == BuildTarget.Android
                 ? this.bootloader.SupportedMobileOrientation
                 : this.bootloader.SupportedDesktopOrientation;
+
+            // if Meta Quest Build target, then force landscape orientation
+            if (IsMetaQuest(buildProfile))
+            {
+                Logger.Log($"[AppInfoBuildStep] Meta Quest - Setting PlayerSettings.defaultInterfaceOrientation to '{UIOrientation.LandscapeLeft}'");
+                PlayerSettings.defaultInterfaceOrientation = UIOrientation.LandscapeLeft;
+
+                Logger.Log($"[AppInfoBuildStep] Meta Quest - Setting PlayerSettings.allowedAutorotateToPortrait to '{false}'");
+                PlayerSettings.allowedAutorotateToPortrait = false;
+
+                Logger.Log($"[AppInfoBuildStep] Meta Quest - Setting PlayerSettings.allowedAutorotateToPortraitUpsideDown to '{false}'");
+                PlayerSettings.allowedAutorotateToPortraitUpsideDown = false;
+
+                Logger.Log($"[AppInfoBuildStep] Meta Quest - Setting PlayerSettings.allowedAutorotateToLandscapeLeft to '{false}'");
+                PlayerSettings.allowedAutorotateToLandscapeLeft = false;
+
+                Logger.Log($"[AppInfoBuildStep] Meta Quest - Setting PlayerSettings.allowedAutorotateToLandscapeRight to '{false}'");
+                PlayerSettings.allowedAutorotateToLandscapeRight = false;
+
+                return;
+            }
 
             bool isBoth = supportedOrientation == AppOrientation.Both;
             bool isPortrait = supportedOrientation == AppOrientation.Portrait;
@@ -437,6 +460,23 @@ namespace OGT.BuildProfile
                     Logger.Log("[AppInfoBuildStep] -lidbfs.js already present in PlayerSettings.WebGL.emscriptenArgs");
                 }
             }
+        }
+
+        public static bool IsMetaQuest(BuildProfile buildProfile)
+        {
+            return string.Equals(GetPlatformId(buildProfile), MetaQuestPlatformId, StringComparison.OrdinalIgnoreCase);
+        }
+
+        // Returns null if there is no build profile (ie. the classic platform list is being used instead of a profile)
+        public static string GetPlatformId(BuildProfile buildProfile)
+        {
+            if (buildProfile == null)
+            {
+                return null;
+            }
+
+            using var serializedObject = new SerializedObject(buildProfile);
+            return serializedObject.FindProperty("m_PlatformId")?.stringValue;
         }
     }
 

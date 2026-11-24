@@ -12,12 +12,12 @@ namespace OGT
     using UnityEngine;
     using UnityEngine.InputSystem.UI;
 
-    public sealed class XRManager : Manager
+    public sealed class XRManager : Manager, IXRApp
     {
         private static readonly OGTLogger Logger = OGTLogger.XR;
 
         [SerializeField] private XRUtilManager xrUtilManager;
-        [SerializeField] private bool initializeOnStartup = true;
+        //// [SerializeField] private bool initializeOnStartup = true;
 
         [Header("Event Systems")]
         [SerializeField] private InputSystemUIInputModule flatInputSystem;
@@ -41,11 +41,12 @@ namespace OGT
             get => this.xrUtilManager.CurrentDevice;
         }
 
-        protected override Task InitializeManager(Bootloader bootloader)
+        public bool IsXRApp => this.IsFlatMode == false;
+
+        protected override async Task InitializeManager(Bootloader bootloader)
         {
             this.xrUtilManager.OnXRDeviceChange += this.UpdateInputSystem;
-            this.xrUtilManager.Initialize();
-            return Task.CompletedTask;
+            await this.xrUtilManager.Initialize();
         }
 
         public override void OnManagerDestroyed()

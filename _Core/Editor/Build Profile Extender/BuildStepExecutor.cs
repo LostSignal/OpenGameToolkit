@@ -40,7 +40,7 @@ namespace OGT.BuildProfile
                 var buildStepName = buildStep.name;
                 Logger.Log($"BuildStepExecutor Running Step {buildStepName}...");
                 var startTime = System.DateTime.UtcNow;
-                buildStep.OnPrepareForBuild(buildPlayerContext);
+                buildStep.OnPrepareForBuild(UnityEditor.Build.Profile.BuildProfile.GetActiveBuildProfile(), buildPlayerContext);
                 var totalTime = System.DateTime.UtcNow.Subtract(startTime).TotalSeconds;
                 Logger.Log($"BuildStepExecutor Step {buildStepName} took {totalTime} seconds");
             }
@@ -61,7 +61,7 @@ namespace OGT.BuildProfile
             {
                 Logger.Log($"BuildStepExecutor Running Step {buildStep.name}...");
                 var startTime = System.DateTime.UtcNow;
-                buildStep.OnPreprocessBuild(buildProfileExtender.CurrentEnvironment, report);
+                buildStep.OnPreprocessBuild(UnityEditor.Build.Profile.BuildProfile.GetActiveBuildProfile(), buildProfileExtender.CurrentEnvironment, report);
                 var totalTime = System.DateTime.UtcNow.Subtract(startTime).TotalSeconds;
                 Logger.Log($"BuildStepExecutor Step {buildStep.name} took {totalTime} seconds");
             }
@@ -82,7 +82,7 @@ namespace OGT.BuildProfile
             {
                 Logger.Log($"BuildStepExecutor Running Step {buildStep.name}...");
                 var startTime = System.DateTime.UtcNow;
-                buildStep.OnPostprocessBuild(buildProfileExtender.CurrentEnvironment, report);
+                buildStep.OnPostprocessBuild(UnityEditor.Build.Profile.BuildProfile.GetActiveBuildProfile(), buildProfileExtender.CurrentEnvironment, report);
                 var totalTime = System.DateTime.UtcNow.Subtract(startTime).TotalSeconds;
                 Logger.Log($"BuildStepExecutor Step {buildStep.name} took {totalTime} seconds");
             }
@@ -140,7 +140,7 @@ namespace OGT.BuildProfile
 
                 try
                 {
-                    buildStep.OnBuildProfileSelected();
+                    buildStep.OnBuildProfileSelected(activeBuildProfile);
                 }
                 catch (Exception ex)
                 {

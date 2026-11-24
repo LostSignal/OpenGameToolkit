@@ -78,7 +78,7 @@ namespace OGT.BuildProfile
 
 
 
-        public override void OnPostprocessBuild(BuildProfileExtender.Environment environment, BuildReport report)
+        public override void OnPostprocessBuild(UnityEditor.Build.Profile.BuildProfile buildProfile, BuildProfileExtender.Environment environment, BuildReport report)
         {
 #if USING_BUNNY_CDN
             var summary = report.summary;

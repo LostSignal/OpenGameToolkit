@@ -43,6 +43,10 @@ namespace OGT.XR
         [SerializeField][ReadOnly] private Panel panel;
         [SerializeField] private XRPanelSettings settings;
         [SerializeField] private bool isGrabable;
+
+        [Tooltip("Keeps this panel level with the user's eyes, so looking up or down only moves it around them and never above or below them.")]
+        [SerializeField] private bool keepUIAtEyeLevel = true;
+
         [SerializeField] private List<GameObject> disableObjectsInXrMode;
 #pragma warning restore 0649
 
@@ -50,6 +54,7 @@ namespace OGT.XR
 
         private Coroutine updatePositionCoroutine;
         private XRManager xrManager;
+        private Camera panelCamera;
         private bool hasBeenGrabbed;
 
 
@@ -69,6 +74,7 @@ namespace OGT.XR
                 EditorUtil.SetDirty(this);
             }
         }
+        private bool needsPlacing;
 
         public void OnAwake(Bootloader bootloader)
         {
@@ -78,7 +84,8 @@ namespace OGT.XR
                 // TODO [bgish]: Update this dialog to be in the correct mode (Pancake vs XR)
             };
 
-            this.panel.Showable.OnShowEnd.AddListener(this.OnShow);
+            // Before it's visible, so the first show doesn't pop when the canvas goes from screen space to world space
+            this.panel.Showable.OnBeforeReveal += this.OnShow;
             this.panel.Showable.OnHideStart.AddListener(this.OnHide);
         }
 
@@ -89,36 +96,82 @@ namespace OGT.XR
             report.AssertNotNull(this, this.settings, "XRPanel this.settings is null.");
         }
 
+        private void FindPanelCamera()
+        {
+            if (this.panelCamera == null && this.panelCanvas != null)
+            {
+                this.panelCamera = this.panelCanvas.worldCamera;
+            }
+
+            if (this.panelCamera == null || this.panelCamera.gameObject.activeInHierarchy == false || this.panelCamera.enabled == false)
+            {
+                this.panelCamera = Camera.main;
+            }
+        }
+
+        private Vector3 GetTargetPosition(Transform cameraTransform)
+        {
+            if (this.keepUIAtEyeLevel == false)
+            {
+                return
+                    cameraTransform.position +
+                    (cameraTransform.forward * this.settings.CanvasDistanceForwards) +
+                    (cameraTransform.up * this.settings.CanvasDistanceUpwards);
+            }
+
+            return
+                cameraTransform.position +
+                (GetHorizontalForward(cameraTransform) * this.settings.CanvasDistanceForwards) +
+                (Vector3.up * this.settings.CanvasDistanceUpwards);
+        }
+
+        // The direction the user is facing with any looking up or down removed
+        private static Vector3 GetHorizontalForward(Transform cameraTransform)
+        {
+            Vector3 forward = Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up);
+
+            // Looking almost straight up or down leaves no usable forward, but the top of the head still points the right way
+            if (forward.sqrMagnitude < 0.01f)
+            {
+                forward = Vector3.ProjectOnPlane(cameraTransform.forward.y > 0.0f ? -cameraTransform.up : cameraTransform.up, Vector3.up);
+            }
+
+            return forward.normalized;
+        }
+
         private void UpdatePosition()
         {
-            var dialogCamera = this.panelCanvas.worldCamera;
+            this.FindPanelCamera();
 
-            if (dialogCamera == null)
+            if (this.panelCamera == null)
             {
                 return;
             }
 
-            if (dialogCamera.gameObject.activeInHierarchy == false || dialogCamera.enabled == false)
-            {
-                dialogCamera = Camera.main;
-            }
+            var dialogCameraTransform = this.panelCamera.transform;
 
-            if (dialogCamera == null)
+            // The first time it's shown it goes straight to its spot, facing the camera, instead of swinging in from wherever it was
+            if (this.needsPlacing)
             {
+                this.needsPlacing = false;
+                this.transform.position = this.GetTargetPosition(dialogCameraTransform);
+                this.transform.rotation = Quaternion.LookRotation(this.transform.position - dialogCameraTransform.position);
                 return;
             }
-
-            var dialogCameraTransform = dialogCamera.transform;
 
             // Move the object CanvasDistance units in front of the camera
             float positionSpeed = Time.deltaTime * this.settings.PositionLerpSpeed;
 
-            Vector3 positionTo =
-                dialogCameraTransform.position +
-                (dialogCameraTransform.forward * this.settings.CanvasDistanceForwards) +
-                (dialogCameraTransform.up * this.settings.CanvasDistanceUpwards);
+            Vector3 positionTo = this.GetTargetPosition(dialogCameraTransform);
+            Vector3 position = Vector3.SlerpUnclamped(this.transform.position, positionTo, positionSpeed);
 
-            this.transform.position = Vector3.SlerpUnclamped(this.transform.position, positionTo, positionSpeed);
+            // The slerp arcs around the world origin, which would dip the panel below eye level while it swings around the user
+            if (this.keepUIAtEyeLevel)
+            {
+                position.y = positionTo.y;
+            }
+
+            this.transform.position = position;
 
             // Rotate the object to face the camera
             float rotattionSpeed = Time.deltaTime * this.settings.RotationLerpSpeed;
@@ -179,13 +232,13 @@ namespace OGT.XR
 
                 this.ExecuteAtEndOfFrame(() =>
                 {
+                    this.FindPanelCamera();
+
                     this.panelCanvas.renderMode = RenderMode.WorldSpace;
                     this.panelCanvas.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
 
-                    // Making sure the dialog is directly in front of the camera at the settings canvas distance
-                    this.panelCanvas.transform.position =
-                        this.panelCanvas.worldCamera.transform.position +
-                        (this.panelCanvas.worldCamera.transform.forward.normalized * this.settings.CanvasDistanceForwards);
+                    // Panels shown during startup can get here before the scene with the camera has loaded, so UpdatePosition does this
+                    this.needsPlacing = true;
 
                     this.ExecuteAtEndOfFrame(() =>
                     {

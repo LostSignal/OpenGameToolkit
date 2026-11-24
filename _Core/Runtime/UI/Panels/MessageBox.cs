@@ -4,6 +4,7 @@ namespace OGT
     using TMPro;
     using UnityEngine;
     using UnityEngine.Serialization;
+    using UnityEngine.UI;
 
     public class MessageBox : PanelLogic
     {
@@ -24,8 +25,13 @@ namespace OGT
         [SerializeField] private ButtonWidget okButtonWidget;
         [SerializeField] private TMP_Text bodyText;
 
+        [Tooltip("Optional. Closing the message box counts as pressing Ok, or the right hand button when there are two.")]
+        [SerializeField] private Button closeButton;
+
         public void ShowOk(string title, string message, Action okAction)
         {
+            this.SetupCloseButton(okAction);
+
             // Ok Button Setup
             this.okButtonWidget.gameObject.SetActive(true);
             this.okButtonWidget.Button.onClick.RemoveAllListeners();
@@ -46,6 +52,8 @@ namespace OGT
 
         public void ShowCustomTwoButton(string title, string message, string leftButtonText, string rightButtonText, Action leftAction, Action rightAction)
         {
+            this.SetupCloseButton(rightAction);
+
             // Left Button Setup
             this.leftButtonWidget.ButtonText.text = leftButtonText;
             this.leftButtonWidget.gameObject.SetActive(true);
@@ -117,6 +125,18 @@ namespace OGT
             {
                 await Awaitable.NextFrameAsync();
             }
+        }
+
+        private void SetupCloseButton(Action closeAction)
+        {
+            if (this.closeButton == null)
+            {
+                return;
+            }
+
+            this.closeButton.onClick.RemoveAllListeners();
+            this.closeButton.onClick.AddListener(this.Panel.Hide);
+            this.closeButton.onClick.AddListener(() => closeAction?.Invoke());
         }
     }
 }

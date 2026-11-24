@@ -33,6 +33,7 @@ namespace OGT
         [Header("Startup")]
         [SerializeField] private string startupSceneName;
         [SerializeField] private string initialSceneGuid;
+        [SerializeField] private string initialXRSceneGuid;
         [SerializeField] private bool unloadStartupOnBooted;
 
         private List<Manager> managers;
@@ -51,6 +52,8 @@ namespace OGT
         public string StartupSceneName => this.startupSceneName;
 
         public string InitialSceneGuid => this.initialSceneGuid;
+        
+        public string InitialXRSceneGuid => this.initialXRSceneGuid;
 
         public bool UnloadStartupOnBooted => this.unloadStartupOnBooted;
 

@@ -45,20 +45,27 @@ namespace OGT.BuildProfile
         [SerializeField] private bool fileNamesAsHashes = true;
         [SerializeField] private bool dataCaching = false;
                 
-        public override void OnPreprocessBuild(BuildProfileExtender.Environment environment, BuildReport report)
+        public override void OnPreprocessBuild(UnityEditor.Build.Profile.BuildProfile buildProfile, BuildProfileExtender.Environment environment, BuildReport report)
         {
             this.SetBuildSettings();
             this.DisableCustomKeyStore(report.summary.platform);
             this.SetWebGLSettings(report.summary.platform);
             this.SetPipelineRuntimeInBuild(report.summary.platform);
 
-            if (this.isOgtDevelopmentBuild)
+            // Making sure the OGT_DEVELOPMENT_BUILD define is set or not set based on the build step's setting
+            bool hasOgtDevelopmentBuild = buildProfile.scriptingDefines.Contains("OGT_DEVELOPMENT_BUILD") == true;
+
+            if (this.isOgtDevelopmentBuild && hasOgtDevelopmentBuild == false)
             {
-                Logger.Log("Enable OGT Development Build is not implemented yet");
+                buildProfile.scriptingDefines = buildProfile.scriptingDefines.Append("OGT_DEVELOPMENT_BUILD").ToArray();
+            }
+            else if (this.isOgtDevelopmentBuild == false && hasOgtDevelopmentBuild)
+            {
+                buildProfile.scriptingDefines = buildProfile.scriptingDefines.Where(d => d != "OGT_DEVELOPMENT_BUILD").ToArray();
             }
         }
 
-        public override void OnPostprocessBuild(BuildProfileExtender.Environment environment, BuildReport report)
+        public override void OnPostprocessBuild(UnityEditor.Build.Profile.BuildProfile buildProfile, BuildProfileExtender.Environment environment, BuildReport report)
         {
             this.CopySimpleWebServer(report.summary.platform, report.summary.outputPath);
         }

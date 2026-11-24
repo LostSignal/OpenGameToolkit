@@ -27,7 +27,7 @@ namespace OGT.BuildProfile
         [ShowIf(nameof(uploadToGooglePlay), true)]
         [SerializeField] private string track = "internal";
 
-        public override void OnPreprocessBuild(BuildProfileExtender.Environment environment, BuildReport report)
+        public override void OnPreprocessBuild(UnityEditor.Build.Profile.BuildProfile buildProfile, BuildProfileExtender.Environment environment, BuildReport report)
         {
             if (report.summary.platform != BuildTarget.Android)
             {
@@ -56,7 +56,7 @@ namespace OGT.BuildProfile
             PlayerSettings.Android.keyaliasPass = this.keyAliasPassword.Value;
         }
 
-        public override void OnPostprocessBuild(BuildProfileExtender.Environment environment, BuildReport report)
+        public override void OnPostprocessBuild(UnityEditor.Build.Profile.BuildProfile buildProfile, BuildProfileExtender.Environment environment, BuildReport report)
         {
             if (report.summary.platform != BuildTarget.Android || this.uploadToGooglePlay == false)
             {

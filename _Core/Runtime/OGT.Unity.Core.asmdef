@@ -12,7 +12,8 @@
         "GUID:ab8962b6277185546a87daeb4b19e1dd",
         "GUID:dc960734dc080426fa6612f1c5fe95f3",
         "GUID:e40ba710768534012815d3193fa296cb",
-        "GUID:fe685ec1767f73d42b749ea8045bfe43"
+        "GUID:fe685ec1767f73d42b749ea8045bfe43",
+        "GUID:82fa6df5473bca646b2ce39349a13e46"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -22,6 +23,11 @@
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [
+        {
+            "name": "com.lostsignal.studiops",
+            "expression": "0.0.0",
+            "define": "USING_STUDIOPS"
+        },
         {
             "name": "Unity",
             "expression": "0.0.0",
